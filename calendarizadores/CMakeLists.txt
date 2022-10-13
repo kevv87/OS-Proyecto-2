@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 # Nombre del proyecto 
-project(CEThreads)
+project(Calenderizadores)
 
 # Add subdirectory for common
 # Aqui es necesario especificar tambien donde van a estar los binarios para que se construya correctamente

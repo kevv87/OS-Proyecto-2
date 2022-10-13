@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 # Nombre del proyecto 
-project(CEThreads)
+project(Hardware_Iface)
 
 # Add subdirectory for common
 # Aqui es necesario especificar tambien donde van a estar los binarios para que se construya correctamente
@@ -9,7 +9,7 @@ project(CEThreads)
 add_subdirectory("${PROJECT_SOURCE_DIR}/../common/" "${PROJECT_BINARY_DIR}/common")
 
 # Setting sources files
-set(SOURCES helloWorld.c)
+set(SOURCES serial_ex.c)
 
 # Adding sources al executable
 # Tambien aqui se crea el target, con el mismo nombre del project name
