@@ -8,5 +8,5 @@
 #include "include/tools.h"
 
 void printError(char *message){
-    printf("%s: %s", message, strerror(errno));
+    printf("%s: %s\n", message, strerror(errno));
 }

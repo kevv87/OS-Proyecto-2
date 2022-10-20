@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 # Nombre del proyecto 
-project(Hardware_Iface)
+project(hardware_iface)
 
 # Add subdirectory for common
 # Aqui es necesario especificar tambien donde van a estar los binarios para que se construya correctamente
@@ -10,11 +10,11 @@ add_subdirectory("${PROJECT_SOURCE_DIR}/../common/" "${PROJECT_BINARY_DIR}/commo
 add_subdirectory("${PROJECT_SOURCE_DIR}/../arduino-serial/" "${PROJECT_BINARY_DIR}/arduino-serial")
 
 # Setting sources files
-set(SOURCES serial_example.c)
+set(SOURCES serial_example.c hw_iface.c include/hw_iface.h include/hw_structs.h)
 
 # Adding sources al executable
 # Tambien aqui se crea el target, con el mismo nombre del project name
-add_executable( ${PROJECT_NAME} ${SOURCES} )
+add_library( ${PROJECT_NAME} ${SOURCES} )
 
 # Aqui linkeamos el target al nombre de una libreria
 # Es necesario que la libreria que estamos usando tambien tenga su CMakeLists
