@@ -10,7 +10,7 @@
 
 #include "hw_structs.h"
 
-#define SERIAL_PORT "/dev/cu.usbmodem1423101"
+#define SERIAL_PORT "/dev/cu.usbmodem1433101"
 #define BAUDRATE 9600;
 
 int initialize_serial_connection(IfaceContext *context);

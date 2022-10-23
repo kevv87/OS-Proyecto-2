@@ -7,7 +7,7 @@ void setup(){
 }
 
 void send_confirmation(){
-    char confirm_message = 10;
+    char* confirm_message = "ok";
     Serial.write(confirm_message);
 }
 

@@ -17,12 +17,14 @@ IfaceContext * context;
 
 int setup(){
     context = malloc(sizeof(IfaceContext));
+    context->scratch_buffer.data = malloc(1024);
     initialize_serial_connection(context);
     return 0;
 }
 
 int teardown(){
     destroy_serial_connection(context);
+    free(context->scratch_buffer.data);
     free(context);
     return 0;
 }
@@ -54,10 +56,11 @@ static void test_send_byte_with_confirmation(){
 
     error_code = serial_send_byte(context, message_byte);
 
-    assert_true(error_code);
+    assert_true(error_code==0);
 
-    char expected_returned_message = 10;
-    assert_true(*(context->scratch_buffer.data) == expected_returned_message);
+    char *expected_returned_message = "ok";
+    char *actual_message = context->scratch_buffer.data;
+    assert_string_equal(expected_returned_message, actual_message);
 }
 
 /*

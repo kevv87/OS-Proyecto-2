@@ -32,7 +32,7 @@ int expect_confirmation(IfaceContext *context){
             context->file_descriptor,
             context->scratch_buffer.data,
             '0',
-            1,
+            2,
             1000
             );
 
