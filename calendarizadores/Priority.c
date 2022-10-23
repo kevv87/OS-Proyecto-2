@@ -34,6 +34,7 @@ void Priority(Boat_Doubly_Linked_List_t* list) {
 
 }
 
+/*
 void swap(int *a,int *b) {
 	
     int temp = *a;
@@ -107,3 +108,4 @@ int main() {
     return 0;
     
 }
+*/

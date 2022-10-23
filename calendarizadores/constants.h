@@ -19,7 +19,12 @@
 #define LEFT 1
 
 // Quantum
-#define QUANTUM_TIME 3
+#define QUANTUM_TIME 1
+
+// Boat priority
+//#define NORMAL_BOAT_PRIORITY 0
+//#define FISHING_BOAT_PRIORITY 1
+//#define PATROL_BOAT_PRIORITY 2
 
 
 #endif //CALENDARIZADOR_CONSTANTS_H
