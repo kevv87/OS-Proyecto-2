@@ -18,7 +18,9 @@ IfaceContext * context;
 int setup(){
     context = malloc(sizeof(IfaceContext));
     context->scratch_buffer.data = malloc(1024);
-    initialize_serial_connection(context);
+    context->scratch_buffer.len = 1024;
+    if (initialize_serial_connection(context) < 0)
+        printError("Error initializing serial");
     return 0;
 }
 
@@ -31,6 +33,7 @@ int teardown(){
 
 static void test_serial_init(){
     int error_code;
+    IfaceContext *context;
     context = malloc(sizeof(IfaceContext));
     context->scratch_buffer.len = 1024;
     context->scratch_buffer.data = malloc(sizeof(char) * context->scratch_buffer.len);
@@ -38,10 +41,11 @@ static void test_serial_init(){
     error_code = initialize_serial_connection(context);
     assert_int_equal(error_code, 0);
     assert_true(context->file_descriptor >= 0);
+    destroy_serial_connection(context);
 }
 
 static void test_send_byte(){
-    uint8_t message_byte = 80;
+    uint8_t message_byte = 20;
     int error_code;
 
     error_code = serial_send_byte(context, message_byte);
@@ -63,25 +67,24 @@ static void test_send_byte_with_confirmation(){
     assert_string_equal(expected_returned_message, actual_message);
 }
 
-/*
-static void test_send_serial_struct(){
-    HwState hw_state = {
-            .ledState = 20
+static void test_send_struct(){
+    hw_state_t hw_state = {
+            .ledState = 200
     };
 
     int error_code;
-    error_code = serial_send_struct(context, &hw_state);
+    error_code = serial_send_struct(context, &hw_state, sizeof(hw_state_t));
 
     assert_true(error_code >= 0);
 
 }
-*/
 
 int main(void) {
     const struct CMUnitTest tests[] = {
-            cmocka_unit_test_teardown(test_serial_init, teardown),
-            cmocka_unit_test_setup_teardown(test_send_byte, setup, teardown),
-            cmocka_unit_test_setup_teardown(test_send_byte_with_confirmation, setup, teardown),
+            //cmocka_unit_test(test_serial_init),
+            cmocka_unit_test(test_send_byte),
+            //cmocka_unit_test_setup_teardown(test_send_byte_with_confirmation, setup, teardown),
+            cmocka_unit_test(test_send_struct),
 /*
             cmocka_unit_test(test_send_serial_struct),
             cmocka_unit_test_setup_teardown(test_add_first_item, setup_empty_list, teardown),
@@ -94,5 +97,5 @@ int main(void) {
             cmocka_unit_test_setup_teardown(test_get_pixel_by_metadata_id, setup_populated_list, teardown),
 */
     };
-    return cmocka_run_group_tests(tests, NULL, NULL);
+    return cmocka_run_group_tests(tests, setup, teardown);
 }

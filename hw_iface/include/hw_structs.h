@@ -5,9 +5,9 @@
 #ifndef HW_STRUCTS_H
 #define HW_STRUCTS_H
 
-typedef struct HwState{
-    int ledState;
-} HwState;
+typedef struct hw_state_t{
+    uint8_t ledState;
+} hw_state_t;
 
 typedef struct buffer_t{
     char* data;

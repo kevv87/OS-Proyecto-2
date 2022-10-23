@@ -16,7 +16,9 @@
 int initialize_serial_connection(IfaceContext *context);
 int destroy_serial_connection(IfaceContext *context);
 
+int serial_send_struct(IfaceContext *context, void *message, size_t len);
 int serial_send_byte(IfaceContext *context, uint8_t byte_message);
 int expect_confirmation(IfaceContext *context);
+
 
 #endif //HW_IFACE_H
