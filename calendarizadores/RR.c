@@ -1,6 +1,9 @@
-// Source: https://www.edureka.co/blog/first-come-first-serve-scheduling/
+// Source: https://www.edureka.co/blog/round-robin-scheduling-in-c/
 
-#include<stdio.h>
+#include <stdio.h>
+//#include <string.h>
+//#include "types.h"
+//#include "Boat_Doubly_Linked_List.c"
 
 int main() {
 		
@@ -82,3 +85,83 @@ int main() {
 	return 0;
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+void Priority(Boat_Doubly_Linked_List_t* list) {
+    
+    Boat_Doubly_Linked_List_Node_t* ptrCurrent;
+    Boat_Doubly_Linked_List_Node_t* ptrAux = NULL;
+
+    if(list -> first == NULL) {
+
+        return;
+
+    }
+
+    ptrCurrent = list -> first;
+
+    while (ptrCurrent -> next != ptrAux) {
+
+        if (ptrCurrent -> data -> priority < ptrCurrent -> next -> data -> priority) {
+
+            swap(ptrCurrent, ptrCurrent -> next);            
+
+        }
+
+        ptrCurrent = ptrCurrent -> next;
+
+    }
+
+    ptrAux = ptrCurrent;
+
+}
+
+
+
+
+
+void RR(Boat_Doubly_Linked_List_t* list) {
+
+
+
+
+}
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
