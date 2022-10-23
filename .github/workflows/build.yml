@@ -31,7 +31,7 @@ jobs:
           cd build
           cmake ../
           cmake --build .
-      - name: Build hw_iface
+      - name: Build test_hw_iface
         run: |
           cd hw_iface
           mkdir build

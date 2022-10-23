@@ -5,8 +5,19 @@
 #ifndef HW_STRUCTS_H
 #define HW_STRUCTS_H
 
-typedef struct iface_context{
-    int file_descriptor;
-} iface_context;
+typedef struct HwState{
+    int ledState;
+} HwState;
 
-#endif //TEST_HW_STRUCTS_H
+typedef struct buffer_t{
+    char* data;
+    size_t len;
+} buffer_t;
+
+typedef struct IfaceContext{
+    int file_descriptor;
+    buffer_t scratch_buffer;
+} IfaceContext;
+
+
+#endif //HW_STRUCTS_H
