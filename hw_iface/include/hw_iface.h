@@ -1,24 +1,29 @@
 //
-// Created by Kevin Zeledón on 15/10/22.
+// Created by Kevin Zeledón on 23/10/22.
 //
 
-#ifndef HW_IFACE_H
-#define HW_IFACE_H
+#ifndef TEST_HW_IFACE_H
+#define TEST_HW_IFACE_H
 
-#include "arduino-serial/arduino-serial-lib.h"
-#include "common/include/tools.h"
+#include "include/hw_structs.h"
+#include "include/serial_comm.h"
 
-#include "hw_structs.h"
+typedef enum direction_t {
+    RIGHT,
+    LEFT
+} direction_t;
 
-#define SERIAL_PORT "/dev/cu.usbmodem1433101"
-#define BAUDRATE 9600;
+typedef enum ship_type_t {
+    NO_SHIP,
+    NORMAL,
+    PESQUERO,
+    PATRULLA
+} ship_type_t;
 
-int initialize_serial_connection(IfaceContext *context);
-int destroy_serial_connection(IfaceContext *context);
+int add_ship(iface_context_t *context, direction_t direction);
+int change_channel_direction(iface_context_t *context, direction_t direction);
+int interchange_ships_position(iface_context_t *context, int from_pos, int to_pos);
+int place_ship_in_position(iface_context_t *context, int position, ship_type_t shipType);
+int remove_ship_from_position(iface_context_t *context, int position);
 
-int serial_send_struct(IfaceContext *context, void *message, size_t len);
-int serial_send_byte(IfaceContext *context, uint8_t byte_message);
-int expect_confirmation(IfaceContext *context);
-
-
-#endif //HW_IFACE_H
+#endif //TEST_HW_IFACE_H

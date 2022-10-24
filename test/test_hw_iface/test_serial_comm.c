@@ -10,13 +10,13 @@
 #include <stdbool.h>
 #include "cmocka/include/cmocka.h"
 
-#include "hw_iface/include/hw_iface.h"
+#include "hw_iface/include/serial_comm.h"
 #include "hw_iface/include/hw_structs.h"
 
-IfaceContext * context;
+iface_context_t * context;
 
 int setup(){
-    context = malloc(sizeof(IfaceContext));
+    context = malloc(sizeof(iface_context_t));
     context->scratch_buffer.data = malloc(1024);
     context->scratch_buffer.len = 1024;
     if (initialize_serial_connection(context) < 0)
@@ -33,8 +33,8 @@ int teardown(){
 
 static void test_serial_init(){
     int error_code;
-    IfaceContext *context;
-    context = malloc(sizeof(IfaceContext));
+    iface_context_t *context;
+    context = malloc(sizeof(iface_context_t));
     context->scratch_buffer.len = 1024;
     context->scratch_buffer.data = malloc(sizeof(char) * context->scratch_buffer.len);
 
@@ -68,12 +68,12 @@ static void test_send_byte_with_confirmation(){
 }
 
 static void test_send_struct(){
-    hw_state_t hw_state = {
+    iface_state_t hw_state = {
             .ledState = 200
     };
 
     int error_code;
-    error_code = serial_send_struct(context, &hw_state, sizeof(hw_state_t));
+    error_code = serial_send_struct(context, &hw_state, sizeof(iface_state_t));
 
     assert_true(error_code >= 0);
 

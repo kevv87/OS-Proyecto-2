@@ -1,97 +1,49 @@
 //
-// Created by Kevin Zeledón on 15/10/22.
+// Created by Kevin Zeledón on 23/10/22.
 //
 
-#include <string.h>
-#include "include/hw_iface.h"
+#include "hw_iface/include/hw_iface.h"
 
-int initialize_serial_connection(IfaceContext *context){
-    int fd;
-    char *serialport = SERIAL_PORT;
-    int baudrate = BAUDRATE;
-
-    fd = serialport_init(serialport, baudrate);
-
-    if (fd < 0){
-        printError("serial port initialization failed");
-        return fd;
+int add_ship(iface_context_t *context, direction_t direction) {
+    if(direction == RIGHT){
+        context->state.ships_at_left ++;
+    }else if(direction == LEFT){
+        context->state.ships_at_right ++;
     }
 
-    printf("successfully opened serialport %s @ %d bps\n", serialport, baudrate);
-    serialport_flush(fd);
-
-    context->file_descriptor = fd;
-
-    return 0;
+    // Send context to serial
+    return serial_send_struct(context, context, sizeof(iface_context_t));
 }
 
-int destroy_serial_connection(IfaceContext *context){
-    int error_code = serialport_close(context->file_descriptor);
-    return error_code;
+int change_channel_direction(iface_context_t *context, direction_t direction) {
+    context->state.channel_direction = direction;
+    // Send context to serial
+    return serial_send_struct(context, context, sizeof(iface_context_t));
 }
 
-int expect_confirmation(IfaceContext *context){
-    int error_code = serialport_read_until(
-            context->file_descriptor,
-            context->scratch_buffer.data,
-            '0',
-            2,
-            1000
-            );
-
-    if(error_code < 0){
-        printError("serialport_read_until failed");
-        return error_code;
-    }
-
-    char * expected_message = "ok";
-    if(strncmp(context->scratch_buffer.data, expected_message, 2) != 0){
-        printf("error on expected result from serial");
+int interchange_ships_position(iface_context_t *context, int from_pos, int to_pos) {
+    if (from_pos < 0 || from_pos > 10 || to_pos < 0 || to_pos > 10) {
+        printf("Channel out of bounds!\n");
         return -1;
     }
 
-    return error_code;
+    context->state.channel_representation[to_pos] = context->state.channel_representation[from_pos];
+    context->state.channel_representation[from_pos] = NO_SHIP;
+    // send context
+    return serial_send_struct(context, context, sizeof(iface_context_t));
 }
 
-int serial_send_byte(IfaceContext *context, uint8_t byte_message){
-    int error_code;
-    int fd = context->file_descriptor;
-
-    error_code = serialport_writebyte(fd, byte_message);
-    if(error_code < 0){
-        printError("writing to serial port failed");
-        return error_code;
+int place_ship_in_position(iface_context_t *context, int position, ship_type_t shipType) {
+    if (position < 0 || position > 10) {
+        printf("position out of bounds!\n");
     }
-
-    if(byte_message == 3){
-        error_code = expect_confirmation(context);
-        if(error_code < 0){
-            printError("expect_confirmation failed");
-            return error_code;
-        }
-    }
-
-    return error_code;
+    context->state.channel_representation[position] = shipType;
+    // send context
+    return serial_send_struct(context, context, sizeof(iface_context_t));
 }
 
-int send_ping(IfaceContext *context){
-    return serial_send_byte(context, 3);
-}
-
-int serial_send_struct(IfaceContext *context, void *message, size_t len){
-    char *char_message = (char *) message;
-
-    if (send_ping(context) < 0){
-        printError("ping couldn't be completed");
-        return -1;
-    }
-
-    for (int i=0; i<len; i++) {
-        if (serial_send_byte(context, char_message[i]) < 0) {
-            printError("error sending bytes");
-            return -1;
-        }
-    }
-
-    return 0;
+int remove_ship_from_position(iface_context_t *context, int position) {
+    context->state.channel_representation[position] = NO_SHIP;
+    // send context
+    return serial_send_struct(context, context, sizeof(iface_context_t));
 }
