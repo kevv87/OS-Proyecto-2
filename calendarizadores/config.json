@@ -1,36 +1,14 @@
 {
-    "SchedulerAlgorithm": "RR",
-    "FlowControlMethod": "Equidad",
+    "SchedulerAlgorithm": 0,
+    "FlowControlMethod": 0,
     "ChannelLength": 10,
     "BoatSpeed": 10,
     "BoatQuantity": 10,
     "WParameter": 0,
     "Signboard": 0,
-    "DefinedLoad": {
-        "PacificOcean": {
-            "NormalBoat": 1,
-            "FishingBoat": 2,
-            "PatrolBoat": 3
-        },
-        "CaribbeanSea": {
-            "NormalBoat": 1,
-            "FishingBoat": 2,
-            "PatrolBoat": 3
-        }
-    },
-    "Priority": {
-        "NormalBoat": 1,
-        "FishingBoat": 2,
-        "PatrolBoat": 3
-    },
-    "SJF": {
-        "NormalBoat": 1,
-        "FishingBoat": 2,
-        "PatrolBoat": 3
-    },
-    "EDF": {
-        "NormalBoat": 1,
-        "FishingBoat": 2,
-        "PatrolBoat": 3
-    }
+    "DefinedLoadLeft": [1, 2, 3],
+    "DefinedLoadRight": [1, 2, 3],
+    "Priority": [1, 2, 3],
+    "SJF": [1, 2, 3],
+    "EDF": [1, 2, 3]
 }
