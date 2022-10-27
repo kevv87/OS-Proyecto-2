@@ -62,7 +62,7 @@ typedef struct Load
 {
     int left[3];
     int right[3];
-}Load_t;
+} Load_t;
 
 //Equity arguments
 typedef struct Equity_arguments

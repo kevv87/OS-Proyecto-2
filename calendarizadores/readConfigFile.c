@@ -5,21 +5,52 @@
 
 #include <stdio.h>
 #include <json-c/json.h>
+#include "types.h"
 
 int main() {
+    
+    /*
+        RR = 0
+        Prioridad = 1
+        SJF = 2
+        FCFS = 3
+        EDF = 4
+    */
+    int calendarization_algorithm;
+
+    /*
+        Equidad = 0
+        Letrero = 1
+        Tico = 2
+    */
+    int canal_algorithm;
+
+    int canal_length;
+    int base_speed;
+    int boat_quantity;
+
+    // w = -1 significa q no aplica
+    int w;
+
+    //signboard_timer = -1 significa q no aplica
+    int signboard_timer;
+
+    Load_t* load = malloc(sizeof(Load_t));
     
     FILE *fp;
     char buffer[1024];
 
-    struct json_object *SchedulerAlgorithm; // calendarization_algorithm
-    struct json_object *FlowControlMethod; // canal_algorithmstruct json_object *FlowControlMethod; //
-    struct json_object *ChannelLength; // canal_length
-    struct json_object *BoatSpeed; // base_speed
+    struct json_object *parsedJson;
+
+    struct json_object *SchedulerAlgorithm;
+    struct json_object *FlowControlMethod;
+    struct json_object *ChannelLength;
+    struct json_object *BoatSpeed;
     struct json_object *BoatQuantity;
-    struct json_object *WParameter; // w
-    struct json_object *Signboard; // signboard_time    
-    struct json_object *DefinedLoadLeft; // load->left
-    struct json_object *DefinedLoadRight; // load->right
+    struct json_object *WParameter;
+    struct json_object *Signboard;
+    struct json_object *DefinedLoadLeft;
+    struct json_object *DefinedLoadRight;
 
     struct json_object *NormalBoat;
     struct json_object *FishingBoat;
@@ -51,25 +82,60 @@ int main() {
     json_object_object_get_ex(parsedJson, "DefinedLoadLeft", &DefinedLoadLeft);
     json_object_object_get_ex(parsedJson, "DefinedLoadRight", &DefinedLoadRight);
 
-    printf("SchedulerAlgorithm: %d\n", json_object_get_int(SchedulerAlgorithm));
-    printf("FlowControlMethod: %d\n", json_object_get_int(FlowControlMethod));
-    printf("ChannelLength: %d\n", json_object_get_int(ChannelLength));
-    printf("BoatSpeed: %d\n", json_object_get_int(BoatSpeed));
-    printf("BoatQuantity: %d\n", json_object_get_int(BoatQuantity));
-    printf("WParameter: %d\n", json_object_get_int(WParameter));
-    printf("Signboard: %d\n", json_object_get_int(Signboard));
+    calendarization_algorithm = json_object_get_int(SchedulerAlgorithm);
+    canal_algorithm = json_object_get_int(FlowControlMethod);
+    canal_length = json_object_get_int(ChannelLength);
+    base_speed = json_object_get_int(BoatSpeed);
+    boat_quantity = json_object_get_int(BoatQuantity);
+    w = json_object_get_int(WParameter);
+    signboard_timer = json_object_get_int(Signboard);
 
-    loadSize = json_object_array_lenght(DefinedLoadLeft);
-    printf("Found %lu defined load\n", loadSize);   
+    load -> left[0] = json_object_get_int(json_object_array_get_idx(DefinedLoadLeft, 0));
+    load -> left[1] = json_object_get_int(json_object_array_get_idx(DefinedLoadLeft, 1));
+    load -> left[2] = json_object_get_int(json_object_array_get_idx(DefinedLoadLeft, 2));
 
-    NormalBoat = json_object_array_get_idx(DefinedLoadLeft, 0);
-    FishingBoat = json_object_array_get_idx(DefinedLoadLeft, 1);
-    PatrolBoat = json_object_array_get_idx(DefinedLoadLeft, 2);
+    load -> right[0] = json_object_get_int(json_object_array_get_idx(DefinedLoadRight, 0));
+    load -> right[1] = json_object_get_int(json_object_array_get_idx(DefinedLoadRight, 1));
+    load -> right[2] = json_object_get_int(json_object_array_get_idx(DefinedLoadRight, 2));
 
-    printf("NormalBoat: %d\n", json_object_get_int(NormalBoat));
-    printf("FishingBoat: %d\n", json_object_get_int(FishingBoat));
-    printf("PatrolBoat: %d\n", json_object_get_int(PatrolBoat));
+    printf("calendarization_algorithm = %d\n", calendarization_algorithm);
+    printf("canal_algorithm = %d\n", canal_algorithm);
+    printf("canal_length = %d\n", canal_length);
+    printf("base_speed = %d\n", base_speed);
+    printf("boat_quantity = %d\n", boat_quantity);
+    printf("w = %d\n", w);
+    printf("signboard_timer = %d\n", signboard_timer);
+
+    printf("load left[0] = %d\n", load -> left[0]);
+    printf("load left[1] = %d\n", load -> left[1]);
+    printf("load left[2] = %d\n", load -> left[2]);
+
+    printf("load right[0] = %d\n", load -> right[0]);
+    printf("load right[1] = %d\n", load -> right[1]);
+    printf("load right[2] = %d\n", load -> right[2]);
+
+    free(load);
     
     return 0;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
