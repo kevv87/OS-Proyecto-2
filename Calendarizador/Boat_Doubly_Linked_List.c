@@ -208,7 +208,28 @@ void print_list_speed(Boat_Doubly_Linked_List_t* list)
             printf(")->");
             piv = piv->next;
         }
-
+        printf("\n");
+    }
+}
+void print_list_priority(Boat_Doubly_Linked_List_t* list)
+{
+    if(list->first==NULL)
+    {
+        printf("Empty list\n");
+    }
+    else
+    {
+        Boat_Doubly_Linked_List_Node_t* piv;
+        piv=list->first;
+        //printf("\nTraversal in forward direction\n");
+        while(piv != NULL)
+        {
+            printf("<-(");
+            printf("%d, %d", piv->data->id, (int)piv->data->priority);
+            printf(")->");
+            piv = piv->next;
+        }
+        printf("\n");
     }
 }
 int get_length(Boat_Doubly_Linked_List_t* list)

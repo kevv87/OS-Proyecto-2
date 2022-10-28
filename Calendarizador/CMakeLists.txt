@@ -4,3 +4,5 @@ project(Calendarizador C)
 set(CMAKE_C_STANDARD 99)
 
 add_executable(Calendarizador main.c)
+target_link_libraries(Calendarizador json-c)
+

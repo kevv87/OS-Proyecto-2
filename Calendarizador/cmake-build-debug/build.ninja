@@ -65,6 +65,7 @@ build CMakeFiles/Calendarizador.dir/main.c.o: C_COMPILER__Calendarizador_Debug /
 
 build Calendarizador: C_EXECUTABLE_LINKER__Calendarizador_Debug CMakeFiles/Calendarizador.dir/main.c.o
   FLAGS = -g
+  LINK_LIBRARIES = -ljson-c
   OBJECT_DIR = CMakeFiles/Calendarizador.dir
   POST_BUILD = :
   PRE_LINK = :

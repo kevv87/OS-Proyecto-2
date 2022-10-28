@@ -13,8 +13,10 @@ typedef struct Boat
     int direction;//0 or 1
     double speed;
     int life_time;
-}Boat_t;
 
+    int priority;
+    int arrival_time;///Para
+}Boat_t;
 //Canal node
 typedef struct Canal_node
 {
@@ -62,6 +64,7 @@ typedef struct Load
     int right[3];
 }Load_t;
 
+
 //Equity arguments
 typedef struct Equity_arguments
 {
@@ -77,6 +80,36 @@ typedef struct Equity_arguments_launcher
     int w;
     int* finished_boats_ptr;
 }Equity_arguments_launcher_t;
+
+
+//Sign arguments
+typedef struct Sign_arguments
+{
+    int* change_sign_flag;
+    Boat_t* boat;
+    sem_t* sem_change_sign_flag;
+}Sign_arguments_t;
+
+//Sign arguments launcher
+typedef struct Sign_arguments_launcher
+{
+    int direction;
+    int* change_sign_flag;
+    sem_t* sem_change_sign_flag;
+}Sign_arguments_launcher_t;
+
+
+//Tico arguments
+typedef struct Tico_arguments
+{
+    Boat_t* boat;
+}Tico_arguments_t;
+
+//Sign arguments launcher
+typedef struct Tico_arguments_launcher
+{
+    int direction;
+}Tico_arguments_launcher_t;
 
 
 #endif // TYPES_H
