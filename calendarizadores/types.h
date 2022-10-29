@@ -8,13 +8,13 @@
 typedef struct Boat
 {
     int id;
-    int type;//0, 1, or 2
-    int position;//index
-    int direction;//0 or 1
+    int type; // 0, 1, or 2
+    int position; // index
+    int direction; // 0 or 1
     double speed;
-    int life_time;
     int priority;
-    int arrival_time;
+    int deadline;
+    //int arrival_time;
 }Boat_t;
 
 //Canal node

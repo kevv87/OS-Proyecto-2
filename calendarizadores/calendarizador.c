@@ -4,7 +4,7 @@
 #include "Boat_Doubly_Linked_List.c"
 
 void RR(Boat_Doubly_Linked_List_t* list) {
-    // ???
+    // Nothing
 }
 
 void Priority(Boat_Doubly_Linked_List_t* list) {
@@ -83,9 +83,10 @@ void SJF(Boat_Doubly_Linked_List_t* list) {
 }
 
 void FCFS(Boat_Doubly_Linked_List_t* list) {
-    // ???
+    // Nothing
 }
 
+/*
 int checkConditionEDF(Boat_Doubly_Linked_List_t* list) {
 
     int mu = 0;
@@ -120,6 +121,7 @@ int checkConditionEDF(Boat_Doubly_Linked_List_t* list) {
     }
 
 }
+*/
 
 void EDF(Boat_Doubly_Linked_List_t* list) {
 
@@ -134,37 +136,41 @@ void EDF(Boat_Doubly_Linked_List_t* list) {
 
     }
 
+    /*
     int checked = checkConditionEDF(list);
 
     if(checked) {
+    */
 
-        do {
+    do {
 
-            swapped = 0;        
-            currentNode = list -> first;
+        swapped = 0;        
+        currentNode = list -> first;
 
-            while (currentNode -> next != auxNode) {
+        while (currentNode -> next != auxNode) {
 
-                if (currentNode -> data -> life_time < currentNode -> next -> data -> life_time) {
+            if (currentNode -> data -> deadline < currentNode -> next -> data -> deadline) {
 
-                    swap(currentNode, currentNode -> next); 
-                    swapped = 1;           
-
-                }
-
-                currentNode = currentNode -> next;
+                swap(currentNode, currentNode -> next); 
+                swapped = 1;           
 
             }
 
-            auxNode = currentNode;
+            currentNode = currentNode -> next;
 
-        } while(swapped);
+        }
 
+        auxNode = currentNode;
+
+    } while(swapped);
+
+    /*
     } else {
 
         printf("No se cumple la condición µ ≤ 1 del algoritmo EDF\n");
 
     }  
+    */
 
 }
 
