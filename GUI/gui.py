@@ -145,6 +145,8 @@ pygame.display.update()
 
 loopFlag = True
 
+x = 0
+
 # run the game loop
 while loopFlag:
 
@@ -154,9 +156,9 @@ while loopFlag:
             pygame.quit()
             sys.exit()
 
-    mousePos = pygame.mouse.get_pos()
-    x = mousePos[0]
-    y = mousePos[1]
+    #mousePos = pygame.mouse.get_pos()
+    #x = mousePos[0]
+    #y = mousePos[1]
 
     # draw the background onto the surface
     windowSurface.blit(background, [0, 0])
@@ -165,16 +167,16 @@ while loopFlag:
     windowSurface.blit(arrowRight, [85, 100])
 
     # draw the ships onto the surface
-    windowSurface.blit(ship0, [x, y])
-    #windowSurface.blit(ship1, [215, 250])
-    #windowSurface.blit(ship2, [315, 250])
-    #windowSurface.blit(ship3, [415, 250])
-    #windowSurface.blit(ship4, [515, 250])
-    #windowSurface.blit(ship10, [615, 250])
-    #windowSurface.blit(ship6, [715, 250])
-    #windowSurface.blit(ship7, [815, 250])
-    #windowSurface.blit(ship8, [915, 250])
-    #windowSurface.blit(ship9, [1015, 250])
+    windowSurface.blit(ship0, [x, 250])
+    windowSurface.blit(ship1, [215, 250])
+    windowSurface.blit(ship2, [315, 250])
+    windowSurface.blit(ship3, [415, 250])
+    windowSurface.blit(ship4, [515, 250])
+    windowSurface.blit(ship5, [615, 250])
+    windowSurface.blit(ship6, [715, 250])
+    windowSurface.blit(ship7, [815, 250])
+    windowSurface.blit(ship8, [915, 250])
+    windowSurface.blit(ship9, [1015, 250])
 
     # draw the scheduler algorithm text
     #windowSurface.blit(rrText, [25, 570])
@@ -190,3 +192,8 @@ while loopFlag:
 
     # draw the window onto the screen>
     pygame.display.update()
+
+    if x !=  1015:
+        x += 0.5
+    else:
+        x = 2000
