@@ -62,3 +62,12 @@ PATROL_BOAT_SPEED_MULTIPLIER  = 3
 
 # define speed pow factor
 SPEED_POW_FACTOR = -4.5
+
+# define socket port
+PORT = 17017
+
+# define localhost
+LOCALHOST = "127.0.0.1"
+
+# define buffer size
+BUFFER_SIZE = 2048

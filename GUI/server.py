@@ -2,16 +2,17 @@ from fileinput import close
 from http import server
 import socket 
 import sys
+from constants import *
 
-def CreateServer(ip,port):
+def createServer(ip, port):
 
-    if isinstance(port,int) and isinstance(ip,str):
+    if isinstance(port, int) and isinstance(ip, str):
 
         try:
 
             serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-            serverSocket.bind((ip,port))
+            serverSocket.bind((ip, port))
 
             return serverSocket
 
@@ -23,7 +24,7 @@ def CreateServer(ip,port):
 
         return "ip or port incorrect"
 
-def ExecuteServer(serverSocket,messageSize):
+def executeServer(serverSocket, messageSize):
 
     message = ""
 
@@ -36,7 +37,7 @@ def ExecuteServer(serverSocket,messageSize):
     while(message != "end"):
 
         try:
-            connection , clientAddress = serverSocket.accept()
+            connection, clientAddress = serverSocket.accept()
 
             print("Connection from: ", clientAddress)
 
@@ -44,7 +45,7 @@ def ExecuteServer(serverSocket,messageSize):
 
                 message = connection.recv(messageSize).decode()
 
-                if message:
+                if(message):
 
                     print("Message received: ",message)
 
@@ -56,10 +57,10 @@ def ExecuteServer(serverSocket,messageSize):
 
         connection.close()
 
-def RunServer(ip,port,size):
+def runServer(ip, port, size):
 
-    server = CreateServer(ip,port)
+    server = createServer(ip, port)
 
-    ExecuteServer(server,size)
+    executeServer(server, size)
 
-RunServer("127.0.0.1", 8080, 2048)
+runServer(LOCALHOST, PORT, BUFFER_SIZE)

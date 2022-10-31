@@ -14,10 +14,73 @@
 import sys
 import json
 import pygame
+import socket
+
 from pygame.locals import *
 from threading import *
 from models import *
 from constants import *
+from fileinput import close
+from http import server
+
+def createServer(ip, port):
+    
+    if isinstance(port, int) and isinstance(ip, str):
+
+        try:
+
+            serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+            serverSocket.bind((ip, port))
+
+            return serverSocket
+
+        except:
+
+            return "Error creating the server"
+
+    else:
+
+        return "ip or port incorrect"
+
+def executeServer(serverSocket, messageSize):
+
+    message = ""
+
+    answer = "All right"
+
+    print("Waiting clients")
+
+    serverSocket.listen(1)
+    
+    while(message != "end"):
+
+        try:
+            connection, clientAddress = serverSocket.accept()
+
+            print("Connection from: ", clientAddress)
+
+            while(message != "end"):
+
+                message = connection.recv(messageSize).decode()
+
+                if(message):
+
+                    print("Message received: ",message)
+
+                    connection.send(answer.encode())
+
+        except:
+
+            print("Error accepting the connection from client")
+
+        connection.close()
+
+def runServer(ip, port, size):
+
+    server = createServer(ip, port)
+
+    executeServer(server, size)
 
 def readConfigFile(file):
 
@@ -313,32 +376,16 @@ def decrementReadyQueueRightText(readyQueueRightNumber):
 
     return readyQueueRightNumber, readyQueueRightText
 
+# create server thread
+threadServer = Thread(target = runServer, args = (LOCALHOST, PORT, BUFFER_SIZE,))
 
+# start server thread
+threadServer.start()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# set up config file
 file = open("calendarizadores/config.json")
 
 configList = readConfigFile(file)
-
-#def gui(configList):
 
 # set up pygame
 pygame.init()
@@ -476,7 +523,7 @@ while(loopFlag):
 
     #removeBoat(0)
     
-    
+
     if x <= 1015:
         x += 0.1
 
