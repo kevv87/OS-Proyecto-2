@@ -11,10 +11,10 @@
 """
 
 # set up libraries
-import pygame
-from pygame.locals import *
 import sys
 import json
+import pygame
+from pygame.locals import *
 from threading import *
 from models import *
 from constants import *
@@ -165,7 +165,7 @@ def removeBoat(id):
 
     for i in range(0, len(boatList)):
 
-        if(boatList[i].getId == id):
+        if(boatList[i].getId() == id):
             
             del boatList[i]
     
@@ -223,54 +223,8 @@ def getFinalPosX(finalPosition):
             return X9_POSITION
 
 def moveBoat(id):
-    
-    """
-    for boat in boatList:
-    
-        if(boat.getId == id):
 
-            speed = boat.getSpeed()
-
-            if(boat.getDirection == LEFT):
-
-                finalPosition = boat.getPosition() - 1
-
-                finalPosition = getFinalPosX(finalPosition)
-
-                while(True):
-
-                    currentPosX = boat.getPosX()                    
-
-                    if(currentPosX > finalPosition):
-
-                        boat.setPosX(currentPosX - speed)
-
-                    else:
-
-                        boat.setPosX(finalPosition)
-
-                        break
-
-            else:
-
-                finalPosition = boat.getPosition() + 1
-
-                finalPosition = getFinalPosX(finalPosition)
-
-                while(True):
-
-                    currentPosX = boat.getPosX()                    
-
-                    if(currentPosX < finalPosition):
-
-                        boat.setPosX(currentPosX + speed)
-
-                    else:
-
-                        boat.setPosX(finalPosition)
-
-                        break
-    """
+    #boat = boatList[0]
 
     for i in boatList:
     
@@ -282,7 +236,7 @@ def moveBoat(id):
 
     speed = boat.getSpeed()
 
-    if(boat.getDirection == LEFT):
+    if(boat.getDirection() == LEFT):
 
         finalPosition = boat.getPosition() - 1
 
@@ -373,7 +327,7 @@ arrowCurrent = arrowList[0]
 # set up boats
 boatList = []
 
-"""
+
 for i in range(0, configList[CHANNEL_LENGTH_INDEX]):
 
     #newBoat = pygame.image.load(NORMAL_BOAT_LEFT_PATH).convert()
@@ -381,10 +335,15 @@ for i in range(0, configList[CHANNEL_LENGTH_INDEX]):
 
     #boatList.append(newBoat)
 
-    addBoat(i, 0, 0, 1, 0)
-"""
+    #addBoat(i, 2, 0, 1, 0.00005)
+    #addBoat(i, 2, 9, 1, 0.00005)
 
-addBoat(0, 2, 0, 0, 0.00005)
+    pass
+
+
+
+#addBoat(0, 2, 0, 0, 0.00005)
+addBoat(0, 2, 9, 1, 0.00005)
 
 # get scheduler algorithm text
 schedulerAlgorithmText = getSchedulerAlgorithmText(configList[SCHEDULER_ALGORITHM_INDEX])
