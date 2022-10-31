@@ -1,36 +1,63 @@
 #include <arpa/inet.h>
-#include <stdio.h>
-#include <string.h>
 #include <sys/socket.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
+#include <pthread.h>
 
 #define PORT 8080
+#define BUFFER_SIZE 2048
 
-int main(int argc, char const* argv[]) {
+// set up global variables
+int clientSocket = 0;
+int answer;
+int clientFd;
+int closeFlag = 1;
 
-	int clientSocket = 0, answer, clientFd;
+struct sockaddr_in serverAddress;
 
-	struct sockaddr_in serverAddress;
+char buffer[BUFFER_SIZE] = { 0 };
 
-	char* message = "Hello from client";
+char *message = "Hello from client";
 
-	char buffer[1024] = { 0 };
+void *sendMessage(void *ptr) {
+
+	char *message;
+
+	message = (char*) ptr;
+
+	send(clientSocket, message, strlen(message), 0);
+
+	printf("Hello message sent\n");
+
+	answer = read(clientSocket, buffer, BUFFER_SIZE);
+
+	printf("%s\n", buffer);
+
+	closeFlag = 0;
+
+}
+
+void *runClient(void *vargp) {
 
 	if ((clientSocket = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
 
 		printf("\nSocket creation error \n");
 
-		return -1;
+		return 0;
+
 	}
 
 	serverAddress.sin_family = AF_INET;
+	
 	serverAddress.sin_port = htons(PORT);
 
 	if(inet_pton(AF_INET, "127.0.0.1", &serverAddress.sin_addr) <= 0) {
 
 		printf("\nInvalid address/ Address not supported \n");
 
-		return -1;
+		return 0;
 
 	}
 
@@ -38,31 +65,36 @@ int main(int argc, char const* argv[]) {
 
 		printf("\nConnection Failed \n");
 
-		return -1;
+		return 0;
 
 	}
 
-    char* end = "end";
+	while(closeFlag) {
 
-    
+		// Keeping client running
 
-    while(strcmp(message, end)) {
-
-        send(clientSocket, message, strlen(message), 0);
-        send(clientSocket, message, strlen(message), 0);
-        send(clientSocket, message, strlen(message), 0);
-
-        printf("Hello message sent\n");
-
-        answer = read(clientSocket, buffer, 1024);
-
-        printf("%s\n", buffer);
-
-        message = "end";
-
-    }
+	}
 
 	close(clientFd);
+
+}
+
+void closeClient() {
+
+	closeFlag = 0;
+
+}
+
+int main(int argc, char const* argv[]) {
+
+	pthread_t clientThread;
+	pthread_t sendThread;
+
+	pthread_create(&clientThread, NULL, runClient, NULL);
+	pthread_create(&sendThread, NULL, sendMessage, (void*) message);
+
+	pthread_join(sendThread, NULL);
+	pthread_join(clientThread, NULL);
 
 	return 0;
 
