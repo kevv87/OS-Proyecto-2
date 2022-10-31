@@ -11,6 +11,7 @@
 """
 
 # set up libraries
+from dis import Instruction
 import sys
 import json
 import pygame
@@ -22,6 +23,46 @@ from models import *
 from constants import *
 from fileinput import close
 from http import server
+
+def executeMessage(message):
+
+    message = message.split(",")
+
+    instruction = message[0]
+
+    match instruction:
+        
+        case "addBoat":
+
+            addBoat(message[1], message[2], message[3], message[4])
+
+        case "removeBoat":
+
+            removeBoat(message[1])
+
+        case "moveBoat":
+
+            moveBoat(message[1])
+
+        case "changeDirection":
+
+            arrowCurrent = changeArrowDirection(arrowCurrent)
+
+        case "incrementLeft":
+
+            readyQueueLeftNumber, readyQueueLeftText = incrementReadyQueueLeftText(readyQueueLeftNumber)
+
+        case "decrementLeft":
+
+            readyQueueLeftNumber, readyQueueLeftText = decrementReadyQueueLeftText(readyQueueLeftNumber)
+
+        case "incrementRight":
+
+            readyQueueRightNumber, readyQueueRightText = incrementReadyQueueRightText(readyQueueRightNumber)
+
+        case "decrementRight":
+
+            readyQueueRightNumber, readyQueueRightText = decrementReadyQueueRightText(readyQueueRightNumber)
 
 def createServer(ip, port):
     
@@ -66,9 +107,11 @@ def executeServer(serverSocket, messageSize):
 
                 if(message):
 
-                    print("Message received: ",message)
+                    print("Message received: ", message)
 
                     connection.send(answer.encode())
+
+                    executeMessage(message)
 
         except:
 

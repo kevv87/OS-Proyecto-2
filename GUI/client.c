@@ -6,7 +6,7 @@
 #include <unistd.h>
 #include <pthread.h>
 
-#define PORT 8080
+#define PORT 17017
 #define BUFFER_SIZE 2048
 
 // set up global variables

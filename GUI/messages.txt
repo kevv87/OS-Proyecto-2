@@ -1,0 +1,15 @@
+addBoat,id,type,position,direction
+
+removeBoat,id
+
+moveBoat,id
+
+changeDirection
+
+incrementLeft
+
+decrementLeft
+
+incrementRight
+
+decrementRight
