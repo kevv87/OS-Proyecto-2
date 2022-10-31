@@ -131,10 +131,8 @@ int serialport_read_until(int fd, char* buf, char until, int buf_max, int timeou
             if( timeout==0 ) return -2;
             continue;
         }
-#ifdef SERIALPORTDEBUG  
         printf("serialport_read_until: i=%d, n=%d b='%c'\n",i,n,b[0]); // debug
-#endif
-        buf[i] = b[0]; 
+        buf[i] = b[0];
         i++;
     } while( b[0] != until && i < buf_max && timeout>0 );
 

@@ -7,4 +7,5 @@
 #include <stdio.h>
 
 void printError(char *message);
+void printBuffer(char * buffer, int len);
 #endif //HARDWARE_IFACE_TOOLS_H

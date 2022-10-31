@@ -10,7 +10,7 @@
 
 #include "hw_structs.h"
 
-#define SERIAL_PORT "/dev/cu.usbmodem1433101"
+#define SERIAL_PORT "/dev/cu.usbmodem1423301"
 #define BAUDRATE 9600;
 
 int initialize_serial_connection(iface_context_t *context);
@@ -19,6 +19,8 @@ int destroy_serial_connection(iface_context_t *context);
 int serial_send_struct(iface_context_t *context, void *message, size_t len);
 int serial_send_byte(iface_context_t *context, uint8_t byte_message);
 int expect_confirmation(iface_context_t *context);
+int state_to_string(iface_state_t state, char *output, size_t *out_len);
+int send_ping(iface_context_t *context);
 
 
 #endif //HW_IFACE_H

@@ -3,6 +3,7 @@
 //
 
 #include <string.h>
+#include <stdlib.h>
 #include "include/serial_comm.h"
 
 int initialize_serial_connection(iface_context_t *context){
@@ -36,7 +37,7 @@ int expect_confirmation(iface_context_t *context){
             context->scratch_buffer.data,
             '0',
             2,
-            1000
+            10000
             );
 
     if(error_code < 0){
@@ -63,7 +64,7 @@ int serial_send_byte(iface_context_t *context, uint8_t byte_message){
         return error_code;
     }
 
-    if(byte_message == 3){
+    if(byte_message == 170){
         error_code = expect_confirmation(context);
         if(error_code < 0){
             printError("expect_confirmation failed");
@@ -75,23 +76,61 @@ int serial_send_byte(iface_context_t *context, uint8_t byte_message){
 }
 
 int send_ping(iface_context_t *context){
-    return serial_send_byte(context, 3);
+    int err_code = serial_send_byte(context, 170);
+    printf("Ping completed!\n");
+    return err_code;
+}
+
+int state_to_string(iface_state_t state, char *output, size_t *out_len){
+    int j  = 0;
+    for (int i = 0; i < 10; i++){
+        output[j] = state.channel_representation[i];
+        j += sizeof(ship_type_t);
+        output[j] = ' ';
+        j++;
+    }
+    output[j] = '\n';
+    j++;
+
+    output[j] = state.ships_at_left;
+    j += sizeof(uint8_t);
+    output[j] = ' ';
+    j++;
+    output[j] = state.ships_at_right;
+    j += sizeof(uint8_t);
+    output[j] = '\n';
+    j++;
+
+    output[j] = state.channel_direction;
+    j += sizeof(uint8_t);
+
+    output[j] = '\0';
+
+    *out_len = j;
+    return 0;
 }
 
 int serial_send_struct(iface_context_t *context, void *message, size_t len){
-    char *char_message = (char *) message;
+    // Now we are only sending the state struct
+    char *char_message = malloc(1024);
 
     if (send_ping(context) < 0){
         printError("ping couldn't be completed");
         return -1;
     }
 
-    for (int i=0; i<len; i++) {
-        if (serial_send_byte(context, char_message[i]) < 0) {
-            printError("error sending bytes");
-            return -1;
-        }
-    }
+    state_to_string(context->state, char_message, &len);
+
+    printf("Sending %zu bytes to arduino\n", len);
+    printf("%s", char_message);
+    printBuffer(char_message, len);
+    serialport_write(context->file_descriptor, char_message);
+//    for (int i=0; i<len; i++) {
+//        if (serial_send_byte(context, char_message[i]) < 0) {
+//            printError("error sending bytes");
+//            return -1;
+//        }
+//    }
 
     return 0;
 }

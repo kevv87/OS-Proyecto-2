@@ -13,7 +13,10 @@ add_subdirectory("${PROJECT_SOURCE_DIR}/../cmocka" "${PROJECT_BINARY_DIR}/cmocka
 add_subdirectory("${PROJECT_SOURCE_DIR}/../hw_iface" "${PROJECT_BINARY_DIR}/hw_iface")
 
 add_executable(test_serial_comm test_hw_iface/test_serial_comm.c)
+add_executable(test_channel_arduino test_hw_iface/test_channel_arduino.c)
 
 target_link_libraries(test_serial_comm PUBLIC Common cmocka hardware_iface)
+target_link_libraries(test_channel_arduino PUBLIC Common cmocka hardware_iface)
 
 target_include_directories(test_serial_comm PUBLIC "${PROJECT_SOURCE_DIR}/../")
+target_include_directories(test_channel_arduino PUBLIC "${PROJECT_SOURCE_DIR}/../")
