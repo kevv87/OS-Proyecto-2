@@ -1,22 +1,13 @@
-"""
-    addShip()
-    changeDirection() 
+"""pygame
+    ✓ addShip()
+    ✓ changeDirection() 
     interchangeShipsPosition()
     placeShipsInPosition()
     addShipToArray()
-    delShip()
+    ✓ delShip()
 
     2 semaforos, 1 izq y otro der
     La direccion del canal la maneja el semaforo que está en 0
-"""
-
-"""
-# Set up the colors
-BLACK = (0,0,0)
-RED = (255,0,0)
-GREEN = (0,255,0)
-BLUE = (0,0,255)
-WHITE = (255,255,255)
 """
 
 # set up libraries
@@ -24,78 +15,8 @@ import pygame
 from pygame.locals import *
 import sys
 import json
-
-# define constants paths
-BACKGROUND_PATH = "GUI/images/ocean.png"
-
-ARROW_LEFT_PATH = "GUI/images/arrows/arrowLeft.png"
-ARROW_RIGHT_PATH = "GUI/images/arrows/arrowRight.png"
-
-NORMAL_BOAT_LEFT_PATH = "GUI/images/boats/normalBoatLeft.png"
-NORMAL_BOAT_RIGHT_PATH = "GUI/images/boats/normalBoatRight.png"
-
-FISHING_BOAT_LEFT_PATH = "GUI/images/boats/fishingBoatLeft.png"
-FISHING_BOAT_RIGHT_PATH = "GUI/images/boats/fishingBoatRight.png"
-
-PATROL_BOAT_LEFT_PATH = "GUI/images/boats/patrolBoatLeft.png"
-PATROL_BOAT_RIGHT_PATH = "GUI/images/boats/patrolBoatRight.png"
-
-TRANSPARENT_BOAT_PATH = "GUI/images/boats/transparentBoat.png"
-
-EQUITY_TEXT_PATH = "GUI/images/texts/equity.png"
-SIGNBOARD_TEXT_PATH = "GUI/images/texts/signboard.png"
-TICO_TEXT_PATH = "GUI/images/texts/tico.png"
-
-RR_TEXT_PATH = "GUI/images/texts/rr.png"
-PRIORITY_TEXT_PATH = "GUI/images/texts/priority.png"
-SJF_TEXT_PATH = "GUI/images/texts/sjf.png"
-FCFS_TEXT_PATH = "GUI/images/texts/fcfs.png"
-EDF_TEXT_PATH = "GUI/images/texts/edf.png"
-
-# define constants directions
-LEFT = 0
-RIGHT = 1
-
-# define constants indexes
-SCHEDULER_ALGORITHM_INDEX = 0
-FLOW_CONTROL_METHOD_INDEX = 1
-CHANNEL_LENGTH_INDEX = 2
-BOAT_SPEED_INDEX = 3
-BOAT_SPEED_INDEX = 4
-W_PARAMETER_INDEX = 5
-SIGNBOARD_INDEX = 6
-DEFINED_LOAD_LEFT_INDEX = 7
-DEFINED_LOAD_RIGHT_INDEX = 8
-PRIORITY_INDEX = 9
-EDF_INDEX = 10
-
-# define boats position
-X0_POSITION = 115
-X1_POSITION = 215
-X2_POSITION = 315
-X3_POSITION = 415
-X4_POSITION = 515
-X5_POSITION = 615
-X6_POSITION = 715
-X7_POSITION = 815
-X8_POSITION = 915
-X9_POSITION = 1015
-
-Y_POSITION = 250
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+from models import *
+from constants import *
 
 
 def readConfigFile(file):
@@ -104,33 +25,6 @@ def readConfigFile(file):
 
     # returns JSON object as a dictionary
     data = json.load(file)
-
-    """
-    global schedulerAlgorithm
-    global flowControlMethod
-
-    global channelLength
-    global boatSpeed
-    global boatQuantity
-    global wParameter
-    global signboard
-    global definedLoadLeft
-    global definedLoadRight
-    global priority
-    global edf
-
-    schedulerAlgorithm = data["SchedulerAlgorithm"]
-    flowControlMethod = data["FlowControlMethod"]
-    channelLength = data["ChannelLength"]
-    boatSpeed = data["BoatSpeed"]
-    boatQuantity = data["BoatQuantity"]
-    wParameter = data["WParameter"]
-    signboard = data["Signboard"]
-    definedLoadLeft = data["DefinedLoadLeft"]
-    definedLoadRight = data["DefinedLoadRight"]
-    priority = data["Priority"]
-    edf = data["EDF"]
-    """
 
     configList.append(data["SchedulerAlgorithm"])
     configList.append(data["FlowControlMethod"])
@@ -196,7 +90,7 @@ def getFlowControlMethodText(flowControl):
 
             return EQUITY_TEXT_PATH
 
-def changeArrowDirection(arrowCurrent, arrowList):
+def changeArrowDirection(arrowCurrent):
     
     if(arrowCurrent == arrowList[LEFT]):
 
@@ -208,303 +102,173 @@ def changeArrowDirection(arrowCurrent, arrowList):
 
     return arrowCurrent
 
-def removeBoat():
-
-    return 3000
-
 def updateReadyQueueText(readyQueueNumber):
 
     font = pygame.font.Font("freesansbold.ttf", 75)
 
     return font.render(str(readyQueueNumber), True, (255, 255, 255))
 
+def getBoatImagePath(type, direction):
 
+    match type:        
 
+        case 0:
 
+            if(direction == LEFT):
 
+                return NORMAL_BOAT_LEFT_PATH
 
+            else:
 
+                return NORMAL_BOAT_RIGHT_PATH
 
+        case 1:
 
-
-
-
-def gui(configList):
-
-    # set up pygame
-    pygame.init()
-
-    # set up window
-    global windowSurface
-    windowSurface = pygame.display.set_mode((1209, 680), 0 , 32)
-
-    # set up window title
-    pygame.display.set_caption("Scheduling Ships - Calendarizador de Hilos")
-
-    # set up background
-    background = pygame.image.load(BACKGROUND_PATH).convert()
-
-    # set up arrows    
-    arrowLeft = pygame.image.load(ARROW_LEFT_PATH).convert()
-    arrowLeft.set_colorkey([0, 0, 0])
-
-    arrowRight = pygame.image.load(ARROW_RIGHT_PATH).convert()
-    arrowRight.set_colorkey([0, 0, 0])
-
-    arrowList = [arrowLeft, arrowRight]
-
-    arrowCurrent = arrowList[0]
-
-    """
-    # set up ships
-    boat0 = pygame.image.load(NORMAL_BOAT_LEFT_PATH).convert()
-    boat0.set_colorkey([0, 0, 0])
-
-    boat1 = pygame.image.load(NORMAL_BOAT_RIGHT_PATH).convert()
-    boat1.set_colorkey([0, 0, 0])
-
-    boat2 = pygame.image.load(FISHING_BOAT_LEFT_PATH).convert()
-    boat2.set_colorkey([0, 0, 0])
-
-    boat3 = pygame.image.load(FISHING_BOAT_RIGHT_PATH).convert()
-    boat3.set_colorkey([0, 0, 0])
-
-    boat4 = pygame.image.load(PATROL_BOAT_LEFT_PATH).convert()
-    boat4.set_colorkey([0, 0, 0])
-
-    boat5 = pygame.image.load(PATROL_BOAT_RIGHT_PATH).convert()
-    boat5.set_colorkey([0, 0, 0])
-
-    boat6 = pygame.image.load(NORMAL_BOAT_LEFT_PATH).convert()
-    boat6.set_colorkey([0, 0, 0])
-
-    boat7 = pygame.image.load(NORMAL_BOAT_RIGHT_PATH).convert()
-    boat7.set_colorkey([0, 0, 0])
-
-    boat8 = pygame.image.load(FISHING_BOAT_LEFT_PATH).convert()
-    boat8.set_colorkey([0, 0, 0])
-
-    boat9 = pygame.image.load(FISHING_BOAT_RIGHT_PATH).convert()
-    boat9.set_colorkey([0, 0, 0])
-
-    boat10 = pygame.image.load(TRANSPARENT_BOAT_PATH).convert()
-    boat10.set_colorkey([0, 0, 0])
-    """
-
-    # set up boats
-    boatList = []
-
-    for i in range(0, configList[CHANNEL_LENGTH_INDEX]):
-
-        newBoat = pygame.image.load(NORMAL_BOAT_LEFT_PATH).convert()
-        newBoat.set_colorkey([0, 0, 0])
-
-        boatList.append(newBoat)
-
-    """
-    # draw scheduler algorithm text
-    #windowSurface.blit(rrText, [25, 570])
-    #windowSurface.blit(priorityText, [25, 570])
-    #windowSurface.blit(sjfText, [25, 570])
-    #windowSurface.blit(fcfsText, [25, 570])
-    #windowSurface.blit(edfText, [25, 570])
-    """
-
-    # get scheduler algorithm text
-    schedulerAlgorithmText = getSchedulerAlgorithmText(configList[SCHEDULER_ALGORITHM_INDEX])
-
-    schedulerAlgorithm = pygame.image.load(schedulerAlgorithmText).convert()
-    schedulerAlgorithm.set_colorkey([0, 0, 0])
-
-    """
-    # set up flow control text
-    equityText = pygame.image.load(EQUITY_TEXT_PATH).convert()
-    equityText.set_colorkey([0, 0, 0])
-
-    signboardText = pygame.image.load(SIGNBOARD_TEXT_PATH).convert()
-    signboardText.set_colorkey([0, 0, 0])
-
-    ticoText = pygame.image.load(TICO_TEXT_PATH).convert()
-    ticoText.set_colorkey([0, 0, 0])
-    """
-
-    # set up flow control text
-    flowControlText = getFlowControlMethodText(configList[SCHEDULER_ALGORITHM_INDEX])
-
-    flowControl = pygame.image.load(flowControlText).convert()
-    flowControl.set_colorkey([0, 0, 0])
-
-    """
-    # draw the background onto the surface
-    windowSurface.blit(background, [0, 0])
-
-    # draw the arrow onto the surface
-    windowSurface.blit(arrowRight, [85, 100])
-
-    # draw the ships onto the surface
-    windowSurface.blit(ship0, [115, 250])
-    windowSurface.blit(ship1, [215, 250])
-    windowSurface.blit(ship2, [315, 250])
-    windowSurface.blit(ship3, [415, 250])
-    windowSurface.blit(ship4, [515, 250])
-    windowSurface.blit(ship10, [615, 250])
-    windowSurface.blit(ship6, [715, 250])
-    windowSurface.blit(ship7, [815, 250])
-    windowSurface.blit(ship8, [915, 250])
-    windowSurface.blit(ship9, [1015, 250])
-
-    # draw the scheduler algorithm text
-    #windowSurface.blit(rrText, [25, 570])
-    windowSurface.blit(priorityText, [25, 570])
-    #windowSurface.blit(sjfText, [25, 570])
-    #windowSurface.blit(fcfsText, [25, 570])
-    #windowSurface.blit(edfText, [25, 570])
-
-    # draw the flow control text
-    #windowSurface.blit(equityText, [885, 570])
-    windowSurface.blit(signboardText, [885, 570])
-    #windowSurface.blit(ticoText, [885, 570])
-
-    # draw the window onto the screen>
-    pygame.display.update()
-    """
-
-
-
-
-
-
-    # set up font for ready queues
-    font = pygame.font.Font("freesansbold.ttf", 75)
+            if(direction == LEFT):
     
-    # set up left ready queue text
-    readyQueueLeftNumber = 0
+                return FISHING_BOAT_LEFT_PATH
 
-    for i in configList[DEFINED_LOAD_LEFT_INDEX]:
+            else:
+
+                return FISHING_BOAT_RIGHT_PATH
+
+        case 2:
+
+            if(direction == LEFT):
     
-        readyQueueLeftNumber += i
+                return PATROL_BOAT_LEFT_PATH
 
-    readyQueueLeftText = font.render(str(readyQueueLeftNumber), True, (255, 255, 255))
+            else:
 
-    # set up right ready queue text
-    readyQueueRightNumber = 0
+                return PATROL_BOAT_RIGHT_PATH
 
-    for i in configList[DEFINED_LOAD_RIGHT_INDEX]:
+def addBoat(id, type, position, direction, speed):
+
+    path = getBoatImagePath(type, direction)
+
+    component = pygame.image.load(path).convert()
+    component.set_colorkey([0, 0, 0])
+
+    if(direction == LEFT):
+
+        newBoat = Boat(id, type, position, direction, speed, X0_POSITION, Y_POSITION, component)
+
+    else:
+
+        newBoat = Boat(id, type, position, direction, speed, X9_POSITION, Y_POSITION, component)
+
+    #boatList.insert(position, newBoat)
+
+    boatList.append(newBoat)
+
+def removeBoat(id):
+
+    for i in range(0, len(boatList)):
+
+        if(boatList[i].getId == id):
+            
+            del boatList[i]
+    
+    """
+    path = getBoatImagePath(3, 0)
+
+    component = pygame.image.load(path).convert()
+    component.set_colorkey([0, 0, 0])
+
+    boatList[position].setComponent(component)
+    """
+
+def getFinalPosX(finalPosition):
+
+    match finalPosition:
         
-        readyQueueRightNumber += i
+        case 0:
 
-    readyQueueRightText = font.render(str(readyQueueRightNumber), True, (255, 255, 255))
+            return X0_POSITION
 
+        case 1:
 
+            return X1_POSITION
 
+        case 2:
 
+            return X2_POSITION
 
+        case 3:
 
+            return X3_POSITION
 
+        case 4:
 
-    loopFlag = True
+            return X4_POSITION
 
-    x = 115
+        case 5:
 
-    # run game loop
-    while loopFlag:
+            return X5_POSITION
 
-        for event in pygame.event.get():
+        case 6:
 
-            if event.type == QUIT:
+            return X6_POSITION
 
-                loopFlag = False
+        case 7:
 
-                pygame.quit()
+            return X7_POSITION
 
-                sys.exit()
+        case 8:
 
-        # draw background onto the surface
-        windowSurface.blit(background, [0, 0])
+            return X8_POSITION
 
-        # draw arrow onto the surface
-        windowSurface.blit(arrowCurrent, [20, 20])
-        
-        """
-        windowSurface.blit(boat0, [x, 250])
-        windowSurface.blit(boat1, [215, 250])
-        windowSurface.blit(boat2, [315, 250])
-        windowSurface.blit(boat3, [415, 250])
-        windowSurface.blit(boat4, [515, 250])
-        windowSurface.blit(boat5, [615, 250])
-        windowSurface.blit(boat6, [715, 250])
-        windowSurface.blit(boat7, [815, 250])
-        windowSurface.blit(boat8, [915, 250])
-        windowSurface.blit(boat9, [1015, 250])
-        """
+        case 9:
 
-        """
-        # draw the boats onto the surface
-        windowSurface.blit(boatList[0], [X0_POSITION, Y_POSITION])
-        windowSurface.blit(boatList[1], [X1_POSITION, Y_POSITION])
-        windowSurface.blit(boatList[2], [X2_POSITION, Y_POSITION])
-        windowSurface.blit(boatList[3], [X3_POSITION, Y_POSITION])
-        windowSurface.blit(boatList[4], [X4_POSITION, Y_POSITION])
-        windowSurface.blit(boatList[5], [X5_POSITION, Y_POSITION])
-        windowSurface.blit(boatList[6], [X6_POSITION, Y_POSITION])
-        windowSurface.blit(boatList[7], [X7_POSITION, Y_POSITION])
-        windowSurface.blit(boatList[8], [X8_POSITION, Y_POSITION])
-        windowSurface.blit(boatList[9], [X9_POSITION, Y_POSITION])
-        """
+            return X9_POSITION
 
-        increment = 0
+def moveBoat(id):
 
-        # draw boats onto the surface
-        for i in range(0, configList[CHANNEL_LENGTH_INDEX]):
+    for boat in boatList:
     
-            windowSurface.blit(boatList[i], [X0_POSITION + increment, Y_POSITION])
+        if(boat.getId == id):
 
-            increment += 100
+            speed = boat.getSpeed()
 
-        # draw ready queue left text
-        windowSurface.blit(readyQueueLeftText, [112, 400])
+            if(boat.getDirection == LEFT):
 
-        # draw ready queue right text
-        windowSurface.blit(readyQueueRightText, [1012, 400])
+                finalPosition = boat.getPosition() - 1
 
-        # draw scheduler algorithm text
-        windowSurface.blit(schedulerAlgorithm, [25, 570])
+                finalPosition = getFinalPosX(finalPosition)
 
-        # draw flow control text
-        windowSurface.blit(flowControl, [885, 570])
+                while(True):
 
-        # draw window onto the screen>
-        pygame.display.update()
+                    currentPosX = boat.getPosX()                    
 
-        #readyQueueRightNumber -= 1
+                    if(currentPosX > finalPosition):
 
-        #readyQueueRightText = updateReadyQueueText(readyQueueRightNumber)
+                        boat.setPosX(currentPosX - speed)
 
-        #arrowCurrent = changeArrowDirection(arrowCurrent, arrowList)
+                    else:
 
+                        boat.setPosX(finalPosition)
 
+                        break
 
+            else:
 
-        """
+                finalPosition = boat.getPosition() + 1
 
-        if x <= 1015:
-            x += 0.1
-        else:
-            x = removeBoat()
+                finalPosition = getFinalPosX(finalPosition)
 
-        """
+                while(True):
 
+                    currentPosX = boat.getPosX()                    
 
+                    if(currentPosX < finalPosition):
 
+                        boat.setPosX(currentPosX + speed)
 
+                    else:
 
+                        boat.setPosX(finalPosition)
 
-
-
-
-
-
-
+                        break
 
 
 
@@ -526,33 +290,196 @@ def gui(configList):
 
 file = open("calendarizadores/config.json")
 
-"""
-0 => schedulerAlgorithm
-1 => flowControlMethod
-2 => channelLength
-3 => boatSpeed
-4 => boatQuantity
-5 => wParameter
-6 => signboard
-7 => definedLoadLeft
-8 => definedLoadRight
-9 => priority
-10 => edf
-"""
 configList = readConfigFile(file)
 
-gui(configList)
+#def gui(configList):
+
+# set up pygame
+pygame.init()
+
+# set up window
+global windowSurface
+windowSurface = pygame.display.set_mode((1209, 680), 0 , 32)
+
+# set up window title
+pygame.display.set_caption("Scheduling Ships - Calendarizador de Hilos")
+
+# set up background
+background = pygame.image.load(BACKGROUND_PATH).convert()
+
+# set up arrows    
+arrowLeft = pygame.image.load(ARROW_LEFT_PATH).convert()
+arrowLeft.set_colorkey([0, 0, 0])
+
+arrowRight = pygame.image.load(ARROW_RIGHT_PATH).convert()
+arrowRight.set_colorkey([0, 0, 0])
+
+arrowList = [arrowLeft, arrowRight]
+
+arrowCurrent = arrowList[0]
+
+# set up boats
+boatList = []
 
 """
-print(schedulerAlgorithm)
-print(flowControlMethod)
-print(channelLength)
-print(boatSpeed)
-print(boatQuantity)
-print(wParameter)
-print(signboard)
-print(definedLoadLeft)
-print(definedLoadRight)
-print(priority)
-print(edf)
+for i in range(0, configList[CHANNEL_LENGTH_INDEX]):
+
+    #newBoat = pygame.image.load(NORMAL_BOAT_LEFT_PATH).convert()
+    #newBoat.set_colorkey([0, 0, 0])
+
+    #boatList.append(newBoat)
+
+    addBoat(i, 0, 0, 1, 0)
 """
+
+addBoat(0, 0, 0, 0, 0.1)
+
+# get scheduler algorithm text
+schedulerAlgorithmText = getSchedulerAlgorithmText(configList[SCHEDULER_ALGORITHM_INDEX])
+
+schedulerAlgorithm = pygame.image.load(schedulerAlgorithmText).convert()
+schedulerAlgorithm.set_colorkey([0, 0, 0])
+
+# set up flow control text
+flowControlText = getFlowControlMethodText(configList[SCHEDULER_ALGORITHM_INDEX])
+
+flowControl = pygame.image.load(flowControlText).convert()
+flowControl.set_colorkey([0, 0, 0])
+
+# set up font for ready queues
+font = pygame.font.Font("freesansbold.ttf", 75)
+
+# set up left ready queue text
+readyQueueLeftNumber = 0
+
+for i in configList[DEFINED_LOAD_LEFT_INDEX]:
+
+    readyQueueLeftNumber += i
+
+readyQueueLeftText = font.render(str(readyQueueLeftNumber), True, (255, 255, 255))
+
+# set up right ready queue text
+readyQueueRightNumber = 0
+
+for i in configList[DEFINED_LOAD_RIGHT_INDEX]:
+    
+    readyQueueRightNumber += i
+
+readyQueueRightText = font.render(str(readyQueueRightNumber), True, (255, 255, 255))
+
+
+
+
+
+
+x = 115
+
+flag = 0
+
+loopFlag = True
+
+# run game loop
+while loopFlag:
+
+    for event in pygame.event.get():
+
+        if event.type == QUIT:
+
+            loopFlag = False
+
+            pygame.quit()
+
+            sys.exit()
+
+    # draw background onto the surface
+    windowSurface.blit(background, [0, 0])
+
+    # draw arrow onto the surface
+    windowSurface.blit(arrowCurrent, [20, 20])
+
+    #increment = 0
+
+    # draw boats onto the surface
+    #for i in range(0, configList[CHANNEL_LENGTH_INDEX]):
+    for i in range(0, len(boatList)):
+
+        windowSurface.blit(boatList[i].component, [boatList[i].posX, boatList[i].posY])
+
+        #increment += 100
+
+    # draw ready queue left text
+    windowSurface.blit(readyQueueLeftText, [112, 400])
+
+    # draw ready queue right text
+    windowSurface.blit(readyQueueRightText, [1012, 400])
+
+    # draw scheduler algorithm text
+    windowSurface.blit(schedulerAlgorithm, [25, 570])
+
+    # draw flow control text
+    windowSurface.blit(flowControl, [885, 570])
+
+    # draw window onto the screen>
+    pygame.display.update()
+
+    #readyQueueRightNumber -= 1
+
+    #readyQueueRightText = updateReadyQueueText(readyQueueRightNumber)
+
+    #arrowCurrent = changeArrowDirection(arrowCurrent)
+
+
+    removeBoat(0)
+
+
+    """
+    if x <= 1015:
+        x += 1
+    else:
+        #if(flag == 0):
+        removeBoat(flag)
+            #flag = 1
+
+        flag += 1
+    """ 
+
+
+    moveBoat(0)
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#file = open("calendarizadores/config.json")
+
+#configList = readConfigFile(file)
+
+#gui(configList)
