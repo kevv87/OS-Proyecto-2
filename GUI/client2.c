@@ -6,27 +6,20 @@
 #include <unistd.h>
 #include <pthread.h>
 
-
 #define PORT 8080
-
-#define END "end"
-
+#define BUFFER_SIZE 2048
 
 // set up global variables
 int clientSocket = 0;
 int answer;
 int clientFd;
-int close = 1;
+int closeFlag = 1;
 
 struct sockaddr_in serverAddress;
 
-//char* message = "Hello from client";
-char buffer[2048] = { 0 };
+char buffer[BUFFER_SIZE] = { 0 };
 
-
-
-
-
+char *message = "Hello from client";
 
 void *sendMessage(void *ptr) {
 
@@ -38,11 +31,11 @@ void *sendMessage(void *ptr) {
 
 	printf("Hello message sent\n");
 
-	answer = read(clientSocket, buffer, 2048);
+	answer = read(clientSocket, buffer, BUFFER_SIZE);
 
 	printf("%s\n", buffer);
 
-	close = 0;
+	closeFlag = 0;
 
 }
 
@@ -52,7 +45,7 @@ void *runClient(void *vargp) {
 
 		printf("\nSocket creation error \n");
 
-		return -1;
+		return 0;
 
 	}
 
@@ -64,7 +57,7 @@ void *runClient(void *vargp) {
 
 		printf("\nInvalid address/ Address not supported \n");
 
-		return -1;
+		return 0;
 
 	}
 
@@ -72,11 +65,11 @@ void *runClient(void *vargp) {
 
 		printf("\nConnection Failed \n");
 
-		return -1;
+		return 0;
 
 	}
 
-	while(close) {
+	while(closeFlag) {
 
 		// Keeping client running
 
@@ -88,121 +81,20 @@ void *runClient(void *vargp) {
 
 void closeClient() {
 
-	close = 0;
+	closeFlag = 0;
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 int main(int argc, char const* argv[]) {
 
-	/*
-	int clientSocket = 0, answer, clientFd;
-
-	struct sockaddr_in serverAddress;
-
-	char* message = "Hello from client";
-
-	char buffer[1024] = { 0 };
-	
-
-	
-	if ((clientSocket = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-
-		printf("\nSocket creation error \n");
-
-		return -1;
-	}
-
-	serverAddress.sin_family = AF_INET;
-	serverAddress.sin_port = htons(PORT);
-
-	if(inet_pton(AF_INET, "127.0.0.1", &serverAddress.sin_addr) <= 0) {
-
-		printf("\nInvalid address/ Address not supported \n");
-
-		return -1;
-
-	}
-
-	if((clientFd = connect(clientSocket, (struct sockaddr*) &serverAddress, sizeof(serverAddress))) < 0) {
-
-		printf("\nConnection Failed \n");
-
-		return -1;
-
-	}
-	
-
-    char* end = "end";
-
-    
-	
-    while(strcmp(message, end)) {
-
-        send(clientSocket, message, strlen(message), 0);
-        send(clientSocket, message, strlen(message), 0);
-        send(clientSocket, message, strlen(message), 0);
-
-        printf("Hello message sent\n");
-
-        answer = read(clientSocket, buffer, 1024);
-
-        printf("%s\n", buffer);
-
-        message = "end";
-
-    }
-	
-	close(clientFd);
-	*/
-
 	pthread_t clientThread;
-
-	pthread_create(&clientThread, NULL, runClient, NULL);
-
-
-	char *message = "Hello from client";
-
 	pthread_t sendThread;
 
+	pthread_create(&clientThread, NULL, runClient, NULL);
 	pthread_create(&sendThread, NULL, sendMessage, (void*) message);
-
-
-
-
-
-
-
-
 
 	pthread_join(sendThread, NULL);
 	pthread_join(clientThread, NULL);
-
-
-
-
-
-
-
 
 	return 0;
 
