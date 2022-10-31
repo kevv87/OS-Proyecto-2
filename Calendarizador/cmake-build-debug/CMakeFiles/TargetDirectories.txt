@@ -1,0 +1,3 @@
+/home/majinloop/CLionProjects/Calendarizador/cmake-build-debug/CMakeFiles/Calendarizador.dir
+/home/majinloop/CLionProjects/Calendarizador/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/majinloop/CLionProjects/Calendarizador/cmake-build-debug/CMakeFiles/rebuild_cache.dir

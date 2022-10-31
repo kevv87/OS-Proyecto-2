@@ -1,0 +1,13 @@
+{
+    "SchedulerAlgorithm": 1,
+    "FlowControlMethod": 0,
+    "ChannelLength": 5,
+    "BoatSpeed": 20,
+    "BoatQuantity": 2,
+    "WParameter": 50,
+    "Signboard": 1,
+    "DefinedLoadLeft": [1,1,1],
+    "DefinedLoadRight": [5,5,5],
+    "Priority": [1, 2],
+    "EDF": [35, 51, 13]
+}
