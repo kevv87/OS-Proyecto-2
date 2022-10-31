@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <semaphore.h>
 
 #define PORT 17017
 #define BUFFER_SIZE 2048
@@ -19,9 +20,24 @@ struct sockaddr_in serverAddress;
 
 char buffer[BUFFER_SIZE] = { 0 };
 
-char *message = "Hello from client";
+char *message1 = "changeDirection";
+
+char *message2 = "incrementLeft";
+char *message3 = "decrementLeft";
+char *message4 = "incrementRight";
+char *message5 = "decrementRight";
+
+char *message6 = "addBoat,2,2,0,0";
+
+char *message7 = "removeBoat,0";
+
+char *message8 = "moveBoat,0";
+
+sem_t messageSemaphore;
 
 void *sendMessage(void *ptr) {
+
+	sem_wait(&messageSemaphore);
 
 	char *message;
 
@@ -29,13 +45,15 @@ void *sendMessage(void *ptr) {
 
 	send(clientSocket, message, strlen(message), 0);
 
-	printf("Hello message sent\n");
+	printf("Message sent\n");
 
 	answer = read(clientSocket, buffer, BUFFER_SIZE);
 
 	printf("%s\n", buffer);
 
 	closeFlag = 0;
+
+	sem_post(&messageSemaphore);
 
 }
 
@@ -87,13 +105,39 @@ void closeClient() {
 
 int main(int argc, char const* argv[]) {
 
+	sem_init(&messageSemaphore, 0, 1);
+
 	pthread_t clientThread;
-	pthread_t sendThread;
+
+	//pthread_t sendThread1;
+	//pthread_t sendThread2;
+	//pthread_t sendThread3;
+	//pthread_t sendThread4;
+	//pthread_t sendThread5;
+	//pthread_t sendThread6;
+	//pthread_t sendThread7;
+	pthread_t sendThread8;
 
 	pthread_create(&clientThread, NULL, runClient, NULL);
-	pthread_create(&sendThread, NULL, sendMessage, (void*) message);
 
-	pthread_join(sendThread, NULL);
+	//pthread_create(&sendThread1, NULL, sendMessage, (void*) message1);
+	//pthread_create(&sendThread2, NULL, sendMessage, (void*) message2);
+	//pthread_create(&sendThread3, NULL, sendMessage, (void*) message3);
+	//pthread_create(&sendThread4, NULL, sendMessage, (void*) message4);
+	//pthread_create(&sendThread5, NULL, sendMessage, (void*) message5);
+	//pthread_create(&sendThread6, NULL, sendMessage, (void*) message6);
+	//pthread_create(&sendThread7, NULL, sendMessage, (void*) message7);
+	pthread_create(&sendThread8, NULL, sendMessage, (void*) message8);
+
+	//pthread_join(sendThread1, NULL);
+	//pthread_join(sendThread2, NULL);
+	//pthread_join(sendThread3, NULL);
+	//pthread_join(sendThread4, NULL);
+	//pthread_join(sendThread5, NULL);
+	//pthread_join(sendThread6, NULL);
+	//pthread_join(sendThread7, NULL);
+	pthread_join(sendThread8, NULL);
+
 	pthread_join(clientThread, NULL);
 
 	return 0;

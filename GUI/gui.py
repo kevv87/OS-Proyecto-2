@@ -1,15 +1,3 @@
-"""pygame
-    ✓ addShip()
-    ✓ changeDirection() 
-    ✓ interchangeShipsPosition() *
-    ✓ placeShipsInPosition() *
-    addShipToArray()
-    ✓ delShip()
-
-    2 semaforos, 1 izq y otro der
-    La direccion del canal la maneja el semaforo que está en 0
-"""
-
 # set up libraries
 from dis import Instruction
 import sys
@@ -26,6 +14,14 @@ from http import server
 
 def executeMessage(message):
 
+    global arrowCurrent
+
+    global readyQueueLeftNumber
+    global readyQueueLeftText
+
+    global readyQueueRightNumber
+    global readyQueueRightText
+
     message = message.split(",")
 
     instruction = message[0]
@@ -34,15 +30,15 @@ def executeMessage(message):
         
         case "addBoat":
 
-            addBoat(message[1], message[2], message[3], message[4])
+            addBoat(int(message[1]), int(message[2]), int(message[3]), int(message[4]))
 
         case "removeBoat":
 
-            removeBoat(message[1])
+            removeBoat(int(message[1]))
 
         case "moveBoat":
 
-            moveBoat(message[1])
+            moveBoat(int(message[1]))
 
         case "changeDirection":
 
@@ -111,7 +107,11 @@ def executeServer(serverSocket, messageSize):
 
                     connection.send(answer.encode())
 
-                    executeMessage(message)
+                    # create message thread
+                    threadMessage = Thread(target = executeMessage, args = (message,))
+
+                    # start message thread
+                    threadMessage.start()
 
         except:
 
@@ -336,6 +336,8 @@ def getFinalPosX(finalPosition):
             return X9_POSITION
 
 def moveBoat(id):
+
+    #boat = boatList[0]
 
     for i in boatList:
     
@@ -582,14 +584,14 @@ while(loopFlag):
             flag = 1
 
             # create threads
-            thread0 = Thread(target = moveBoat, args = (0,))
-            thread1 = Thread(target = moveBoat, args = (1,))
-            thread2 = Thread(target = moveBoat, args = (2,))
+            #thread0 = Thread(target = moveBoat, args = (0,))
+            #thread1 = Thread(target = moveBoat, args = (1,))
+            #thread2 = Thread(target = moveBoat, args = (2,))
 
             # start threads
-            thread0.start()
-            thread1.start()
-            thread2.start()
+            #thread0.start()
+            #thread1.start()
+            #thread2.start()
 
     
 
