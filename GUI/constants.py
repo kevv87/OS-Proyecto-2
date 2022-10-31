@@ -1,4 +1,4 @@
-# define constants paths
+# define constant paths
 BACKGROUND_PATH = "GUI/images/ocean.png"
 
 ARROW_LEFT_PATH = "GUI/images/arrows/arrowLeft.png"
@@ -25,11 +25,7 @@ SJF_TEXT_PATH = "GUI/images/texts/sjf.png"
 FCFS_TEXT_PATH = "GUI/images/texts/fcfs.png"
 EDF_TEXT_PATH = "GUI/images/texts/edf.png"
 
-# define constants directions
-LEFT = 0
-RIGHT = 1
-
-# define constants indexes
+# define constant indexes
 SCHEDULER_ALGORITHM_INDEX = 0
 FLOW_CONTROL_METHOD_INDEX = 1
 CHANNEL_LENGTH_INDEX = 2
@@ -42,7 +38,7 @@ DEFINED_LOAD_RIGHT_INDEX = 8
 PRIORITY_INDEX = 9
 EDF_INDEX = 10
 
-# define boats position
+# define boat positions
 X0_POSITION = 115
 X1_POSITION = 215
 X2_POSITION = 315
@@ -59,3 +55,10 @@ Y_POSITION = 250
 # define directions
 RIGHT = 0
 LEFT = 1
+
+#define speed multipliers
+FISHING_BOAT_SPEED_MULTIPLIER  = 1.5
+PATROL_BOAT_SPEED_MULTIPLIER  = 3
+
+# define speed pow factor
+SPEED_POW_FACTOR = -4.5

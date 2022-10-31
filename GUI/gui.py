@@ -1,8 +1,8 @@
 """pygame
     ✓ addShip()
     ✓ changeDirection() 
-    interchangeShipsPosition()
-    placeShipsInPosition()
+    ✓ interchangeShipsPosition() *
+    ✓ placeShipsInPosition() *
     addShipToArray()
     ✓ delShip()
 
@@ -90,7 +90,7 @@ def getFlowControlMethodText(flowControl):
 
             return EQUITY_TEXT_PATH
 
-def changeArrowDirection():
+def changeArrowDirection(arrowCurrent):
     
     if(arrowCurrent == arrowList[LEFT]):
 
@@ -100,7 +100,7 @@ def changeArrowDirection():
 
         arrowCurrent = arrowList[LEFT]
 
-    #return arrowCurrent
+    return arrowCurrent
 
 def updateReadyQueueText(readyQueueNumber):
 
@@ -142,7 +142,25 @@ def getBoatImagePath(type, direction):
 
                 return PATROL_BOAT_RIGHT_PATH
 
-def addBoat(id, type, position, direction, speed):
+def getSpeed(type):
+
+    match type:        
+
+        case 0:
+
+            return pow(configList[BOAT_SPEED_INDEX], SPEED_POW_FACTOR)
+
+        case 1:
+
+            return pow(configList[BOAT_SPEED_INDEX], SPEED_POW_FACTOR) * FISHING_BOAT_SPEED_MULTIPLIER
+
+        case 2:
+
+            return pow(configList[BOAT_SPEED_INDEX], SPEED_POW_FACTOR) * PATROL_BOAT_SPEED_MULTIPLIER
+
+def addBoat(id, type, position, direction):
+
+    speed = getSpeed(type)
 
     path = getBoatImagePath(type, direction)
 
@@ -157,8 +175,6 @@ def addBoat(id, type, position, direction, speed):
 
         newBoat = Boat(id, type, position, direction, speed, X0_POSITION, Y_POSITION, component)
 
-    #boatList.insert(position, newBoat)
-
     boatList.append(newBoat)
 
 def removeBoat(id):
@@ -168,15 +184,6 @@ def removeBoat(id):
         if(boatList[i].getId() == id):
             
             del boatList[i]
-    
-    """
-    path = getBoatImagePath(3, 0)
-
-    component = pygame.image.load(path).convert()
-    component.set_colorkey([0, 0, 0])
-
-    boatList[position].setComponent(component)
-    """
 
 def getFinalPosX(finalPosition):
 
@@ -223,8 +230,6 @@ def getFinalPosX(finalPosition):
             return X9_POSITION
 
 def moveBoat(id):
-
-    #boat = boatList[0]
 
     for i in boatList:
     
@@ -275,6 +280,41 @@ def moveBoat(id):
                 boat.setPosX(finalPosition)
 
                 break
+
+def incrementReadyQueueLeftText(readyQueueLeftNumber):
+    
+    readyQueueLeftNumber += 1
+
+    readyQueueLeftText = font.render(str(readyQueueLeftNumber), True, (255, 255, 255))
+
+    return readyQueueLeftNumber, readyQueueLeftText
+
+def decrementReadyQueueLeftText(readyQueueLeftNumber):
+
+    readyQueueLeftNumber -= 1
+
+    readyQueueLeftText = font.render(str(readyQueueLeftNumber), True, (255, 255, 255))
+
+    return readyQueueLeftNumber, readyQueueLeftText
+
+def incrementReadyQueueRightText(readyQueueRightNumber):
+
+    readyQueueRightNumber += 1
+
+    readyQueueRightText = font.render(str(readyQueueRightNumber), True, (255, 255, 255))
+
+    return readyQueueRightNumber, readyQueueRightText
+
+def decrementReadyQueueRightText(readyQueueRightNumber):
+
+    readyQueueRightNumber -= 1
+
+    readyQueueRightText = font.render(str(readyQueueRightNumber), True, (255, 255, 255))
+
+    return readyQueueRightNumber, readyQueueRightText
+
+
+
 
 
 
@@ -327,7 +367,7 @@ arrowCurrent = arrowList[0]
 # set up boats
 boatList = []
 
-
+"""
 for i in range(0, configList[CHANNEL_LENGTH_INDEX]):
 
     #newBoat = pygame.image.load(NORMAL_BOAT_LEFT_PATH).convert()
@@ -339,11 +379,11 @@ for i in range(0, configList[CHANNEL_LENGTH_INDEX]):
     #addBoat(i, 2, 9, 1, 0.00005)
 
     pass
+"""
 
-
-
-#addBoat(0, 2, 0, 0, 0.00005)
-addBoat(0, 2, 9, 1, 0.00005)
+addBoat(0, 0, 0, 0)
+addBoat(1, 1, 0, 0)
+addBoat(2, 2, 0, 0)
 
 # get scheduler algorithm text
 schedulerAlgorithmText = getSchedulerAlgorithmText(configList[SCHEDULER_ALGORITHM_INDEX])
@@ -402,22 +442,19 @@ while(loopFlag):
 
             sys.exit()
 
+    # draw window onto the screen>
+    pygame.display.update()
+
     # draw background onto the surface
     windowSurface.blit(background, [0, 0])
 
     # draw arrow onto the surface
     windowSurface.blit(arrowCurrent, [20, 20])
 
-    #increment = 0
-
     # draw boats onto the surface
-    #for i in range(0, configList[CHANNEL_LENGTH_INDEX]):
-    #for i in range(0, len(boatList)):
     for boat in boatList:
 
         windowSurface.blit(boat.getComponent(), [boat.getPosX(), boat.getPosY()])
-
-        #increment += 100
 
     # draw ready queue left text
     windowSurface.blit(readyQueueLeftText, [112, 400])
@@ -431,18 +468,14 @@ while(loopFlag):
     # draw flow control text
     windowSurface.blit(flowControl, [885, 570])
 
-    # draw window onto the screen>
-    pygame.display.update()
-
-    #readyQueueRightNumber -= 1
-
-    #readyQueueRightText = updateReadyQueueText(readyQueueRightNumber)
 
     #arrowCurrent = changeArrowDirection(arrowCurrent)
 
+    #readyQueueLeftNumber, readyQueueLeftText = incrementReadyQueueLeftText(readyQueueLeftNumber)
+    #readyQueueRightNumber, readyQueueRightText = decrementReadyQueueRightText(readyQueueRightNumber)
+
     #removeBoat(0)
-
-
+    
     
     if x <= 1015:
         x += 0.1
@@ -460,21 +493,13 @@ while(loopFlag):
 
             # create threads
             thread0 = Thread(target = moveBoat, args = (0,))
+            thread1 = Thread(target = moveBoat, args = (1,))
+            thread2 = Thread(target = moveBoat, args = (2,))
 
             # start threads
             thread0.start()
-
-            
-
-
-
-
-
-
-    
-
-
-    #moveBoat(0)
+            thread1.start()
+            thread2.start()
 
     
 
@@ -493,23 +518,3 @@ while(loopFlag):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#file = open("calendarizadores/config.json")
-
-#configList = readConfigFile(file)
-
-#gui(configList)
