@@ -1,4 +1,6 @@
 # define constant paths
+CONFIG_FILE_PATH = "Calendarizador/cmake-build-debug/config.json"
+
 BACKGROUND_PATH = "GUI/images/ocean.png"
 
 ARROW_LEFT_PATH = "GUI/images/arrows/arrowLeft.png"

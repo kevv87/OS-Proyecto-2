@@ -436,7 +436,7 @@ threadServer = Thread(target = runServer, args = (LOCALHOST, PORT, BUFFER_SIZE,)
 threadServer.start()
 
 # set up config file
-file = open("calendarizadores/config.json")
+file = open(CONFIG_FILE_PATH)
 
 configList = readConfigFile(file)
 
