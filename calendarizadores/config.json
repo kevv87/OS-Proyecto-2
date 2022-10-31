@@ -2,7 +2,7 @@
     "SchedulerAlgorithm": 0,
     "FlowControlMethod": 0,
     "ChannelLength": 10,
-    "BoatSpeed": 72,
+    "BoatSpeed": 20,
     "BoatQuantity": 10,
     "WParameter": 0,
     "Signboard": 5,

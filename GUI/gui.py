@@ -4,6 +4,7 @@ import sys
 import json
 import pygame
 import socket
+import time
 
 from pygame.locals import *
 from threading import *
@@ -254,15 +255,18 @@ def getSpeed(type):
 
         case 0:
 
-            return pow(configList[BOAT_SPEED_INDEX], SPEED_POW_FACTOR)
+            #return pow(configList[BOAT_SPEED_INDEX], SPEED_POW_FACTOR)
+            return configList[BOAT_SPEED_INDEX]
 
         case 1:
 
-            return pow(configList[BOAT_SPEED_INDEX], SPEED_POW_FACTOR) * FISHING_BOAT_SPEED_MULTIPLIER
+            #return pow(configList[BOAT_SPEED_INDEX], SPEED_POW_FACTOR) * FISHING_BOAT_SPEED_MULTIPLIER
+            return configList[BOAT_SPEED_INDEX] * FISHING_BOAT_SPEED_MULTIPLIER
 
         case 2:
 
-            return pow(configList[BOAT_SPEED_INDEX], SPEED_POW_FACTOR) * PATROL_BOAT_SPEED_MULTIPLIER
+            #return pow(configList[BOAT_SPEED_INDEX], SPEED_POW_FACTOR) * PATROL_BOAT_SPEED_MULTIPLIER
+            return configList[BOAT_SPEED_INDEX] * PATROL_BOAT_SPEED_MULTIPLIER
 
 def addBoat(id, type, position, direction):
 
@@ -361,7 +365,9 @@ def moveBoat(id):
 
             if(currentPosX > finalPosition):
 
-                boat.setPosX(currentPosX - speed)
+                boat.setPosX(currentPosX - STEP)
+
+                time.sleep(((1 / speed) * TIME_FIX_FACTOR) / 100)
 
             else:
 
@@ -381,7 +387,9 @@ def moveBoat(id):
 
             if(currentPosX < finalPosition):
 
-                boat.setPosX(currentPosX + speed)
+                boat.setPosX(currentPosX + STEP)
+
+                time.sleep(((1 / speed) * TIME_FIX_FACTOR) / 100)
 
             else:
 
@@ -474,7 +482,7 @@ for i in range(0, configList[CHANNEL_LENGTH_INDEX]):
 """
 
 addBoat(0, 0, 0, 0)
-addBoat(1, 1, 0, 0)
+addBoat(1, 1, 9, 1)
 addBoat(2, 2, 0, 0)
 
 # get scheduler algorithm text
@@ -509,11 +517,6 @@ for i in configList[DEFINED_LOAD_RIGHT_INDEX]:
     readyQueueRightNumber += i
 
 readyQueueRightText = font.render(str(readyQueueRightNumber), True, (255, 255, 255))
-
-
-
-
-
 
 x = 115
 
@@ -569,8 +572,8 @@ while(loopFlag):
     #removeBoat(0)
     
 
-    if x <= 1015:
-        x += 0.1
+    if x <= 400:
+        x += 1
 
         #boatList[0].setPosX(x)
 
@@ -584,14 +587,14 @@ while(loopFlag):
             flag = 1
 
             # create threads
-            #thread0 = Thread(target = moveBoat, args = (0,))
-            #thread1 = Thread(target = moveBoat, args = (1,))
-            #thread2 = Thread(target = moveBoat, args = (2,))
+            thread0 = Thread(target = moveBoat, args = (0,))
+            thread1 = Thread(target = moveBoat, args = (1,))
+            thread2 = Thread(target = moveBoat, args = (2,))
 
             # start threads
-            #thread0.start()
-            #thread1.start()
-            #thread2.start()
+            thread0.start()
+            thread1.start()
+            thread2.start()
 
     
 
