@@ -15,9 +15,9 @@ import pygame
 from pygame.locals import *
 import sys
 import json
+from threading import *
 from models import *
 from constants import *
-
 
 def readConfigFile(file):
 
@@ -90,7 +90,7 @@ def getFlowControlMethodText(flowControl):
 
             return EQUITY_TEXT_PATH
 
-def changeArrowDirection(arrowCurrent):
+def changeArrowDirection():
     
     if(arrowCurrent == arrowList[LEFT]):
 
@@ -100,7 +100,7 @@ def changeArrowDirection(arrowCurrent):
 
         arrowCurrent = arrowList[LEFT]
 
-    return arrowCurrent
+    #return arrowCurrent
 
 def updateReadyQueueText(readyQueueNumber):
 
@@ -151,11 +151,11 @@ def addBoat(id, type, position, direction, speed):
 
     if(direction == LEFT):
 
-        newBoat = Boat(id, type, position, direction, speed, X0_POSITION, Y_POSITION, component)
+        newBoat = Boat(id, type, position, direction, speed, X9_POSITION, Y_POSITION, component)
 
     else:
 
-        newBoat = Boat(id, type, position, direction, speed, X9_POSITION, Y_POSITION, component)
+        newBoat = Boat(id, type, position, direction, speed, X0_POSITION, Y_POSITION, component)
 
     #boatList.insert(position, newBoat)
 
@@ -223,7 +223,8 @@ def getFinalPosX(finalPosition):
             return X9_POSITION
 
 def moveBoat(id):
-
+    
+    """
     for boat in boatList:
     
         if(boat.getId == id):
@@ -269,6 +270,57 @@ def moveBoat(id):
                         boat.setPosX(finalPosition)
 
                         break
+    """
+
+    for i in boatList:
+    
+        if(i.getId() == id):
+
+            boat = i
+
+            break
+
+    speed = boat.getSpeed()
+
+    if(boat.getDirection == LEFT):
+
+        finalPosition = boat.getPosition() - 1
+
+        finalPosition = getFinalPosX(finalPosition)
+
+        while(True):
+
+            currentPosX = boat.getPosX()                    
+
+            if(currentPosX > finalPosition):
+
+                boat.setPosX(currentPosX - speed)
+
+            else:
+
+                boat.setPosX(finalPosition)
+
+                break
+
+    else:
+
+        finalPosition = boat.getPosition() + 1
+
+        finalPosition = getFinalPosX(finalPosition)
+
+        while(True):
+
+            currentPosX = boat.getPosX()                    
+
+            if(currentPosX < finalPosition):
+
+                boat.setPosX(currentPosX + speed)
+
+            else:
+
+                boat.setPosX(finalPosition)
+
+                break
 
 
 
@@ -332,7 +384,7 @@ for i in range(0, configList[CHANNEL_LENGTH_INDEX]):
     addBoat(i, 0, 0, 1, 0)
 """
 
-addBoat(0, 0, 0, 0, 0.1)
+addBoat(0, 2, 0, 0, 0.00005)
 
 # get scheduler algorithm text
 schedulerAlgorithmText = getSchedulerAlgorithmText(configList[SCHEDULER_ALGORITHM_INDEX])
@@ -379,7 +431,7 @@ flag = 0
 loopFlag = True
 
 # run game loop
-while loopFlag:
+while(loopFlag):
 
     for event in pygame.event.get():
 
@@ -401,9 +453,10 @@ while loopFlag:
 
     # draw boats onto the surface
     #for i in range(0, configList[CHANNEL_LENGTH_INDEX]):
-    for i in range(0, len(boatList)):
+    #for i in range(0, len(boatList)):
+    for boat in boatList:
 
-        windowSurface.blit(boatList[i].component, [boatList[i].posX, boatList[i].posY])
+        windowSurface.blit(boat.getComponent(), [boat.getPosX(), boat.getPosY()])
 
         #increment += 100
 
@@ -428,23 +481,41 @@ while loopFlag:
 
     #arrowCurrent = changeArrowDirection(arrowCurrent)
 
+    #removeBoat(0)
 
-    removeBoat(0)
 
-
-    """
+    
     if x <= 1015:
-        x += 1
+        x += 0.1
+
+        #boatList[0].setPosX(x)
+
+        
+
     else:
-        #if(flag == 0):
-        removeBoat(flag)
-            #flag = 1
 
-        flag += 1
-    """ 
+        if(flag == 0):           
+
+            #removeBoat(flag)
+            flag = 1
+
+            # create threads
+            thread0 = Thread(target = moveBoat, args = (0,))
+
+            # start threads
+            thread0.start()
+
+            
 
 
-    moveBoat(0)
+
+
+
+
+    
+
+
+    #moveBoat(0)
 
     
 
