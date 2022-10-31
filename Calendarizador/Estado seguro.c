@@ -19,6 +19,11 @@ int calendarization_algorithm=0;
 int canal_algorithm=0;
 int boat_quantity;
 int canal_length;
+int signboard_time=1;
+int priority[2];
+int edf_deadlines[3];
+
+
 Canal_node_t* canal;
 int base_speed=0;
 
@@ -61,6 +66,14 @@ sem_t sem_direction_aux;//To switch direction
 sem_t sem_schedule_left;
 sem_t sem_schedule_right;
 
+///RR
+Boat_Doubly_Linked_List_t* list_RR_left;
+sem_t sem_list_RR_left;
+
+Boat_Doubly_Linked_List_t* list_RR_right;
+sem_t sem_list_RR_right;
+
+
 
 ///Defs
 int get_id();
@@ -90,21 +103,21 @@ void initial_load(Load_t* load)
     while(load->left[0] > 0)
     {
         Boat_t* normal_boat = malloc(sizeof(Boat_t));
-        normal_boat->id=get_id(); normal_boat->type=0; normal_boat->position=0; normal_boat->direction=RIGHT; normal_boat->speed=base_speed; normal_boat->life_time=LIFE_TIME_IMMORTAL; normal_boat->priority=10; //normal_boat->arrival_time=0;
+        normal_boat->id=get_id(); normal_boat->type=0; normal_boat->position=0; normal_boat->direction=RIGHT; normal_boat->speed=base_speed; normal_boat->deadline=edf_deadlines[0]; normal_boat->priority=priority[0]; //normal_boat->arrival_time=0;
         append_boat(list_left, normal_boat);
         load->left[0]--;
     }
     while(load->left[1] > 0)
     {
         Boat_t* fisher_boat = malloc(sizeof(Boat_t));
-        fisher_boat->id=get_id(); fisher_boat->type=1; fisher_boat->position=0; fisher_boat->direction=RIGHT; fisher_boat->speed=base_speed*FISHER_BOAT_SPEED_MULTIPLIER;fisher_boat->life_time=LIFE_TIME_IMMORTAL; fisher_boat->priority=20; //fisher_boat->arrival_time=0;
+        fisher_boat->id=get_id(); fisher_boat->type=1; fisher_boat->position=0; fisher_boat->direction=RIGHT; fisher_boat->speed=base_speed*FISHER_BOAT_SPEED_MULTIPLIER;fisher_boat->deadline=edf_deadlines[1]; fisher_boat->priority=priority[1]; //fisher_boat->arrival_time=0;
         append_boat(list_left, fisher_boat);
         load->left[1]--;
     }
     while(load->left[2] > 0)
     {
         Boat_t* patrol_boat = malloc(sizeof(Boat_t));
-        patrol_boat->id=get_id(); patrol_boat->type=2; patrol_boat->position=0; patrol_boat->direction=RIGHT; patrol_boat->speed=base_speed*PATROL_BOAT_SPEED_MULTIPLIER; patrol_boat->life_time=LIFE_TIME_STANDARD; patrol_boat->priority=15;
+        patrol_boat->id=get_id(); patrol_boat->type=2; patrol_boat->position=0; patrol_boat->direction=RIGHT; patrol_boat->speed=base_speed*PATROL_BOAT_SPEED_MULTIPLIER; patrol_boat->deadline=edf_deadlines[2]; patrol_boat->priority=PATROL_BOAT_PRIORITY;
         append_boat(list_left, patrol_boat);
         load->left[2]--;
     }
@@ -112,21 +125,21 @@ void initial_load(Load_t* load)
     while(load->right[0] > 0)
     {
         Boat_t* normal_boat = malloc(sizeof(Boat_t));
-        normal_boat->id=get_id(); normal_boat->type=0; normal_boat->position=0; normal_boat->direction=LEFT; normal_boat->speed=base_speed; normal_boat->life_time=LIFE_TIME_IMMORTAL; normal_boat->priority=20;
+        normal_boat->id=get_id(); normal_boat->type=0; normal_boat->position=0; normal_boat->direction=LEFT; normal_boat->speed=base_speed; normal_boat->deadline=edf_deadlines[0]; normal_boat->priority=priority[0];
         append_boat(list_right, normal_boat);
         load->right[0]--;
     }
     while(load->right[1] > 0)
     {
         Boat_t* fisher_boat = malloc(sizeof(Boat_t));
-        fisher_boat->id=get_id(); fisher_boat->type=1; fisher_boat->position=0; fisher_boat->direction=LEFT; fisher_boat->speed=base_speed*FISHER_BOAT_SPEED_MULTIPLIER;fisher_boat->life_time=LIFE_TIME_IMMORTAL; fisher_boat->priority=10;
+        fisher_boat->id=get_id(); fisher_boat->type=1; fisher_boat->position=0; fisher_boat->direction=LEFT; fisher_boat->speed=base_speed*FISHER_BOAT_SPEED_MULTIPLIER;fisher_boat->deadline=edf_deadlines[1]; fisher_boat->priority=priority[1];
         append_boat(list_right, fisher_boat);
         load->right[1]--;
     }
     while(load->right[2] > 0)
     {
         Boat_t* patrol_boat = malloc(sizeof(Boat_t));
-        patrol_boat->id=get_id(); patrol_boat->type=2; patrol_boat->position=0; patrol_boat->direction=LEFT; patrol_boat->speed=base_speed*PATROL_BOAT_SPEED_MULTIPLIER; patrol_boat->life_time=LIFE_TIME_STANDARD; patrol_boat->priority=20;
+        patrol_boat->id=get_id(); patrol_boat->type=2; patrol_boat->position=0; patrol_boat->direction=LEFT; patrol_boat->speed=base_speed*PATROL_BOAT_SPEED_MULTIPLIER; patrol_boat->deadline=edf_deadlines[2]; patrol_boat->priority=PATROL_BOAT_PRIORITY;
         append_boat(list_right, patrol_boat);
         load->right[2]--;
     }
@@ -149,7 +162,7 @@ void print_canal()
         printf("Canal Sem: %d = %d\t", i, value);
         if((canal+i)->boat!=NULL)
         {
-            printBoat((canal+i)->boat);
+            print_boat((canal+i)->boat);
         }
         else
         {
@@ -188,48 +201,84 @@ void* boat_spawner_func()
         Boat_t* boat = malloc(sizeof(Boat_t));
         switch(caracter)
         {
-            case 'q':///Patrol Left
-                boat->id=get_id(); boat->type=2; boat->position=0; boat->direction=RIGHT; boat->speed=base_speed*PATROL_BOAT_SPEED_MULTIPLIER; boat->life_time=LIFE_TIME_STANDARD; boat->priority=2;
+            case 'a':///Patrol Left
+                boat->id=get_id(); boat->type=2; boat->position=0; boat->direction=RIGHT; boat->speed=base_speed*PATROL_BOAT_SPEED_MULTIPLIER; boat->deadline=edf_deadlines[2]; boat->priority=PATROL_BOAT_PRIORITY;
                 sem_wait(&sem_list_left); append_boat(list_left, boat); sem_post(&sem_list_left);
-                printf("Patrol Boat: %d spawns on left\n", boat->id);
+                printf("Patrol Boat [%d] spawns on left\n", boat->id);
                 sem_wait(&sem_boats_remaining_left); boats_remaining_left++; sem_post(&sem_boats_remaining_left);
                 break;
-            case 'w':///Fisher Left
-                boat->id=get_id(); boat->type=1; boat->position=0; boat->direction=RIGHT; boat->speed=base_speed*FISHER_BOAT_SPEED_MULTIPLIER; boat->life_time=LIFE_TIME_IMMORTAL; boat->priority=1;
+            case 's':///Fisher Left
+                boat->id=get_id(); boat->type=1; boat->position=0; boat->direction=RIGHT; boat->speed=base_speed*FISHER_BOAT_SPEED_MULTIPLIER; boat->deadline=edf_deadlines[1]; boat->priority=priority[1];
                 sem_wait(&sem_list_left); append_boat(list_left, boat); sem_post(&sem_list_left);
-                printf("Fisher Boat: %d spawns on left\n", boat->id);
+                printf("Fisher Boat [%d] spawns on left\n", boat->id);
                 sem_wait(&sem_boats_remaining_left); boats_remaining_left++; sem_post(&sem_boats_remaining_left);
                 break;
-            case 'e':///Normal Left
-                boat->id=get_id(); boat->type=0; boat->position=0; boat->direction=RIGHT; boat->speed=base_speed; boat->life_time=LIFE_TIME_IMMORTAL; boat->priority=0;
+            case 'd':///Normal Left
+                boat->id=get_id(); boat->type=0; boat->position=0; boat->direction=RIGHT; boat->speed=base_speed; boat->deadline=edf_deadlines[0]; boat->priority=priority[0];
                 sem_wait(&sem_list_left); append_boat(list_left, boat); sem_post(&sem_list_left);
-                printf("Normal Boat: %d spawns on left\n", boat->id);
+                printf("Normal Boat [%d] spawns on left\n", boat->id);
                 sem_wait(&sem_boats_remaining_left); boats_remaining_left++; sem_post(&sem_boats_remaining_left);
                 break;
-            case 'r':///Normal Right
-                boat->id=get_id(); boat->type=0; boat->position=0; boat->direction=LEFT; boat->speed=base_speed; boat->life_time=LIFE_TIME_IMMORTAL; boat->priority=0;
+            case 'j':///Normal Right
+                boat->id=get_id(); boat->type=0; boat->position=0; boat->direction=LEFT; boat->speed=base_speed; boat->deadline=edf_deadlines[0]; boat->priority=priority[0];
                 sem_wait(&sem_list_right); append_boat(list_right, boat); sem_post(&sem_list_right);
-                printf("Normal Boat: %d spawns on right\n", boat->id);
+                printf("Normal Boat [%d] spawns on right\n", boat->id);
                 sem_wait(&sem_boats_remaining_right); boats_remaining_right++; sem_post(&sem_boats_remaining_right);
                 break;
-            case 't':///Fisher Right
-                boat->id=get_id(); boat->type=1; boat->position=0; boat->direction=LEFT; boat->speed=base_speed*FISHER_BOAT_SPEED_MULTIPLIER; boat->life_time=LIFE_TIME_IMMORTAL; boat->priority=1;
+            case 'k':///Fisher Right
+                boat->id=get_id(); boat->type=1; boat->position=0; boat->direction=LEFT; boat->speed=base_speed*FISHER_BOAT_SPEED_MULTIPLIER; boat->deadline=edf_deadlines[1]; boat->priority=priority[1];
                 sem_wait(&sem_list_right); append_boat(list_right, boat); sem_post(&sem_list_right);
-                printf("Fisher Boat: %d spawns on right\n", boat->id);
+                printf("Fisher Boat [%d] spawns on right\n", boat->id);
                 sem_wait(&sem_boats_remaining_right); boats_remaining_right++; sem_post(&sem_boats_remaining_right);
                 break;
-            case 'y':///Patrol Right
-                boat->id=get_id(); boat->type=2; boat->position=0; boat->direction=LEFT; boat->speed=base_speed*PATROL_BOAT_SPEED_MULTIPLIER; boat->life_time=LIFE_TIME_STANDARD; boat->priority=2;
+            case 'l':///Patrol Right
+                boat->id=get_id(); boat->type=2; boat->position=0; boat->direction=LEFT; boat->speed=base_speed*PATROL_BOAT_SPEED_MULTIPLIER; boat->deadline=edf_deadlines[2]; boat->priority=PATROL_BOAT_PRIORITY;
                 sem_wait(&sem_list_right); append_boat(list_right, boat); sem_post(&sem_list_right);
-                printf("Patrol Boat: %d spawns on right\n", boat->id);
+                printf("Patrol Boat [%d] spawns on right\n", boat->id);
                 sem_wait(&sem_boats_remaining_right); boats_remaining_right++; sem_post(&sem_boats_remaining_right);
                 break;
 
             default:
-                if(caracter==' ')
+                if(caracter=='w')
                 {
                     loop=0;
                 };
+        }
+    }
+}
+void* RR_func(void* arguments_)
+{
+    Tico_arguments_launcher_t* arguments=arguments_;
+    while(loop)
+    {
+        usleep(QUANTUM_TIME);
+        if(arguments->direction==RIGHT)
+        {
+            if(!is_boat_list_empty(list_RR_left))
+            {
+                sem_wait(&sem_list_RR_left);
+                append_boat(list_RR_left, list_RR_left->first->data);
+                delete_first(list_RR_left);
+                sem_post(&sem_list_RR_left);
+
+                printf("List RR left:\t");
+                print_list(list_RR_left);
+                printf("\n");
+            }
+        }
+        else
+        {
+            if(!is_boat_list_empty(list_RR_right))
+            {
+                sem_wait(&sem_list_RR_right);
+                append_boat(list_RR_right, list_RR_right->first->data);
+                delete_first(list_RR_right);
+                sem_post(&sem_list_RR_right);
+
+                //printf("List RR right:\t");
+                //print_list(list_RR_right);
+                //printf("\n");
+            }
         }
     }
 }
@@ -241,30 +290,108 @@ void* equity_thread_func(void* arguments_)
     ///Direction semaphores
     if(arguments->boat->direction==RIGHT)
     {
-        //sem_wait(&sem_schedule_left); schedule(calendarization_algorithm,list_exec_order_left); sem_post(&sem_schedule_left);
+        sem_wait(&sem_direction_aux);///Se apropia de la edicion de los semaforos de direccion
+        int sem_value; sem_getvalue(&sem_left, &sem_value);
+        if(boats_in_canal==0 && sem_value==0 && boats_remaining_right==0)
+        {
+            //*(arguments->finished_boats_left)=0;
+            ups(&sem_left, arguments->w);
+            set_to_zero(&sem_right);
+        }
+        sem_post(&sem_direction_aux);///Termina de apropiarce de la edicion de los semaforos de direccion
 
-        while(list_exec_order_left->first->data->id!=arguments->boat->id)///Busy waiting hasta que le toque su turno
-        {/*Busy waiting equis de*/}
-        //printf("%d antes de sem_left\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
+        ///Busy waiting hasta que le toque su turno
+        int order=1;
+        while(order)
+        {
+            sem_wait(&sem_list_exec_order_left);
+            if(list_exec_order_left->first->data->id==arguments->boat->id)
+            {
+                order=0;
+            }
+            sem_post(&sem_list_exec_order_left);
+        }order=1;
+        int w_aux=1;
+        while(w_aux)
+        {
+            sem_wait(&(*arguments->sem_finished_boats));
+            if(*(arguments->finished_boats)<arguments->w)
+            {
+                w_aux=0;
+            }
+            sem_post(&(*arguments->sem_finished_boats));
+        }w_aux=1;
         sem_wait(&sem_left);///Se come un permiso de entrar por la izquierda
-        //printf("%d despues de sem_left\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
+
+        sem_wait(&(*arguments->sem_finished_boats)); *(arguments->finished_boats)=*(arguments->finished_boats)+1; sem_post(&(*arguments->sem_finished_boats));
+
     }
     else
     {
-        //sem_wait(&sem_schedule_right); schedule(calendarization_algorithm,list_exec_order_right); sem_post(&sem_schedule_right);
+        sem_wait(&sem_direction_aux);///Se apropia de la edicion de los semaforos de direccion
+        int sem_value; sem_getvalue(&sem_right, &sem_value);
+        if(boats_in_canal==0 && sem_value==0 && boats_remaining_left==0)
+        {
+            //*(arguments->finished_boats_right)=0;
+            ups(&sem_right, arguments->w);
+            set_to_zero(&sem_left);
+        }
+        sem_post(&sem_direction_aux);///Se apropia de la edicion de los semaforos de direccion
 
-        while(list_exec_order_right->first->data->id!=arguments->boat->id)///Busy waiting hasta que le toque su turno
-        {/*Busy waiting equis de*/}
-        //printf("%d antes de sem_right\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
+        ///Busy waiting hasta que le toque su turno
+        int order=1;
+        while(order)
+        {
+            sem_wait(&sem_list_exec_order_right);
+            if(list_exec_order_right->first->data->id==arguments->boat->id)
+            {
+                order=0;
+            }
+            sem_post(&sem_list_exec_order_right);
+        }order=1;
+
+        int w_aux=1;
+        while(w_aux)
+        {
+            sem_wait(&(*arguments->sem_finished_boats));
+            if(*(arguments->finished_boats)<arguments->w)
+            {
+                w_aux=0;
+            }
+            sem_post(&(*arguments->sem_finished_boats));
+        }w_aux=1;
+
         sem_wait(&sem_right);///Se come un permiso de entrar por la derecha
-        //printf("%d despues de sem_right\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
+
+        sem_wait(&(*arguments->sem_finished_boats)); *(arguments->finished_boats)=*(arguments->finished_boats)+1; sem_post(&(*arguments->sem_finished_boats));
+
     }
+
+    int RR_aux=1;
 
     ///Recorre el canal
     for(int i=0; i<=canal_length; i++)
     {
         if(arguments->boat->direction==RIGHT)///Si el barco va para la derecha
         {
+            if(calendarization_algorithm==0)
+            {
+                if(!is_boat_list_empty(list_RR_left))
+                {
+                    while(RR_aux)
+                    {
+                        sem_wait(&sem_list_RR_left);
+                        if(list_RR_left->first->data->id==arguments->boat->id)
+                        {
+                            RR_aux=0;
+                        }
+                        sem_post(&sem_list_RR_left);
+                    }
+                    printf("%d moves in quantum\n", arguments->boat->id);
+                    RR_aux=1;
+                }
+            }
+
             arguments->boat->position=i;///Actualiza la posicion del barco
             if(i==canal_length)///Final
             {
@@ -277,21 +404,16 @@ void* equity_thread_func(void* arguments_)
             }
             else if(i==0)///Inicio
             {
-                //while(exec_order_left->first->data->id!=arguments->boat->id)///Busy waiting hasta que le toque su turno
-                //{/*Busy waiting equis de*/}
-                //printf("%d antes de sem: %d\n", arguments->boat->id, i);//todo/////////////////////////////////////////////////////////////////////////////
                 sem_wait(&((canal+i)->sem));///Reserva el espacio siguiente
-                //printf("%d despues de sem: %d\n", arguments->boat->id, i);//todo/////////////////////////////////////////////////////////////////////////////
-
                 printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tEntra: %d\n", arguments->boat->id);
 
-                //printf("%d antes de sem_exec_order_left\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
-                sem_wait(&sem_list_exec_order_left);
-                    delete_first(list_exec_order_left);
-                sem_post(&sem_list_exec_order_left);
-                //printf("%d despues de sem_exec_order_left\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
+                ///Deletes first exec order left
+                //sem_wait(&sem_list_exec_order_left); delete_first(list_exec_order_left); sem_post(&sem_list_exec_order_left);
+                sem_wait(&sem_list_exec_order_left); delete_boat_for_id(list_exec_order_left, arguments->boat->id); sem_post(&sem_list_exec_order_left);
 
+                ///Append general exec order
                 sem_wait(&sem_list_exec_order_general); append_boat(list_exec_order_general, arguments->boat); sem_post(&sem_list_exec_order_general);
+                sem_wait(&sem_boats_in_canal); boats_in_canal++; sem_post(&sem_boats_in_canal);
 
                 (canal+i)->boat=arguments->boat;///Pone el bote en esa posicion
             }
@@ -308,6 +430,24 @@ void* equity_thread_func(void* arguments_)
         }
         else///Si el barco va para la izquierda
         {
+            if(calendarization_algorithm==0)
+            {
+                if(!is_boat_list_empty(list_RR_right))
+                {
+                    while(RR_aux)
+                    {
+                        sem_wait(&sem_list_RR_right);
+                        if(list_RR_right->first->data->id==arguments->boat->id)
+                        {
+                            RR_aux=0;
+                        }
+                        sem_post(&sem_list_RR_right);
+                    }
+                    printf("%d moves in quantum\n", arguments->boat->id);
+                    RR_aux=1;
+                }
+            }
+
             int i_upside_down=(canal_length-i-1);///i de derecha a izquierda (i al reves)
             arguments->boat->position=i_upside_down;///Actualiza la posicion del barco
 
@@ -322,21 +462,16 @@ void* equity_thread_func(void* arguments_)
             }
             else if(i==0)///Inicio
             {
-                //while(exec_order_right->first->data->id!=arguments->boat->id)///Busy waiting hasta que le toque su turno
-                //{/*Busy waiting equis de*/}
-                //printf("%d antes de sem: %d\n", arguments->boat->id, i_upside_down);//todo/////////////////////////////////////////////////////////////////////////////
                 sem_wait(&((canal+i_upside_down)->sem));///Reserva el espacio siguiente
-                //printf("%d despues de sem: %d\n", arguments->boat->id, i_upside_down);//todo/////////////////////////////////////////////////////////////////////////////
-
                 printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tEntra: %d\n", arguments->boat->id);
 
-                //printf("%d antes de sem_exec_order_right\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
-                sem_wait(&sem_list_exec_order_right);
-                    delete_first(list_exec_order_right);
-                sem_post(&sem_list_exec_order_right);
-                //printf("%d despues de sem_exec_order_right\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
+                ///Deletes first exec order right
+                //sem_wait(&sem_list_exec_order_right); delete_first(list_exec_order_right); sem_post(&sem_list_exec_order_right);
+                sem_wait(&sem_list_exec_order_right); delete_boat_for_id(list_exec_order_right, arguments->boat->id); sem_post(&sem_list_exec_order_right);
 
+                ///Append general exec order
                 sem_wait(&sem_list_exec_order_general); append_boat(list_exec_order_general, arguments->boat); sem_post(&sem_list_exec_order_general);
+                sem_wait(&sem_boats_in_canal); boats_in_canal++; sem_post(&sem_boats_in_canal);
 
                 (canal+i_upside_down)->boat=arguments->boat;///Pone el bote en esa posicion
             }
@@ -351,11 +486,22 @@ void* equity_thread_func(void* arguments_)
                 sem_post(&((canal+i_upside_down+1)->sem));///Libera el espacio anterior
             }
         }
-        //printf("step\n");//todo/////////////////////////////////////////////////////////////////////////////
-        //printf("\t\t\t\t\t %d\n", (int)((1000000 / arguments->boat->speed) * TIME_FIX_FACTOR));
         usleep((int)((1000000 / arguments->boat->speed) * TIME_FIX_FACTOR));///Simula el tiempo que le toma moverse un espacio
     }
-    //printf("\n");//todo/////////////////////////////////////////////////////////////////////////////
+
+    sem_wait(&sem_boats_in_canal); boats_in_canal--; sem_post(&sem_boats_in_canal);
+
+    if(calendarization_algorithm==0)
+    {
+        if(arguments->boat->direction==RIGHT)
+        {
+            sem_wait(&sem_list_RR_left); delete_boat_for_id(list_RR_left, arguments->boat->id); sem_post(&sem_list_RR_left);
+        }
+        else
+        {
+            sem_wait(&sem_list_RR_right); delete_boat_for_id(list_RR_right, arguments->boat->id); sem_post(&sem_list_RR_right);
+        }
+    }
 
     sem_wait(&sem_direction_aux);///Se apropia de la edicion de los semaforos de direccion
     if(arguments->boat->direction==RIGHT)///Si el barco va para derecha
@@ -371,49 +517,62 @@ void* equity_thread_func(void* arguments_)
 
     if(arguments->boat->direction==RIGHT)///Si el barco va para la derecha
     {
-        if(*(arguments->finished_boats)==arguments->w-1 || boats_remaining_left==0)///Si ya pasaron los w barcos o no hay mas barcos que pasar desde la izquierda
+        printf("A\n");
+        if(*(arguments->finished_boats)==1 || boats_remaining_left==0)///Si ya pasaron los w barcos o no hay mas barcos que pasar desde la izquierda
         {
+            printf("B\n");
+            if(*(arguments->finished_boats)==arguments->w){printf("B1\n");}
+            if(boats_remaining_left==0){printf("B2\n");}
             if(boats_remaining_right==0)///Si no hay mas barcos que pasar desde la derecha
             {
-                ups(&sem_left, arguments->w);///Reestablece el semaforo de la izquierda pq no hay barcos a la derecha
+                printf("C\n");
+                ups(&sem_left, arguments->w);///Se reestablece permisos a si mismo
                 set_to_zero(&sem_right);
             }
-            else
+            else///Quedan barcos por pasar del otro lado
             {
+                printf("D\n");
                 ups(&sem_right, arguments->w);///Reestablece el semaforo de la derecha pq hay que cambiar de sentido
                 set_to_zero(&sem_left);
             }
-            *(arguments->finished_boats)=0;///Reestablece la cantidad de barcos por sentido
+            sem_wait(&(*arguments->sem_finished_boats)); *(arguments->finished_boats)=*(arguments->finished_boats)=0; sem_post(&(*arguments->sem_finished_boats));
         }
         else///Si no han pasado w barcos y hay barcos a la derecha que quieren pasar
         {
-            *(arguments->finished_boats)=*(arguments->finished_boats)+1;///Aumenta la cantidad de barcos q han pasado desde la izquierda
+            printf("E\n");
+            sem_wait(&(*arguments->sem_finished_boats)); *(arguments->finished_boats)=*(arguments->finished_boats)-1; sem_post(&(*arguments->sem_finished_boats));
         }
     }
     else///Si el barco va para la izquierda
     {
-        if(*(arguments->finished_boats)==arguments->w-1 || boats_remaining_right==0)
+        printf("F\n");
+        if(*(arguments->finished_boats)==1 || boats_remaining_right==0)///Ya pasaron w-1 barcos o no quedan barcos por pasar
         {
-            if(boats_remaining_left==0)
+            printf("G\n");
+            if(boats_remaining_left==0)///No quedan barcos al otro lado
             {
+                printf("H\n");
                 ups(&sem_right, arguments->w);
                 set_to_zero(&sem_left);
             }
-            else
+            else///Quedan barcos al otro lado
             {
+                printf("I\n");
                 ups(&sem_left, arguments->w);
                 set_to_zero(&sem_right);
             }
-            *(arguments->finished_boats)=0;
+            sem_wait(&(*arguments->sem_finished_boats)); *(arguments->finished_boats)=*(arguments->finished_boats)=0; sem_post(&(*arguments->sem_finished_boats));
         }
-        else
+        else///No han pasado w-1 barcos y aun quedan barcos de este lado por pasar
         {
-            *(arguments->finished_boats)=*(arguments->finished_boats)+1;
+            printf("J\n");
+            sem_wait(&(*arguments->sem_finished_boats)); *(arguments->finished_boats)=*(arguments->finished_boats)-1; sem_post(&(*arguments->sem_finished_boats));
             ///*(finished_boats)++; //todo WHY NOT?
         }
     }
-
     sem_post(&sem_direction_aux);
+    printf("J1 -> finished_boats: %d\n", *(arguments->finished_boats));
+
 }
 void* equity_thread_launcher_func(void* arguments_)
 {
@@ -436,86 +595,58 @@ void* equity_thread_launcher_func(void* arguments_)
             pthread_t thread_boat;
             Equity_arguments_t* equity_arguments = malloc(sizeof(Equity_arguments_t));
             equity_arguments->w=arguments->w;
-            equity_arguments->finished_boats=arguments->finished_boats_ptr;
+            equity_arguments->finished_boats=arguments->finished_boats;
+            equity_arguments->sem_finished_boats=arguments->sem_finished_boats;
             equity_arguments->boat=list->first->data;
 
-            //printf("Thread: %d antes de sem_create_order\n", arguments->direction);//todo/////////////////////////////////////////////////////////////////////////////
-            sem_wait(&sem_list_creation_order);
-                append_boat(list_creation_order, equity_arguments->boat);
-            sem_post(&sem_list_creation_order);
-            //printf("Thread: %d despues de sem_create_order\n", arguments->direction);//todo/////////////////////////////////////////////////////////////////////////////
+            ///Append creation order list
+            sem_wait(&sem_list_creation_order); append_boat(list_creation_order, equity_arguments->boat); sem_post(&sem_list_creation_order);
 
+            ///Exec order & calendarization
             if(equity_arguments->boat->direction==RIGHT)
             {
-                //printf("Thread: %d antes de sem_exec_order_left\n", arguments->direction);//todo/////////////////////////////////////////////////////////////////////////////
-                sem_wait(&sem_list_exec_order_left);
-                    append_boat(list_exec_order_left, equity_arguments->boat);
+                sem_wait(&sem_list_exec_order_left); append_boat(list_exec_order_left, equity_arguments->boat); sem_post(&sem_list_exec_order_left);
+
+                ///RR Left
+                if(calendarization_algorithm==0)
+                {
+                    sem_wait(&sem_list_RR_left); append_boat(list_RR_left, equity_arguments->boat); sem_post(&sem_list_RR_left);
+                }
+                else
+                {
                     sem_wait(&sem_schedule_left); schedule(calendarization_algorithm,list_exec_order_left); sem_post(&sem_schedule_left);
-                sem_post(&sem_list_exec_order_left);
-                //printf("Thread: %d despues de sem_exec_order_left\n", arguments->direction);//todo/////////////////////////////////////////////////////////////////////////////
+                }
             }
             else
             {
-                //printf("Thread: %d antes de sem_exec_order_right\n", arguments->direction);//todo/////////////////////////////////////////////////////////////////////////////
-                sem_wait(&sem_list_exec_order_right);
-                    append_boat(list_exec_order_right, equity_arguments->boat);
+                sem_wait(&sem_list_exec_order_right); append_boat(list_exec_order_right, equity_arguments->boat); sem_post(&sem_list_exec_order_right);
+
+                ///RR Right
+                if(calendarization_algorithm==0)
+                {
+                    sem_wait(&sem_list_RR_right); append_boat(list_RR_right, equity_arguments->boat); sem_post(&sem_list_RR_right);
+                }
+                else
+                {
                     sem_wait(&sem_schedule_right); schedule(calendarization_algorithm,list_exec_order_right); sem_post(&sem_schedule_right);
-                sem_post(&sem_list_exec_order_right);
-                //printf("Thread: %d despues de sem_exec_order_right\n", arguments->direction);//todo/////////////////////////////////////////////////////////////////////////////
+                }
             }
 
+            ///Create thread
             pthread_create(&thread_boat, NULL, equity_thread_func, equity_arguments);
+            printf("Created thread for Boat: %d\n", equity_arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
+
+            ///Append thread list
             if(arguments->direction==RIGHT)
             {
                 append_thread(thread_list_left, thread_boat);
-
-                //printf("Thread: %d antes de sem_list_left\n", arguments->direction);//todo/////////////////////////////////////////////////////////////////////////////
-                sem_wait(&sem_list_left);
-                    delete_first(list);//todo no borrar nodos para poder ordenar la lista con el calendarizacion luego
-                sem_post(&sem_list_left);
-                //printf("Thread: %d despues de sem_list_left\n", arguments->direction);//todo/////////////////////////////////////////////////////////////////////////////
+                sem_wait(&sem_list_left); delete_first(list); sem_post(&sem_list_left);
             }
             else
             {
                 append_thread(thread_list_right, thread_boat);
-
-                //printf("Thread: %d antes de sem_list_right\n", arguments->direction);//todo/////////////////////////////////////////////////////////////////////////////
-                sem_wait(&sem_list_right);
-                    delete_first(list);//todo no borrar nodos para poder ordenar la lista con el calendarizacion luego
-                sem_post(&sem_list_right);
-                //printf("Thread: %d despues de sem_list_right\n", arguments->direction);//todo/////////////////////////////////////////////////////////////////////////////
+                sem_wait(&sem_list_right); delete_first(list); sem_post(&sem_list_right);
             }
-            printf("Created thread for Boat: %d\n", equity_arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
-        }
-        else//If empty list
-        {
-            ///Wait for boat threads
-            //
-            /*
-            Thread_Doubly_Linked_List_Node_t* piv;
-            if(arguments->direction==RIGHT)
-            {
-                piv=thread_list_left->first;
-                while(piv!=NULL)
-                {
-                    pthread_join(piv->data, NULL);
-                    piv = piv->next;
-                    delete_first_thread(thread_list_left);
-                }
-            }
-            else
-            {
-                piv=thread_list_right->first;
-                while(piv != NULL)
-                {
-                    pthread_join(piv->data, NULL);
-                    piv = piv->next;
-                    delete_first_thread(thread_list_right);
-                }
-            }
-            break;//todo Temporal
-            */
-            //
         }
     }
 }
@@ -525,8 +656,10 @@ void equity(int w)
     printf("Equity\n");
     printf("W: %d\n", w);
 
+
     ///Int for boats count to switch direction semaphores
-    int* finished_boats_ptr = malloc(sizeof(int)); *finished_boats_ptr=0;
+    int* finished_boats = malloc(sizeof(int)); *finished_boats=0;
+    sem_t sem_finished_boats; sem_init(&sem_finished_boats, 0, 1);
 
     ///Semaphores
     if(is_boat_list_empty(list_left))
@@ -540,9 +673,11 @@ void equity(int w)
         sem_init(&sem_right, 0, 0);
     }
 
+
     ///Print oceans
     printf("Left:\t"); print_list(list_left);
     printf("Right:\t"); print_list(list_right);
+
 
     ///Print semaphores
     printf("Sem Left: "); print_semaphore(&sem_left);
@@ -558,16 +693,35 @@ void equity(int w)
     Equity_arguments_launcher_t* thread_launcher_arguments_left = malloc(sizeof(Equity_arguments_launcher_t));
     thread_launcher_arguments_left->direction=RIGHT;
     thread_launcher_arguments_left->w=w;
-    thread_launcher_arguments_left->finished_boats_ptr=finished_boats_ptr;
+    thread_launcher_arguments_left->finished_boats=finished_boats;
+    thread_launcher_arguments_left->sem_finished_boats=&sem_finished_boats;
     pthread_create(&thread_launcher_left, NULL, equity_thread_launcher_func, thread_launcher_arguments_left);
+
 
     ///Creating Launcher thread for right boats
     pthread_t thread_launcher_right;
     Equity_arguments_launcher_t* thread_launcher_arguments_right = malloc(sizeof(Equity_arguments_launcher_t));
     thread_launcher_arguments_right->direction=LEFT;
     thread_launcher_arguments_right->w=w;
-    thread_launcher_arguments_right->finished_boats_ptr=finished_boats_ptr;
+    thread_launcher_arguments_right->finished_boats=finished_boats;
+    thread_launcher_arguments_right->sem_finished_boats=&sem_finished_boats;
     pthread_create(&thread_launcher_right, NULL, equity_thread_launcher_func, thread_launcher_arguments_right);
+
+
+    ///Creating threads for RR control
+    if(calendarization_algorithm==0)
+    {
+        pthread_t RR_thread_left;
+        Tico_arguments_launcher_t* RR_arguments_left=malloc(sizeof(Tico_arguments_launcher_t));
+        RR_arguments_left->direction=RIGHT;
+        pthread_create(&RR_thread_left, NULL, RR_func, RR_arguments_left);
+
+        pthread_t RR_thread_right;
+        Tico_arguments_launcher_t* RR_arguments_right=malloc(sizeof(Tico_arguments_launcher_t));
+        RR_arguments_right->direction=LEFT;
+        pthread_create(&RR_thread_right, NULL, RR_func, RR_arguments_right);
+    }
+
 
     ///Waiting for launcher threads
     pthread_join(thread_launcher_left, NULL);
@@ -578,7 +732,6 @@ void* sign_thread_func(void* arguments_)
     ///adquiere los parametros
     Sign_arguments_t* arguments = arguments_;
 
-
     ///Direction semaphores
     if(arguments->boat->direction==RIGHT)
     {
@@ -588,20 +741,13 @@ void* sign_thread_func(void* arguments_)
         {
             ups(&sem_left, canal_length);
             set_to_zero(&sem_right);
-
-            //sem_wait(&(*arguments->sem_change_sign_flag));
-            //*(arguments->change_sign_flag)=0;
-            //sem_post(&(*arguments->sem_change_sign_flag));
         }
         sem_post(&sem_direction_aux);///Se apropia de la edicion de los semaforos de direccion
 
-        //sem_wait(&sem_schedule_left); schedule(calendarization_algorithm,list_exec_order_left); sem_post(&sem_schedule_left);
-
-        while((list_exec_order_left->first->data->id!=arguments->boat->id) || (*(arguments->change_sign_flag)==1 && boats_remaining_right!=0))///Busy waiting hasta que le toque su turno
-        {/*Busy waiting equis de*/}
-        //printf("%d antes de sem_left\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
+        ///Busy waiting hasta que le toque su turno
+        while((list_exec_order_left->first->data->id!=arguments->boat->id) || (*(arguments->change_sign_flag)==1 && boats_remaining_right!=0))
+        {}
         sem_wait(&sem_left);///Se come un permiso de entrar por la izquierda
-        //printf("%d despues de sem_left\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
     }
     else
     {
@@ -611,27 +757,40 @@ void* sign_thread_func(void* arguments_)
         {
             ups(&sem_right, canal_length);
             set_to_zero(&sem_left);
-
-            //sem_wait(&(*arguments->sem_change_sign_flag));
-            //*(arguments->change_sign_flag)=0;
-            //sem_post(&(*arguments->sem_change_sign_flag));
         }
         sem_post(&sem_direction_aux);///Se apropia de la edicion de los semaforos de direccion
 
-        //sem_wait(&sem_schedule_right); schedule(calendarization_algorithm,list_exec_order_right); sem_post(&sem_schedule_right);
-
-        while((list_exec_order_right->first->data->id!=arguments->boat->id) || (*(arguments->change_sign_flag)==1 && boats_remaining_left!=0))///Busy waiting hasta que le toque su turno
-        {/*Busy waiting equis de*/}
-        //printf("%d antes de sem_right\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
+        ///Busy waiting hasta que le toque su turno
+        while((list_exec_order_right->first->data->id!=arguments->boat->id) || (*(arguments->change_sign_flag)==1 && boats_remaining_left!=0))
+        {}
         sem_wait(&sem_right);///Se come un permiso de entrar por la derecha
-        //printf("%d despues de sem_right\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
     }
+
+    int RR_aux=1;
 
     ///Recorre el canal
     for(int i=0; i<=canal_length; i++)
     {
         if(arguments->boat->direction==RIGHT)///Si el barco va para la derecha
         {
+            if(calendarization_algorithm==0)
+            {
+                if(!is_boat_list_empty(list_RR_left))
+                {
+                    while(RR_aux)
+                    {
+                        sem_wait(&sem_list_RR_left);
+                        if(list_RR_left->first->data->id==arguments->boat->id)
+                        {
+                            RR_aux=0;
+                        }
+                        sem_post(&sem_list_RR_left);
+                    }
+                    printf("%d moves in quantum\n", arguments->boat->id);
+                    RR_aux=1;
+                }
+            }
+
             arguments->boat->position=i;///Actualiza la posicion del barco
             if(i==canal_length)///Final
             {
@@ -644,19 +803,13 @@ void* sign_thread_func(void* arguments_)
             }
             else if(i==0)///Inicio
             {
-                //while(exec_order_left->first->data->id!=arguments->boat->id)///Busy waiting hasta que le toque su turno
-                //{/*Busy waiting equis de*/}
-                //printf("%d antes de sem: %d\n", arguments->boat->id, i);//todo/////////////////////////////////////////////////////////////////////////////
                 sem_wait(&((canal+i)->sem));///Reserva el espacio siguiente
-                //printf("%d despues de sem: %d\n", arguments->boat->id, i);//todo/////////////////////////////////////////////////////////////////////////////
 
                 printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tEntra: %d\n", arguments->boat->id);
 
-                //printf("%d antes de sem_exec_order_left\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
                 sem_wait(&sem_list_exec_order_left);
                     delete_first(list_exec_order_left);
                 sem_post(&sem_list_exec_order_left);
-                //printf("%d despues de sem_exec_order_left\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
 
                 sem_wait(&sem_list_exec_order_general); append_boat(list_exec_order_general, arguments->boat); sem_post(&sem_list_exec_order_general);
                 sem_wait(&sem_boats_in_canal); boats_in_canal++; sem_post(&sem_boats_in_canal);
@@ -676,6 +829,24 @@ void* sign_thread_func(void* arguments_)
         }
         else///Si el barco va para la izquierda
         {
+            if(calendarization_algorithm==0)
+            {
+                if(!is_boat_list_empty(list_RR_right))
+                {
+                    while(RR_aux)
+                    {
+                        sem_wait(&sem_list_RR_right);
+                        if(list_RR_right->first->data->id==arguments->boat->id)
+                        {
+                            RR_aux=0;
+                        }
+                        sem_post(&sem_list_RR_right);
+                    }
+                    printf("%d moves in quantum\n", arguments->boat->id);
+                    RR_aux=1;
+                }
+            }
+
             int i_upside_down=(canal_length-i-1);///i de derecha a izquierda (i al reves)
             arguments->boat->position=i_upside_down;///Actualiza la posicion del barco
 
@@ -690,15 +861,10 @@ void* sign_thread_func(void* arguments_)
             }
             else if(i==0)///Inicio
             {
-                //while(exec_order_right->first->data->id!=arguments->boat->id)///Busy waiting hasta que le toque su turno
-                //{/*Busy waiting equis de*/}
-                //printf("%d antes de sem: %d\n", arguments->boat->id, i_upside_down);//todo/////////////////////////////////////////////////////////////////////////////
                 sem_wait(&((canal+i_upside_down)->sem));///Reserva el espacio siguiente
-                //printf("%d despues de sem: %d\n", arguments->boat->id, i_upside_down);//todo/////////////////////////////////////////////////////////////////////////////
 
                 printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tEntra: %d\n", arguments->boat->id);
 
-                //printf("%d antes de sem_exec_order_right\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
                 sem_wait(&sem_list_exec_order_right);
                 delete_first(list_exec_order_right);
                 sem_post(&sem_list_exec_order_right);
@@ -720,13 +886,22 @@ void* sign_thread_func(void* arguments_)
                 sem_post(&((canal+i_upside_down+1)->sem));///Libera el espacio anterior
             }
         }
-        //printf("step\n");//todo/////////////////////////////////////////////////////////////////////////////
-        //printf("\t\t\t\t\t %d\n", (int)((1000000 / arguments->boat->speed) * TIME_FIX_FACTOR));
         usleep((int)((1000000 / arguments->boat->speed) * TIME_FIX_FACTOR));///Simula el tiempo que le toma moverse un espacio
     }
 
     sem_wait(&sem_boats_in_canal); boats_in_canal--; sem_post(&sem_boats_in_canal);
-    //printf("\n");//todo/////////////////////////////////////////////////////////////////////////////
+
+    if(calendarization_algorithm==0)
+    {
+        if(arguments->boat->direction==RIGHT)
+        {
+            sem_wait(&sem_list_RR_left); delete_boat_for_id(list_RR_left, arguments->boat->id); sem_post(&sem_list_RR_left);
+        }
+        else
+        {
+            sem_wait(&sem_list_RR_right); delete_boat_for_id(list_RR_right, arguments->boat->id); sem_post(&sem_list_RR_right);
+        }
+    }
 
     sem_wait(&sem_direction_aux);///Se apropia de la edicion de los semaforos de direccion
     if(arguments->boat->direction==RIGHT)///Si el barco va para derecha
@@ -812,7 +987,7 @@ void* sign_thread_func(void* arguments_)
                 if(boats_remaining_right>0)///Aun hay barcos al otro lado
                 {
                     printf("N\n");
-                    ups(&sem_right, canal_length);///Da n permisos a la derecha
+                    ups(&sem_right, canal_length);///Da n permisos al otro lado
                     set_to_zero(&sem_left);
                 }
                 else///No hay barcos de ningun lado
@@ -939,8 +1114,7 @@ void* sign_thread_launcher_func(void* arguments_)
     {
         list=list_right;
     }
-    while(loop)//todo hacer q otro thread cambie una variable booleana global <continue> que cambie con un getchar()
-        //while(1)
+    while(loop)
     {
         if(!is_boat_list_empty(list))
         {
@@ -951,63 +1125,57 @@ void* sign_thread_launcher_func(void* arguments_)
             sign_arguments->boat=list->first->data;
             sign_arguments->sem_change_sign_flag=arguments->sem_change_sign_flag;
 
-            //printf("Thread: %d antes de sem_create_order\n", arguments->direction);//todo/////////////////////////////////////////////////////////////////////////////
-            sem_wait(&sem_list_creation_order);
-                append_boat(list_creation_order, sign_arguments->boat);
-            sem_post(&sem_list_creation_order);
-            //printf("Thread: %d despues de sem_create_order\n", arguments->direction);//todo/////////////////////////////////////////////////////////////////////////////
+            ///Append creation order list
+            sem_wait(&sem_list_creation_order); append_boat(list_creation_order, sign_arguments->boat); sem_post(&sem_list_creation_order);
 
+            ///Exec order & calendarization
             if(sign_arguments->boat->direction==RIGHT)
             {
-                //printf("Thread: %d antes de sem_exec_order_left\n", arguments->direction);//todo/////////////////////////////////////////////////////////////////////////////
-                sem_wait(&sem_list_exec_order_left);
-                    append_boat(list_exec_order_left, sign_arguments->boat);
-                sem_wait(&sem_schedule_left); schedule(calendarization_algorithm,list_exec_order_left); sem_post(&sem_schedule_left);
-                sem_post(&sem_list_exec_order_left);
-                //printf("Thread: %d despues de sem_exec_order_left\n", arguments->direction);//todo/////////////////////////////////////////////////////////////////////////////
+                sem_wait(&sem_list_exec_order_left); append_boat(list_exec_order_left, sign_arguments->boat); sem_post(&sem_list_exec_order_left);
+
+                ///RR Left
+                if(calendarization_algorithm==0)
+                {
+                    sem_wait(&sem_list_RR_left); append_boat(list_RR_left, sign_arguments->boat); sem_post(&sem_list_RR_left);
+                }
+                else
+                {
+                    sem_wait(&sem_schedule_left); schedule(calendarization_algorithm,list_exec_order_left); sem_post(&sem_schedule_left);
+                }
             }
             else
             {
-                //printf("Thread: %d antes de sem_exec_order_right\n", arguments->direction);//todo/////////////////////////////////////////////////////////////////////////////
-                sem_wait(&sem_list_exec_order_right);
-                    append_boat(list_exec_order_right, sign_arguments->boat);
-                sem_wait(&sem_schedule_right); schedule(calendarization_algorithm,list_exec_order_right); sem_post(&sem_schedule_right);
-                sem_post(&sem_list_exec_order_right);
-                //printf("Thread: %d despues de sem_exec_order_right\n", arguments->direction);//todo/////////////////////////////////////////////////////////////////////////////
+                sem_wait(&sem_list_exec_order_right); append_boat(list_exec_order_right, sign_arguments->boat); sem_post(&sem_list_exec_order_right);
+
+                ///RR Right
+                if(calendarization_algorithm==0)
+                {
+                    sem_wait(&sem_list_RR_right); append_boat(list_RR_right, sign_arguments->boat); sem_post(&sem_list_RR_right);
+                }
+                else
+                {
+                    sem_wait(&sem_schedule_right); schedule(calendarization_algorithm,list_exec_order_right); sem_post(&sem_schedule_right);
+                }
             }
 
             ///Create thread
             pthread_create(&thread_boat, NULL, sign_thread_func, sign_arguments);
+            printf("Created thread for Boat: %d\n", sign_arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
 
             if(arguments->direction==RIGHT)
             {
                 append_thread(thread_list_left, thread_boat);
-
-                //printf("Thread: %d antes de sem_list_left\n", arguments->direction);//todo/////////////////////////////////////////////////////////////////////////////
-                sem_wait(&sem_list_left);
-                delete_first(list);//todo no borrar nodos para poder ordenar la lista con el calendarizacion luego
-                sem_post(&sem_list_left);
-                //printf("Thread: %d despues de sem_list_left\n", arguments->direction);//todo/////////////////////////////////////////////////////////////////////////////
+                sem_wait(&sem_list_left); delete_first(list); sem_post(&sem_list_left);
             }
             else
             {
                 append_thread(thread_list_right, thread_boat);
-
-                //printf("Thread: %d antes de sem_list_right\n", arguments->direction);//todo/////////////////////////////////////////////////////////////////////////////
-                sem_wait(&sem_list_right);
-                delete_first(list);//todo no borrar nodos para poder ordenar la lista con el calendarizacion luego
-                sem_post(&sem_list_right);
-                //printf("Thread: %d despues de sem_list_right\n", arguments->direction);//todo/////////////////////////////////////////////////////////////////////////////
+                sem_wait(&sem_list_right); delete_first(list); sem_post(&sem_list_right);
             }
-            printf("Created thread for Boat: %d\n", sign_arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
-        }
-        else//If empty list
-        {
-            ///Wait for boat threads
         }
     }
 }
-void sign(int signboard_time)
+void sign()
 {
     int* change_sign_flag=malloc(sizeof(int)); *change_sign_flag=0;
     sem_t sem_change_sign_flag;
@@ -1058,18 +1226,33 @@ void sign(int signboard_time)
     thread_launcher_arguments_right->sem_change_sign_flag=&sem_change_sign_flag;
     pthread_create(&thread_launcher_right, NULL, sign_thread_launcher_func, thread_launcher_arguments_right);
 
+    ///Creating threads for RR control
+    if(calendarization_algorithm==0)
+    {
+        pthread_t RR_thread_left;
+        Tico_arguments_launcher_t* RR_arguments_left=malloc(sizeof(Tico_arguments_launcher_t));
+        RR_arguments_left->direction=RIGHT;
+        pthread_create(&RR_thread_left, NULL, RR_func, RR_arguments_left);
+
+        pthread_t RR_thread_right;
+        Tico_arguments_launcher_t* RR_arguments_right=malloc(sizeof(Tico_arguments_launcher_t));
+        RR_arguments_right->direction=LEFT;
+        pthread_create(&RR_thread_right, NULL, RR_func, RR_arguments_right);
+    }
+
+
     while(loop)
     {
         if((*change_sign_flag)==1)
         {
             ///Busy waiting
         }
-        else
+        else if((boats_remaining_left!=0 || boats_remaining_right!=0) && boats_in_canal!=0)
         {
             sleep(signboard_time);
             sem_wait(&sem_change_sign_flag);
             (*change_sign_flag)=1;
-            printf("Time out\n");
+            printf("[\t[\tTime out\t]\t]\n");
             sem_post(&sem_change_sign_flag);
         }
     }
@@ -1093,20 +1276,12 @@ void* tico_thread_func(void* arguments_)
         {
             ups(&sem_left, canal_length);
             set_to_zero(&sem_right);
-
-            //sem_wait(&(*arguments->sem_change_sign_flag));
-            //*(arguments->change_sign_flag)=0;
-            //sem_post(&(*arguments->sem_change_sign_flag));
         }
-        sem_post(&sem_direction_aux);///Se apropia de la edicion de los semaforos de direccion
+        sem_post(&sem_direction_aux);///Termina de apropiarce de la edicion de los semaforos de direccion
 
-        //sem_wait(&sem_schedule_left); schedule(calendarization_algorithm,list_exec_order_left); sem_post(&sem_schedule_left);
-
-        while((list_exec_order_left->first->data->id!=arguments->boat->id))///Busy waiting hasta que le toque su turno
-        {/*Busy waiting equis de*/}
-        //printf("%d antes de sem_left\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
+        ///Busy waiting hasta que le toque su turno
+        while((list_exec_order_left->first->data->id!=arguments->boat->id)){/*Busy waiting equis de*/}
         sem_wait(&sem_left);///Se come un permiso de entrar por la izquierda
-        //printf("%d despues de sem_left\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
     }
     else
     {
@@ -1125,18 +1300,38 @@ void* tico_thread_func(void* arguments_)
 
         //sem_wait(&sem_schedule_right); schedule(calendarization_algorithm,list_exec_order_right); sem_post(&sem_schedule_right);
 
-        while((list_exec_order_right->first->data->id!=arguments->boat->id))///Busy waiting hasta que le toque su turno
+        while(list_exec_order_right->first->data->id!=arguments->boat->id)///Busy waiting hasta que le toque su turno
         {/*Busy waiting equis de*/}
         //printf("%d antes de sem_right\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
         sem_wait(&sem_right);///Se come un permiso de entrar por la derecha
         //printf("%d despues de sem_right\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
     }
 
+    int RR_aux=1;
+
     ///Recorre el canal
     for(int i=0; i<=canal_length; i++)
     {
         if(arguments->boat->direction==RIGHT)///Si el barco va para la derecha
         {
+            if(calendarization_algorithm==0)
+            {
+                if(!is_boat_list_empty(list_RR_left))
+                {
+                    while(RR_aux)
+                    {
+                        sem_wait(&sem_list_RR_left);
+                        if(list_RR_left->first->data->id==arguments->boat->id)
+                        {
+                            RR_aux=0;
+                        }
+                        sem_post(&sem_list_RR_left);
+                    }
+                    printf("%d moves in quantum\n", arguments->boat->id);
+                    RR_aux=1;
+                }
+            }
+
             arguments->boat->position=i;///Actualiza la posicion del barco
             if(i==canal_length)///Final
             {
@@ -1181,6 +1376,24 @@ void* tico_thread_func(void* arguments_)
         }
         else///Si el barco va para la izquierda
         {
+            if(calendarization_algorithm==0)
+            {
+                if(!is_boat_list_empty(list_RR_right))
+                {
+                    while(RR_aux)
+                    {
+                        sem_wait(&sem_list_RR_right);
+                        if(list_RR_right->first->data->id==arguments->boat->id)
+                        {
+                            RR_aux=0;
+                        }
+                        sem_post(&sem_list_RR_right);
+                    }
+                    printf("%d moves in quantum\n", arguments->boat->id);
+                    RR_aux=1;
+                }
+            }
+
             int i_upside_down=(canal_length-i-1);///i de derecha a izquierda (i al reves)
             arguments->boat->position=i_upside_down;///Actualiza la posicion del barco
 
@@ -1230,8 +1443,24 @@ void* tico_thread_func(void* arguments_)
         usleep((int)((1000000 / arguments->boat->speed) * TIME_FIX_FACTOR));///Simula el tiempo que le toma moverse un espacio
     }
 
+
     sem_wait(&sem_boats_in_canal); boats_in_canal--; sem_post(&sem_boats_in_canal);
     //printf("\n");//todo/////////////////////////////////////////////////////////////////////////////
+
+
+    ///RR deletes
+    if(calendarization_algorithm==0)
+    {
+        if(arguments->boat->direction==RIGHT)
+        {
+            sem_wait(&sem_list_RR_left); delete_boat_for_id(list_RR_left, arguments->boat->id); sem_post(&sem_list_RR_left);
+        }
+        else
+        {
+            sem_wait(&sem_list_RR_right); delete_boat_for_id(list_RR_right, arguments->boat->id); sem_post(&sem_list_RR_right);
+        }
+    }
+
 
     sem_wait(&sem_direction_aux);///Se apropia de la edicion de los semaforos de direccion
     if(arguments->boat->direction==RIGHT)///Si el barco va para derecha
@@ -1350,20 +1579,32 @@ void* tico_thread_launcher_func(void* arguments_)
             if(tico_arguments->boat->direction==RIGHT)
             {
                 //printf("Thread: %d antes de sem_exec_order_left\n", arguments->direction);//todo/////////////////////////////////////////////////////////////////////////////
-                sem_wait(&sem_list_exec_order_left);
-                append_boat(list_exec_order_left, tico_arguments->boat);
-                sem_wait(&sem_schedule_left); schedule(calendarization_algorithm,list_exec_order_left); sem_post(&sem_schedule_left);
-                sem_post(&sem_list_exec_order_left);
+                sem_wait(&sem_list_exec_order_left); append_boat(list_exec_order_left, tico_arguments->boat); sem_post(&sem_list_exec_order_left);
+
                 //printf("Thread: %d despues de sem_exec_order_left\n", arguments->direction);//todo/////////////////////////////////////////////////////////////////////////////
+                if(calendarization_algorithm==0)
+                {
+                    sem_wait(&sem_list_RR_left); append_boat(list_RR_left, tico_arguments->boat); sem_post(&sem_list_RR_left);
+                }
+                else
+                {
+                    sem_wait(&sem_schedule_left); schedule(calendarization_algorithm,list_exec_order_left); sem_post(&sem_schedule_left);
+                }
             }
             else
             {
                 //printf("Thread: %d antes de sem_exec_order_right\n", arguments->direction);//todo/////////////////////////////////////////////////////////////////////////////
-                sem_wait(&sem_list_exec_order_right);
-                append_boat(list_exec_order_right, tico_arguments->boat);
-                sem_wait(&sem_schedule_right); schedule(calendarization_algorithm,list_exec_order_right); sem_post(&sem_schedule_right);
-                sem_post(&sem_list_exec_order_right);
+                sem_wait(&sem_list_exec_order_right); append_boat(list_exec_order_right, tico_arguments->boat); sem_post(&sem_list_exec_order_right);
+
                 //printf("Thread: %d despues de sem_exec_order_right\n", arguments->direction);//todo/////////////////////////////////////////////////////////////////////////////
+                if(calendarization_algorithm==0)
+                {
+                    sem_wait(&sem_list_RR_right); append_boat(list_RR_right, tico_arguments->boat); sem_post(&sem_list_RR_right);
+                }
+                else
+                {
+                    sem_wait(&sem_schedule_right); schedule(calendarization_algorithm,list_exec_order_right); sem_post(&sem_schedule_right);
+                }
             }
 
             ///Create thread
@@ -1445,6 +1686,21 @@ void tico()
     thread_launcher_arguments_right->direction=LEFT;
     pthread_create(&thread_launcher_right, NULL, tico_thread_launcher_func, thread_launcher_arguments_right);
 
+    if(calendarization_algorithm==0)
+    {
+        pthread_t RR_thread_left;
+        Tico_arguments_launcher_t* RR_arguments_left=malloc(sizeof(Tico_arguments_launcher_t));
+        RR_arguments_left->direction=RIGHT;
+        pthread_create(&RR_thread_left, NULL, RR_func, RR_arguments_left);
+
+        pthread_t RR_thread_right;
+        Tico_arguments_launcher_t* RR_arguments_right=malloc(sizeof(Tico_arguments_launcher_t));
+        RR_arguments_right->direction=LEFT;
+        pthread_create(&RR_thread_right, NULL, RR_func, RR_arguments_right);
+
+        pthread_join(RR_thread_left, NULL);
+        pthread_join(RR_thread_right, NULL);
+    }
 
     ///Waiting for launcher threads
     pthread_join(thread_launcher_left, NULL);
@@ -1456,7 +1712,6 @@ int main()
 {
     ///Leer valores del file
     int w;
-    int signboard_time;
     Load_t* load = malloc(sizeof(Load_t));
     FILE *fp;
     char buffer[1024];
@@ -1474,7 +1729,6 @@ int main()
     struct json_object *FishingBoat;
     struct json_object *PatrolBoat;
     struct json_object *Priority;
-    struct json_object *SJF;
     struct json_object *EDF;
 
     size_t loadSize;
@@ -1495,6 +1749,8 @@ int main()
     json_object_object_get_ex(parsedJson, "Signboard", &Signboard);
     json_object_object_get_ex(parsedJson, "DefinedLoadLeft", &DefinedLoadLeft);
     json_object_object_get_ex(parsedJson, "DefinedLoadRight", &DefinedLoadRight);
+    json_object_object_get_ex(parsedJson, "Priority", &Priority);
+    json_object_object_get_ex(parsedJson, "EDF", &EDF);
 
     calendarization_algorithm = json_object_get_int(SchedulerAlgorithm);
     canal_algorithm = json_object_get_int(FlowControlMethod);
@@ -1507,11 +1763,36 @@ int main()
     load -> left[0] = json_object_get_int(json_object_array_get_idx(DefinedLoadLeft, 0));
     load -> left[1] = json_object_get_int(json_object_array_get_idx(DefinedLoadLeft, 1));
     load -> left[2] = json_object_get_int(json_object_array_get_idx(DefinedLoadLeft, 2));
+        load -> right[0] = json_object_get_int(json_object_array_get_idx(DefinedLoadRight, 0));
+        load -> right[1] = json_object_get_int(json_object_array_get_idx(DefinedLoadRight, 1));
+        load -> right[2] = json_object_get_int(json_object_array_get_idx(DefinedLoadRight, 2));
 
-    load -> right[0] = json_object_get_int(json_object_array_get_idx(DefinedLoadRight, 0));
-    load -> right[1] = json_object_get_int(json_object_array_get_idx(DefinedLoadRight, 1));
-    load -> right[2] = json_object_get_int(json_object_array_get_idx(DefinedLoadRight, 2));
+    priority[0] = json_object_get_int(json_object_array_get_idx(Priority, 0));
+    priority[1] = json_object_get_int(json_object_array_get_idx(Priority, 1));
 
+    edf_deadlines[0] = json_object_get_int(json_object_array_get_idx(EDF, 0));
+    edf_deadlines[1] = json_object_get_int(json_object_array_get_idx(EDF, 1));
+    edf_deadlines[2] = json_object_get_int(json_object_array_get_idx(EDF, 2));
+
+    ///Prints generales
+    printf("Scheduler algorithm: ");
+    switch(calendarization_algorithm)
+    {
+        case 0:  printf("Round Robin\n"); break;
+        case 1:  printf("Priority\n"); break;
+        case 2:  printf("SJF\n"); break;
+        case 3:  printf("FCFS\n"); break;
+        case 4:  printf("EDF\n"); break;
+        default:  printf("Invalid scheduler algorithm\n"); break;
+    }
+    printf("Flow control method: ");
+    switch(canal_algorithm)
+    {
+        case 0:  printf("Equity\n"); break;
+        case 1:  printf("Sign\n"); break;
+        case 2:  printf("Tico\n"); break;
+        default:  printf("Invalid flow control method\n"); break;
+    }
 
     ///Crea las estructuras de control
     list_left = create_boat_list(list_left);
@@ -1545,6 +1826,15 @@ int main()
 
     sem_init(&sem_boats_in_canal, 0, 1);
 
+    if(calendarization_algorithm==0)
+    {
+        list_RR_left = create_boat_list(list_RR_left);
+        sem_init(&sem_list_RR_left, 0, 1);
+
+        list_RR_right = create_boat_list(list_RR_right);
+        sem_init(&sem_list_RR_right, 0, 1);
+    }
+
 
     ///Crea el canal
     canal_init();
@@ -1558,6 +1848,7 @@ int main()
     if(!is_boat_list_empty(list_left))
     {
         schedule(calendarization_algorithm, list_left);
+        //print_complete_list(list_left);
         //print_list_priority(list_left);
         //print_list_speed(list_left);
     }
@@ -1568,22 +1859,18 @@ int main()
         //print_list_speed(list_right);
     }
 
-
     pthread_t boat_spawner_thread;
     pthread_create(&boat_spawner_thread, NULL, boat_spawner_func, NULL);
 
-
-    switch(canal_algorithm)//todo
+    switch(canal_algorithm)
     {
         case 0: equity(w); break;
-        case 1: sign(signboard_time); break;
+        case 1: sign(); break;
         case 2: tico(); break;
-        default: printf("No se selecciono un metodo de control de flujo valido\n");
+        default: printf("Invalid flow control method\n");
     }
 
-
     pthread_join(boat_spawner_thread, NULL);
-
 
     ///Prints
     printf("\n");
@@ -1592,6 +1879,9 @@ int main()
     print_canal();
     printf("Sem Left: "); print_semaphore(&sem_left);
     printf("Sem right: "); print_semaphore(&sem_right);
+
+    printf("Execution order left: "); print_list(list_exec_order_left);
+    printf("Execution order right: "); print_list(list_exec_order_right);
 
 
     return 0;

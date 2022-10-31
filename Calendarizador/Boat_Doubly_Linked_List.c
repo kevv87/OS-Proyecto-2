@@ -17,6 +17,94 @@ int is_boat_list_empty(Boat_Doubly_Linked_List_t* list)
     }
     return 0;
 }
+void print_boat(Boat_t* boat)
+{
+    printf("Boat: [%d]", boat->id);
+    printf("\tType: %d", boat->type);
+    printf("\tPosition: %d", boat->position);
+    printf("\tDirection: %d", boat->direction);
+    printf("\tSpeed: %f", boat->speed);
+    printf("\tPriority: %d", boat->priority);
+    printf("\tDeadline: %d\n", boat->deadline);
+}
+void print_list(Boat_Doubly_Linked_List_t* list)
+{
+    if(list->first==NULL)
+    {
+        printf("Empty list\n");
+    }
+    else
+    {
+        Boat_Doubly_Linked_List_Node_t* piv;
+        piv=list->first;
+        while(piv != NULL)
+        {
+            printf("<-(%d)->", piv->data->id);
+            piv = piv->next;
+        }
+        printf("\n");
+    }
+}
+void print_complete_list(Boat_Doubly_Linked_List_t* list)
+{
+    if(list->first==NULL)
+    {
+        printf("Empty list\n");
+    }
+    else
+    {
+        Boat_Doubly_Linked_List_Node_t* piv;
+        piv=list->first;
+        while(piv != NULL)
+        {
+            print_boat(piv->data);
+            piv = piv->next;
+        }
+    }
+}
+void print_list_speed(Boat_Doubly_Linked_List_t* list)
+{
+    if(list->first==NULL)
+    {
+        printf("Empty list\n");
+    }
+    else
+    {
+        Boat_Doubly_Linked_List_Node_t* piv;
+        piv=list->first;
+        //printf("\nTraversal in forward direction\n");
+        while(piv != NULL)
+        {
+            printf("<-(");
+            printf("%d, %d", piv->data->id, (int)piv->data->speed);
+            printf(")->");
+            piv = piv->next;
+        }
+        printf("\n");
+    }
+}
+void print_list_priority(Boat_Doubly_Linked_List_t* list)
+{
+    if(list->first==NULL)
+    {
+        printf("Empty list\n");
+    }
+    else
+    {
+        Boat_Doubly_Linked_List_Node_t* piv;
+        piv=list->first;
+        //printf("\nTraversal in forward direction\n");
+        while(piv != NULL)
+        {
+            printf("<-(");
+            printf("%d, %d", piv->data->id, (int)piv->data->priority);
+            printf(")->");
+            piv = piv->next;
+        }
+        printf("\n");
+    }
+}
+
 /* Given a reference (pointer to pointer) to the head of a
    list and an int, inserts a new node on the front of the
    list. */
@@ -123,6 +211,61 @@ void delete_first(Boat_Doubly_Linked_List_t* list)
         free(temp);
     }
 }
+void delete_last_boat(Boat_Doubly_Linked_List_t* list)
+{
+    if(!is_boat_list_empty(list))
+    {
+        if(list->first->next==NULL)
+        {
+            list->first=NULL;
+        }
+        else
+        {
+            Boat_Doubly_Linked_List_Node_t* piv = list->first;
+            while(piv->next!=NULL)
+            {
+                piv=piv->next;
+            }
+            if(piv->prev!=NULL)
+            {
+                piv->prev->next=NULL;
+            }
+            free(piv);
+        }
+    }
+}
+void delete_boat_for_id(Boat_Doubly_Linked_List_t* list, int id)
+{
+    if(!is_boat_list_empty(list))
+    {
+        Boat_Doubly_Linked_List_Node_t* piv = list->first;
+        while(piv!=NULL)
+        {
+            if(piv->data->id==id)///Finded
+            {
+                if(list->first->data->id==id)///Is First
+                {
+                    delete_first(list);
+                    return;
+                }
+                else if(piv->next==NULL)///Is Last
+                {
+                    delete_last_boat(list);
+                    return;
+                }
+                else
+                {
+                    piv->prev->next=piv->next;
+                    piv->next->prev=piv->prev;
+                    free(piv);
+                    return;
+                }
+            }
+            piv=piv->next;
+        }
+    }
+}
+
 /* function to swap data of two nodes a and b*/
 void swap(Boat_Doubly_Linked_List_Node_t* a, Boat_Doubly_Linked_List_Node_t* b)
 {
@@ -130,15 +273,7 @@ void swap(Boat_Doubly_Linked_List_Node_t* a, Boat_Doubly_Linked_List_Node_t* b)
     a->data = b->data;
     b->data = temp;
 }
-void printBoat(Boat_t* boat)
-{
-    printf("Boat: %d", boat->id);
-    printf("\tType: %d", boat->type);
-    printf("\tPosition: %d", boat->position);
-    printf("\tDirection: %d", boat->direction);
-    printf("\tSpeed: %f", boat->speed);
-    printf("\tLife time: %d\n", boat->life_time);
-}
+
 // This function prints contents of linked list starting
 // from the given node
 void printListDoubly(Boat_Doubly_Linked_List_t* list)
@@ -170,66 +305,6 @@ void printListDoubly(Boat_Doubly_Linked_List_t* list)
             printf(" %d ", piv2->data->id);
             piv2 = piv2->prev;
         }
-    }
-}
-void print_list(Boat_Doubly_Linked_List_t* list)
-{
-    if(list->first==NULL)
-    {
-        printf("Empty list\n");
-    }
-    else
-    {
-        Boat_Doubly_Linked_List_Node_t* piv;
-        piv=list->first;
-        while(piv != NULL)
-        {
-            printf("<-(%d)->", piv->data->id);
-            piv = piv->next;
-        }
-        printf("\n");
-    }
-}
-void print_list_speed(Boat_Doubly_Linked_List_t* list)
-{
-    if(list->first==NULL)
-    {
-        printf("Empty list\n");
-    }
-    else
-    {
-        Boat_Doubly_Linked_List_Node_t* piv;
-        piv=list->first;
-        //printf("\nTraversal in forward direction\n");
-        while(piv != NULL)
-        {
-            printf("<-(");
-            printf("%d, %d", piv->data->id, (int)piv->data->speed);
-            printf(")->");
-            piv = piv->next;
-        }
-        printf("\n");
-    }
-}
-void print_list_priority(Boat_Doubly_Linked_List_t* list)
-{
-    if(list->first==NULL)
-    {
-        printf("Empty list\n");
-    }
-    else
-    {
-        Boat_Doubly_Linked_List_Node_t* piv;
-        piv=list->first;
-        //printf("\nTraversal in forward direction\n");
-        while(piv != NULL)
-        {
-            printf("<-(");
-            printf("%d, %d", piv->data->id, (int)piv->data->priority);
-            printf(")->");
-            piv = piv->next;
-        }
-        printf("\n");
     }
 }
 int get_length(Boat_Doubly_Linked_List_t* list)

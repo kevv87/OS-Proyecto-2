@@ -8,15 +8,15 @@
 typedef struct Boat
 {
     int id;
-    int type;//0, 1, or 2
-    int position;//index
-    int direction;//0 or 1
+    int type; // 0, 1, or 2
+    int position; // index
+    int direction; // 0 or 1
     double speed;
-    int life_time;
-
     int priority;
-    int arrival_time;///Para
+    int deadline;
 }Boat_t;
+
+
 //Canal node
 typedef struct Canal_node
 {
@@ -70,6 +70,7 @@ typedef struct Equity_arguments
 {
     int w;
     int* finished_boats;
+    sem_t* sem_finished_boats;
     Boat_t* boat;
 }Equity_arguments_t;
 
@@ -78,7 +79,8 @@ typedef struct Equity_arguments_launcher
 {
     int direction;
     int w;
-    int* finished_boats_ptr;
+    int* finished_boats;
+    sem_t* sem_finished_boats;
 }Equity_arguments_launcher_t;
 
 

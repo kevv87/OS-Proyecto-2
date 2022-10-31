@@ -2,156 +2,165 @@
 #include <string.h>
 #include "types.h"
 #include "Boat_Doubly_Linked_List.c"
-///0 = RR
-///1 = Priority
-///2 = SJF
-///3 = FCFS
-///4 = EDF
 
-
-///todo qqyywwtteerr
-
-
-void RR(Boat_Doubly_Linked_List_t* list)
-{
-    //todo ???
+void RR(Boat_Doubly_Linked_List_t* list) {
+    // Nothing
 }
 
-///Entre mas bajo el numero mas prioridad
-void Priority(Boat_Doubly_Linked_List_t* list)
-{
-    //printf("Priority");//todo//////////////////////////////////////////////////////////////////////////////////
+void Priority(Boat_Doubly_Linked_List_t* list) {
+
     int swapped;
 
     Boat_Doubly_Linked_List_Node_t* currentNode;
     Boat_Doubly_Linked_List_Node_t* auxNode = NULL;
 
-    if(list -> first == NULL)
-    {
+    if(list -> first == NULL) {
+
         return;
+
     }
-    do
-    {
+
+    do {
+
         swapped = 0;
         currentNode = list -> first;
 
-        while(currentNode -> next != auxNode)
-        {
-            if(currentNode->data->priority > currentNode->next->data->priority)
-            {
-                swap(currentNode, currentNode->next);
+        while(currentNode -> next != auxNode) {
+
+            if(currentNode -> data -> priority > currentNode -> next -> data -> priority) {
+
+                swap(currentNode, currentNode -> next);
                 swapped = 1;
+
             }
+
             currentNode = currentNode -> next;
+
         }
+
         auxNode = currentNode;
-    }
-    while(swapped);
+
+    } while(swapped);
+
 }
-void SJF(Boat_Doubly_Linked_List_t* list)
-{
-    //printf("SJF");//todo//////////////////////////////////////////////////////////////////////////////////
+
+void SJF(Boat_Doubly_Linked_List_t* list) {
+
     int swapped;
+
     Boat_Doubly_Linked_List_Node_t* ptr1;
     Boat_Doubly_Linked_List_Node_t* lptr = NULL;
 
     /* Checking for empty list */
-    if(list -> first == NULL)
-    {
+    if(list -> first == NULL) {
+
         return;
+
     }
-    do
-    {
+
+    do {
+
         swapped = 0;
         ptr1 = list -> first;
 
-        while(ptr1 -> next != lptr)
-        {
-            if(ptr1->data->speed < ptr1->next->data->speed)
-            {
+        while(ptr1 -> next != lptr) {
+
+            if(ptr1 -> data -> speed < ptr1 -> next -> data -> speed) {
+
                 swap(ptr1, ptr1 -> next);
                 swapped = 1;
+
             }
+
             ptr1 = ptr1 -> next;
+
         }
+
         lptr = ptr1;
-    }
-    while(swapped);
+
+    } while(swapped);
+
 }
 
-void FCFS(Boat_Doubly_Linked_List_t* list)
-{
-    // ???
+void FCFS(Boat_Doubly_Linked_List_t* list) {
+    // Nothing
 }
 
-int checkConditionEDF(Boat_Doubly_Linked_List_t* list)
-{
+/*
+int checkConditionEDF(Boat_Doubly_Linked_List_t* list) {
     int mu = 0;
-
     Boat_Doubly_Linked_List_Node_t* currentNode;
     Boat_Doubly_Linked_List_Node_t* auxNode = NULL;
-
-    if(list -> first == NULL)
-    {
-        return -1;
-    }
-    currentNode = list -> first;
-    while(currentNode -> next != auxNode)
-    {
-        mu++;
-        currentNode = currentNode -> next;
-    }
-    if(mu <= 1)
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
-}
-
-void EDF(Boat_Doubly_Linked_List_t* list)
-{
-    int swapped;
-    Boat_Doubly_Linked_List_Node_t* currentNode;
-    Boat_Doubly_Linked_List_Node_t* auxNode = NULL;
-
-    if(list -> first == NULL)
-    {
+    if(list -> first == NULL) {
         return;
     }
 
-    int checked = checkConditionEDF(list);
-    if(checked)
-    {
-        do
-        {
-            swapped = 0;
-            currentNode = list -> first;
-
-            while(currentNode -> next != auxNode)
-            {
-                if (currentNode -> data -> life_time < currentNode -> next -> data -> life_time)
-                {
-                    swap(currentNode, currentNode -> next);
-                    swapped = 1;
-                }
-                currentNode = currentNode -> next;
-            }
-            auxNode = currentNode;
-        }
-        while(swapped);
+    currentNode = list -> first;
+    while(currentNode -> next != auxNode) {
+        mu++;
+        currentNode = currentNode -> next;
     }
-    else
-    {
-        printf("No se cumple la condición µ ≤ 1 del algoritmo EDF\n");
+    if(mu <= 1) {
+        return 1;
+    } else {
+        return 0;
     }
 }
-void schedule(int calendarization_algorithm, Boat_Doubly_Linked_List_t* list)
+*/
+
+void EDF(Boat_Doubly_Linked_List_t* list)
 {
-    switch(calendarization_algorithm)
-    {
+
+    int swapped;
+
+    Boat_Doubly_Linked_List_Node_t* currentNode;
+    Boat_Doubly_Linked_List_Node_t* auxNode = NULL;
+
+    if(list -> first == NULL) {
+
+        return;
+
+    }
+
+    /*
+    int checked = checkConditionEDF(list);
+    if(checked) {
+    */
+
+    do {
+
+        swapped = 0;
+        currentNode = list -> first;
+
+        while (currentNode -> next != auxNode) {
+
+            if (currentNode -> data -> deadline > currentNode -> next -> data -> deadline) {
+
+                swap(currentNode, currentNode -> next);
+                swapped = 1;
+
+            }
+
+            currentNode = currentNode -> next;
+
+        }
+
+        auxNode = currentNode;
+
+    } while(swapped);
+
+    /*
+    } else {
+        printf("No se cumple la condición µ ≤ 1 del algoritmo EDF\n");
+    }
+    */
+
+}
+
+void schedule(int calendarization_algorithm, Boat_Doubly_Linked_List_t* list) {
+
+    switch(calendarization_algorithm) {
+
         case 0:
             // RR
             break;
@@ -176,4 +185,5 @@ void schedule(int calendarization_algorithm, Boat_Doubly_Linked_List_t* list)
             printf("No se selecciono un metodo de control de flujo valido\n");
 
     }
+
 }
