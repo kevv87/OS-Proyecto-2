@@ -27,4 +27,15 @@
 
 
 
+
+
+#define PORT 17017
+#define BUFFER_SIZE 2048
+
+
+
+
+
+
+
 #endif //CALENDARIZADOR_CONSTANTS_H

@@ -15,6 +15,8 @@ from http import server
 
 def executeMessage(message):
 
+    global configList
+
     global arrowCurrent
 
     global readyQueueLeftNumber
@@ -29,35 +31,57 @@ def executeMessage(message):
 
     match instruction:
         
-        case "addBoat":
+        case "addBot":
 
             addBoat(int(message[1]), int(message[2]), int(message[3]), int(message[4]))
 
-        case "removeBoat":
+        case "rmvBot":
 
             removeBoat(int(message[1]))
 
-        case "moveBoat":
+        case "movBot":
 
             moveBoat(int(message[1]))
 
-        case "changeDirection":
+            """
+
+            id = int(message[1])
+
+            for i in boatList:
+
+                if(i.getId() == id):
+
+                    boat = i
+
+            finalPosition = boat.getPosition()
+
+            if((aux != -1) & (aux != configList[CHANNEL_LENGTH_INDEX] + 1)):
+
+                moveBoat(aux)
+
+            else:
+
+                removeBoat(aux)
+
+            """
+
+        case "chgDir":
 
             arrowCurrent = changeArrowDirection(arrowCurrent)
 
-        case "incrementLeft":
+        case "incLft":
 
             readyQueueLeftNumber, readyQueueLeftText = incrementReadyQueueLeftText(readyQueueLeftNumber)
 
-        case "decrementLeft":
+        case "decLft":
 
             readyQueueLeftNumber, readyQueueLeftText = decrementReadyQueueLeftText(readyQueueLeftNumber)
 
-        case "incrementRight":
+        case "incRht":
 
             readyQueueRightNumber, readyQueueRightText = incrementReadyQueueRightText(readyQueueRightNumber)
 
-        case "decrementRight":
+        case "decRht":
 
             readyQueueRightNumber, readyQueueRightText = decrementReadyQueueRightText(readyQueueRightNumber)
 
@@ -91,14 +115,14 @@ def executeServer(serverSocket, messageSize):
 
     serverSocket.listen(1)
     
-    while(message != "end"):
+    while(messageFlag):
 
         try:
             connection, clientAddress = serverSocket.accept()
 
             print("Connection from: ", clientAddress)
 
-            while(message != "end"):
+            while(messageFlag):
 
                 message = connection.recv(messageSize).decode()
 
@@ -114,11 +138,16 @@ def executeServer(serverSocket, messageSize):
                     # start message thread
                     threadMessage.start()
 
+                    # wait till message thread finishes
+                    threadMessage.join()
+
         except:
 
             print("Error accepting the connection from client")
 
         connection.close()
+
+    connection.close()
 
 def runServer(ip, port, size):
 
@@ -279,21 +308,29 @@ def addBoat(id, type, position, direction):
 
     if(direction == LEFT):
 
-        newBoat = Boat(id, type, position, direction, speed, X9_POSITION, Y_POSITION, component)
+        newBoat = Boat(id, type, position, direction, speed, X6_POSITION, Y_POSITION, component)
 
     else:
 
-        newBoat = Boat(id, type, position, direction, speed, X0_POSITION, Y_POSITION, component)
+        newBoat = Boat(id, type, position, direction, speed, X2_POSITION, Y_POSITION, component)
 
     boatList.append(newBoat)
 
 def removeBoat(id):
 
+    for i in boatList:
+
+        if(i.getId() == id):
+
+            boatList.remove(i)
+
+    """
     for i in range(0, len(boatList)):
 
         if(boatList[i].getId() == id):
             
             del boatList[i]
+    """
 
 def getFinalPosX(finalPosition):
 
@@ -301,47 +338,33 @@ def getFinalPosX(finalPosition):
         
         case 0:
 
-            return X0_POSITION
+            return X2_POSITION
 
         case 1:
 
-            return X1_POSITION
+            return X3_POSITION
 
         case 2:
 
-            return X2_POSITION
+            return X4_POSITION
 
         case 3:
 
-            return X3_POSITION
+            return X5_POSITION
 
         case 4:
 
-            return X4_POSITION
-
-        case 5:
-
-            return X5_POSITION
-
-        case 6:
-
             return X6_POSITION
-
-        case 7:
-
-            return X7_POSITION
-
-        case 8:
-
-            return X8_POSITION
-
-        case 9:
-
-            return X9_POSITION
 
 def moveBoat(id):
 
     #boat = boatList[0]
+
+    global firstDirection
+
+    global arrowCurrent
+
+    moveFlag = 0
 
     for i in boatList:
     
@@ -349,53 +372,90 @@ def moveBoat(id):
 
             boat = i
 
+            moveFlag = 1
+
+            print("Actual Position =============== ", boat.getPosition())
+
             break
 
-    speed = boat.getSpeed()
+    if(moveFlag == 1):
 
-    if(boat.getDirection() == LEFT):
+        speed = boat.getSpeed()
 
-        finalPosition = boat.getPosition() - 1
+        if(boat.getDirection() == LEFT):
 
-        finalPosition = getFinalPosX(finalPosition)
+            if(firstDirection == 0):
 
-        while(True):
+                arrowCurrent = arrowList[RIGHT]
 
-            currentPosX = boat.getPosX()                    
+                firstDirection = 1
 
-            if(currentPosX > finalPosition):
+            finalPosition = boat.getPosition() - 1
 
-                boat.setPosX(currentPosX - STEP)
+            if(finalPosition <= -1) | (finalPosition >= configList[CHANNEL_LENGTH_INDEX]):
 
-                time.sleep(((1 / speed) * TIME_FIX_FACTOR) / 100)
+                removeBoat(boat.getId())
 
-            else:
+                return            
 
-                boat.setPosX(finalPosition)
+            finalPosition = getFinalPosX(finalPosition)
 
-                break
+            while(True):
 
-    else:
+                currentPosX = boat.getPosX()                    
 
-        finalPosition = boat.getPosition() + 1
+                if(currentPosX > finalPosition):
 
-        finalPosition = getFinalPosX(finalPosition)
+                    boat.setPosX(currentPosX - STEP)
 
-        while(True):
+                    time.sleep(((1 / speed) * TIME_FIX_FACTOR) / 100)
 
-            currentPosX = boat.getPosX()                    
+                else:
 
-            if(currentPosX < finalPosition):
+                    boat.setPosX(finalPosition)
 
-                boat.setPosX(currentPosX + STEP)
+                    boat.setPosition(boat.getPosition() - 1)
 
-                time.sleep(((1 / speed) * TIME_FIX_FACTOR) / 100)
+                    break
 
-            else:
+        else:
 
-                boat.setPosX(finalPosition)
+            if(firstDirection == 0):
 
-                break
+                arrowCurrent = arrowList[LEFT]
+
+                firstDirection = 1
+
+            finalPosition = boat.getPosition() + 1
+
+            if(finalPosition <= -1) | (finalPosition >= configList[CHANNEL_LENGTH_INDEX]):
+
+                removeBoat(boat.getId())
+
+                return   
+
+            finalPosition = getFinalPosX(finalPosition)
+
+            while(True):
+
+                currentPosX = boat.getPosX()                    
+
+                if(currentPosX < finalPosition):
+
+                    boat.setPosX(currentPosX + STEP)
+
+                    time.sleep(((1 / speed) * TIME_FIX_FACTOR) / 100)
+
+                else:
+
+                    boat.setPosX(finalPosition)
+
+                    boat.setPosition(boat.getPosition() + 1)
+
+                    break
+
+        print("Final Position =============== ", boat.getPosition())
+        print("")
 
 def incrementReadyQueueLeftText(readyQueueLeftNumber):
     
@@ -435,6 +495,9 @@ threadServer = Thread(target = runServer, args = (LOCALHOST, PORT, BUFFER_SIZE,)
 # start server thread
 threadServer.start()
 
+# set up message flag
+messageFlag = True
+
 # set up config file
 file = open(CONFIG_FILE_PATH)
 
@@ -462,7 +525,9 @@ arrowRight.set_colorkey([0, 0, 0])
 
 arrowList = [arrowLeft, arrowRight]
 
-arrowCurrent = arrowList[0]
+arrowCurrent = arrowList[1]
+
+firstDirection = 0
 
 # set up boats
 boatList = []
@@ -480,10 +545,11 @@ for i in range(0, configList[CHANNEL_LENGTH_INDEX]):
 
     pass
 """
-
+"""
 addBoat(0, 0, 0, 0)
-addBoat(1, 1, 9, 1)
+addBoat(1, 1, 4, 1)
 addBoat(2, 2, 0, 0)
+"""
 
 # get scheduler algorithm text
 schedulerAlgorithmText = getSchedulerAlgorithmText(configList[SCHEDULER_ALGORITHM_INDEX])
@@ -533,6 +599,8 @@ while(loopFlag):
 
             loopFlag = False
 
+            messageFlag = False
+
             pygame.quit()
 
             sys.exit()
@@ -540,7 +608,7 @@ while(loopFlag):
     # draw window onto the screen>
     pygame.display.update()
 
-    # draw background onto the surface
+    # draw bacsground onto the surface
     windowSurface.blit(background, [0, 0])
 
     # draw arrow onto the surface
@@ -571,7 +639,7 @@ while(loopFlag):
 
     #removeBoat(0)
     
-
+    """
     if x <= 400:
         x += 1
 
@@ -596,7 +664,7 @@ while(loopFlag):
             thread1.start()
             thread2.start()
 
-    
+    """
 
 
 

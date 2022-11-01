@@ -1,6 +1,6 @@
 {
-    "SchedulerAlgorithm": 1,
-    "FlowControlMethod": 0,
+    "SchedulerAlgorithm": 2,
+    "FlowControlMethod": 2,
     "ChannelLength": 5,
     "BoatSpeed": 20,
     "BoatQuantity": 2,

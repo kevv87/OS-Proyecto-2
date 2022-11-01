@@ -8,8 +8,9 @@
 #include "constants.h"
 #include "calendarizador.c"
 #include "Thread_Doubly_Linked_List.c"
-#include "time.h"
 #include <json-c/json.h>
+#include <arpa/inet.h>
+#include <sys/socket.h>
 
 
 ///Globals
@@ -73,6 +74,20 @@ sem_t sem_list_RR_left;
 Boat_Doubly_Linked_List_t* list_RR_right;
 sem_t sem_list_RR_right;
 
+///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// set up global variables
+int clientSocket = 0;
+int answer;
+int clientFd;
+int closeFlag = 1;
+
+struct sockaddr_in serverAddress;
+
+char buffer[BUFFER_SIZE] = { 0 };
+
+sem_t messageSemaphore;
+///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 
 
 ///Defs
@@ -86,6 +101,194 @@ void set_to_zero(sem_t* sem);
 void* boat_spawner_func();
 void* equity_thread_func(void* arguments_);
 void* equity_thread_launcher_func(void* arguments_);
+
+
+
+///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+void *sendMessageThread(void *ptr)
+{
+    sem_wait(&messageSemaphore);
+    char *message;
+    message = (char*) ptr;
+    send(clientSocket, message, strlen(message), 0);
+    printf("Message sent\n");
+    answer = read(clientSocket, buffer, BUFFER_SIZE);
+    printf("%s\n", buffer);
+    //closeFlag = 0;
+    sem_post(&messageSemaphore);
+}
+void *runClient(void *vargp) {
+
+    if ((clientSocket = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+
+        printf("\nSocket creation error \n");
+
+        return 0;
+
+    }
+
+    serverAddress.sin_family = AF_INET;
+
+    serverAddress.sin_port = htons(PORT);
+
+    if(inet_pton(AF_INET, "127.0.0.1", &serverAddress.sin_addr) <= 0) {
+
+        printf("\nInvalid address/ Address not supported \n");
+
+        return 0;
+
+    }
+
+    if((clientFd = connect(clientSocket, (struct sockaddr*) &serverAddress, sizeof(serverAddress))) < 0) {
+
+        printf("\nConnection Failed \n");
+
+        return 0;
+
+    }
+
+    while(closeFlag) {
+
+        // Keeping client running
+
+    }
+
+    close(clientFd);
+
+}
+void closeClient()
+{
+    closeFlag=0;
+}
+void sendMessage(char *message)
+{
+    pthread_t sendThread;
+    pthread_create(&sendThread, NULL, sendMessageThread, (void*) message);
+}
+
+///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+char* construct_message(Boat_t* boat, int function)
+{
+
+    char *message;
+
+    //int id = boat->id;
+
+    //char addBoat[]="addBoat,";
+    //char id = boat->id + '0';
+
+    char *directive = malloc(sizeof(char)*14);
+    switch(function)
+    {
+        case 0:
+            strcpy(directive, "addBot,");
+            break;
+        case 1:
+            strcpy(directive, "rmvBot,");
+            break;
+        case 2:
+            strcpy(directive, "movBot,");
+            break;
+        case 3:
+            strcpy(directive, "chgDir");
+            break;
+        case 4:
+            strcpy(directive, "incLft");
+            break;
+        case 5:
+            strcpy(directive, "decLft");
+            break;
+        case 6:
+            strcpy(directive, "incRht");
+            break;
+        case 7:
+            strcpy(directive, "decRht");
+            break;
+        default:
+            strcpy(directive, "addBot,");
+            break;
+    }
+
+    if(function == 0)
+    {
+
+        char* type;
+        switch (boat->type) {
+            case 0:
+                type = "0,";
+                break;
+            case 1:
+                type = "1,";
+                break;
+            case 2:
+                type = "2,";
+                break;
+            default:
+                type = "0,";
+        }
+        char *position;
+        switch (boat->position) {
+            case 0:
+                position = "0,";
+                break;
+            case 1:
+                position = "1,";
+                break;
+            case 2:
+                position = "2,";
+                break;
+            case 3:
+                position = "3,";
+                break;
+            case 4:
+                position = "4,";
+                break;
+        }
+        char *direction;
+        switch (boat->direction) {
+            case 0:
+                direction = "0";
+                break;
+            case 1:
+                direction = "1";
+                break;
+        }
+
+        //char *message1 = strcat(directive, id);
+
+        //strcat(directive, id);
+
+        char str_ID[3];
+        sprintf(str_ID, "%d,", boat->id);
+        strcat(directive, str_ID);
+        strcat(directive, type);
+        strcat(directive, position);
+        strcat(directive, direction);
+
+
+        //char *message2 = strcat(message1, type);
+        //char *message3 = strcat(message2, position);
+        //char *message4 = strcat(message3, direction);
+
+        //return message4;
+
+        //return directive;
+
+    } else if(function == 1 || function == 2)
+    {
+
+        char str_ID[2];
+        sprintf(str_ID, "%d", boat->id);
+        strcat(directive, str_ID);
+    }
+
+    return directive;
+
+}
+
+
+
 
 
 int get_id()
@@ -199,6 +402,8 @@ void* boat_spawner_func()
         caracter=(char)getchar();
         //printf("caracter: %c\n", caracter);
         Boat_t* boat = malloc(sizeof(Boat_t));
+        char* message;
+
         switch(caracter)
         {
             case 'a':///Patrol Left
@@ -206,37 +411,68 @@ void* boat_spawner_func()
                 sem_wait(&sem_list_left); append_boat(list_left, boat); sem_post(&sem_list_left);
                 printf("Patrol Boat [%d] spawns on left\n", boat->id);
                 sem_wait(&sem_boats_remaining_left); boats_remaining_left++; sem_post(&sem_boats_remaining_left);
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                message = construct_message(boat, 4);
+                sendMessage(message);
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                 break;
             case 's':///Fisher Left
                 boat->id=get_id(); boat->type=1; boat->position=0; boat->direction=RIGHT; boat->speed=base_speed*FISHER_BOAT_SPEED_MULTIPLIER; boat->deadline=edf_deadlines[1]; boat->priority=priority[1];
                 sem_wait(&sem_list_left); append_boat(list_left, boat); sem_post(&sem_list_left);
                 printf("Fisher Boat [%d] spawns on left\n", boat->id);
                 sem_wait(&sem_boats_remaining_left); boats_remaining_left++; sem_post(&sem_boats_remaining_left);
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                message = construct_message(boat, 4);
+                sendMessage(message);
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                 break;
             case 'd':///Normal Left
                 boat->id=get_id(); boat->type=0; boat->position=0; boat->direction=RIGHT; boat->speed=base_speed; boat->deadline=edf_deadlines[0]; boat->priority=priority[0];
                 sem_wait(&sem_list_left); append_boat(list_left, boat); sem_post(&sem_list_left);
                 printf("Normal Boat [%d] spawns on left\n", boat->id);
                 sem_wait(&sem_boats_remaining_left); boats_remaining_left++; sem_post(&sem_boats_remaining_left);
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                message = construct_message(boat, 4);
+                sendMessage(message);
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                 break;
             case 'j':///Normal Right
                 boat->id=get_id(); boat->type=0; boat->position=0; boat->direction=LEFT; boat->speed=base_speed; boat->deadline=edf_deadlines[0]; boat->priority=priority[0];
                 sem_wait(&sem_list_right); append_boat(list_right, boat); sem_post(&sem_list_right);
                 printf("Normal Boat [%d] spawns on right\n", boat->id);
                 sem_wait(&sem_boats_remaining_right); boats_remaining_right++; sem_post(&sem_boats_remaining_right);
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                message = construct_message(boat, 6);
+                sendMessage(message);
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                 break;
             case 'k':///Fisher Right
                 boat->id=get_id(); boat->type=1; boat->position=0; boat->direction=LEFT; boat->speed=base_speed*FISHER_BOAT_SPEED_MULTIPLIER; boat->deadline=edf_deadlines[1]; boat->priority=priority[1];
                 sem_wait(&sem_list_right); append_boat(list_right, boat); sem_post(&sem_list_right);
                 printf("Fisher Boat [%d] spawns on right\n", boat->id);
                 sem_wait(&sem_boats_remaining_right); boats_remaining_right++; sem_post(&sem_boats_remaining_right);
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                message = construct_message(boat, 6);
+                sendMessage(message);
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                 break;
             case 'l':///Patrol Right
                 boat->id=get_id(); boat->type=2; boat->position=0; boat->direction=LEFT; boat->speed=base_speed*PATROL_BOAT_SPEED_MULTIPLIER; boat->deadline=edf_deadlines[2]; boat->priority=PATROL_BOAT_PRIORITY;
                 sem_wait(&sem_list_right); append_boat(list_right, boat); sem_post(&sem_list_right);
                 printf("Patrol Boat [%d] spawns on right\n", boat->id);
                 sem_wait(&sem_boats_remaining_right); boats_remaining_right++; sem_post(&sem_boats_remaining_right);
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                message = construct_message(boat, 6);
+                sendMessage(message);
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                 break;
+
 
             default:
                 if(caracter=='w')
@@ -399,13 +635,23 @@ void* equity_thread_func(void* arguments_)
                 {
                     (canal+i-1)->boat=NULL;///Se borra
                 }
-                printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tSale: %d\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
+                printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tSale: %d\n", arguments->boat->id);
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                sendMessage(construct_message(arguments->boat, 1));
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                 sem_post(&((canal+i-1)->sem));///Libera el espacio anterior
             }
             else if(i==0)///Inicio
             {
                 sem_wait(&((canal+i)->sem));///Reserva el espacio siguiente
                 printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tEntra: %d\n", arguments->boat->id);
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                sendMessage(construct_message(arguments->boat, 0));
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                sendMessage(construct_message(arguments->boat, 5));
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
                 ///Deletes first exec order left
                 //sem_wait(&sem_list_exec_order_left); delete_first(list_exec_order_left); sem_post(&sem_list_exec_order_left);
@@ -457,13 +703,23 @@ void* equity_thread_func(void* arguments_)
                 {
                     (canal+i_upside_down+1)->boat=NULL;///Se borra
                 }
-                printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tSale: %d\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
+                printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tSale: %d\n", arguments->boat->id);
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                sendMessage(construct_message(arguments->boat, 1));
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                 sem_post(&((canal+i_upside_down+1)->sem));///Libera el espacio anterior
             }
             else if(i==0)///Inicio
             {
                 sem_wait(&((canal+i_upside_down)->sem));///Reserva el espacio siguiente
                 printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tEntra: %d\n", arguments->boat->id);
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                sendMessage(construct_message(arguments->boat, 0));
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                sendMessage(construct_message(arguments->boat, 7));
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
                 ///Deletes first exec order right
                 //sem_wait(&sem_list_exec_order_right); delete_first(list_exec_order_right); sem_post(&sem_list_exec_order_right);
@@ -486,6 +742,9 @@ void* equity_thread_func(void* arguments_)
                 sem_post(&((canal+i_upside_down+1)->sem));///Libera el espacio anterior
             }
         }
+        ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        sendMessage(construct_message(arguments->boat, 2));
+        ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         usleep((int)((1000000 / arguments->boat->speed) * TIME_FIX_FACTOR));///Simula el tiempo que le toma moverse un espacio
     }
 
@@ -531,6 +790,10 @@ void* equity_thread_func(void* arguments_)
             }
             else///Quedan barcos por pasar del otro lado
             {
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                char* message = construct_message(arguments->boat, 3);
+                sendMessage(message);
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 printf("D\n");
                 ups(&sem_right, arguments->w);///Reestablece el semaforo de la derecha pq hay que cambiar de sentido
                 set_to_zero(&sem_left);
@@ -557,6 +820,10 @@ void* equity_thread_func(void* arguments_)
             }
             else///Quedan barcos al otro lado
             {
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                char* message = construct_message(arguments->boat, 3);
+                sendMessage(message);
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 printf("I\n");
                 ups(&sem_left, arguments->w);
                 set_to_zero(&sem_right);
@@ -798,7 +1065,11 @@ void* sign_thread_func(void* arguments_)
                 {
                     (canal+i-1)->boat=NULL;///Se borra
                 }
-                printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tSale: %d\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
+                printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tSale: %d\n", arguments->boat->id);
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                sendMessage(construct_message(arguments->boat, 1));
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                 sem_post(&((canal+i-1)->sem));///Libera el espacio anterior
             }
             else if(i==0)///Inicio
@@ -806,6 +1077,12 @@ void* sign_thread_func(void* arguments_)
                 sem_wait(&((canal+i)->sem));///Reserva el espacio siguiente
 
                 printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tEntra: %d\n", arguments->boat->id);
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                sendMessage(construct_message(arguments->boat, 0));
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                sendMessage(construct_message(arguments->boat, 5));
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
                 sem_wait(&sem_list_exec_order_left);
                     delete_first(list_exec_order_left);
@@ -856,7 +1133,11 @@ void* sign_thread_func(void* arguments_)
                 {
                     (canal+i_upside_down+1)->boat=NULL;///Se borra
                 }
-                printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tSale: %d\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
+                printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tSale: %d\n", arguments->boat->id);
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                sendMessage(construct_message(arguments->boat, 1));
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                 sem_post(&((canal+i_upside_down+1)->sem));///Libera el espacio anterior
             }
             else if(i==0)///Inicio
@@ -864,11 +1145,16 @@ void* sign_thread_func(void* arguments_)
                 sem_wait(&((canal+i_upside_down)->sem));///Reserva el espacio siguiente
 
                 printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tEntra: %d\n", arguments->boat->id);
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                sendMessage(construct_message(arguments->boat, 0));
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                sendMessage(construct_message(arguments->boat, 7));
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
                 sem_wait(&sem_list_exec_order_right);
                 delete_first(list_exec_order_right);
                 sem_post(&sem_list_exec_order_right);
-                //printf("%d despues de sem_exec_order_right\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
 
                 sem_wait(&sem_list_exec_order_general); append_boat(list_exec_order_general, arguments->boat); sem_post(&sem_list_exec_order_general);
                 sem_wait(&sem_boats_in_canal); boats_in_canal++; sem_post(&sem_boats_in_canal);
@@ -886,6 +1172,9 @@ void* sign_thread_func(void* arguments_)
                 sem_post(&((canal+i_upside_down+1)->sem));///Libera el espacio anterior
             }
         }
+        ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        sendMessage(construct_message(arguments->boat, 2));
+        ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         usleep((int)((1000000 / arguments->boat->speed) * TIME_FIX_FACTOR));///Simula el tiempo que le toma moverse un espacio
     }
 
@@ -931,6 +1220,11 @@ void* sign_thread_func(void* arguments_)
                     if(boats_remaining_right>0)///Hay barcos al otro lado
                     {
                         printf("E\n");
+                        ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        char* message = construct_message(arguments->boat, 3);
+                        sendMessage(message);
+                        ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                         ups(&sem_right, canal_length);///Da n permisos a la derecha
                         set_to_zero(&sem_left);
                     }
@@ -961,6 +1255,11 @@ void* sign_thread_func(void* arguments_)
                     if(boats_remaining_right>0)///Hay barcos al otro lado
                     {
                         printf("J\n");
+                        ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        char* message = construct_message(arguments->boat, 3);
+                        sendMessage(message);
+                        ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                         ups(&sem_right, canal_length);///Da n permisos a la derecha
                         set_to_zero(&sem_left);
                     }
@@ -987,12 +1286,22 @@ void* sign_thread_func(void* arguments_)
                 if(boats_remaining_right>0)///Aun hay barcos al otro lado
                 {
                     printf("N\n");
+                    ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    char* message = construct_message(arguments->boat, 3);
+                    sendMessage(message);
+                    ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                     ups(&sem_right, canal_length);///Da n permisos al otro lado
                     set_to_zero(&sem_left);
                 }
                 else///No hay barcos de ningun lado
                 {
                     printf("O\n");
+                    ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    char* message = construct_message(arguments->boat, 3);
+                    sendMessage(message);
+                    ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                     ups(&sem_right, canal_length);///Da n permisos a la derecha
                     set_to_zero(&sem_left);
                 }
@@ -1023,12 +1332,22 @@ void* sign_thread_func(void* arguments_)
                     if(boats_remaining_left>0)///Hay barcos al otro lado
                     {
                         printf("U\n");
+                        ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        char* message = construct_message(arguments->boat, 3);
+                        sendMessage(message);
+                        ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                         ups(&sem_left, canal_length);///Da n permisos a la izquierda
                         set_to_zero(&sem_right);
                     }
                     else///No hay barcos en ningun lado
                     {
                         printf("V\n");
+                        ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        char* message = construct_message(arguments->boat, 3);
+                        sendMessage(message);
+                        ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                         ups(&sem_left, canal_length);///Reestablece n permisos en la misma direccion
                         set_to_zero(&sem_right);
                     }
@@ -1053,6 +1372,11 @@ void* sign_thread_func(void* arguments_)
                     if(boats_remaining_left>0)///Hay barcos al otro lado
                     {
                         printf("Z\n");
+                        ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        char* message = construct_message(arguments->boat, 3);
+                        sendMessage(message);
+                        ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                         ups(&sem_left, canal_length);///Da n permisos a la izquierda
                         set_to_zero(&sem_right);
                     }
@@ -1079,12 +1403,22 @@ void* sign_thread_func(void* arguments_)
                 if(boats_remaining_left>0)///Aun hay barcos al otro lado
                 {
                     printf("AD\n");
+                    ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    char* message = construct_message(arguments->boat, 3);
+                    sendMessage(message);
+                    ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                     ups(&sem_left, canal_length);///Da n permisos a la izquierda
                     set_to_zero(&sem_right);
                 }
                 else///No hay barcos de ningun lado
                 {
                     printf("AE\n");
+                    ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    char* message = construct_message(arguments->boat, 3);
+                    sendMessage(message);
+                    ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                     ups(&sem_left, canal_length);///Da n permisos a la izquierda
                     set_to_zero(&sem_right);
                 }
@@ -1291,20 +1625,12 @@ void* tico_thread_func(void* arguments_)
         {
             ups(&sem_right, canal_length);
             set_to_zero(&sem_left);
-
-            //sem_wait(&(*arguments->sem_change_sign_flag));
-            //*(arguments->change_sign_flag)=0;
-            //sem_post(&(*arguments->sem_change_sign_flag));
         }
         sem_post(&sem_direction_aux);///Se apropia de la edicion de los semaforos de direccion
 
-        //sem_wait(&sem_schedule_right); schedule(calendarization_algorithm,list_exec_order_right); sem_post(&sem_schedule_right);
-
         while(list_exec_order_right->first->data->id!=arguments->boat->id)///Busy waiting hasta que le toque su turno
         {/*Busy waiting equis de*/}
-        //printf("%d antes de sem_right\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
         sem_wait(&sem_right);///Se come un permiso de entrar por la derecha
-        //printf("%d despues de sem_right\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
     }
 
     int RR_aux=1;
@@ -1339,24 +1665,28 @@ void* tico_thread_func(void* arguments_)
                 {
                     (canal+i-1)->boat=NULL;///Se borra
                 }
-                printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tSale: %d\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
+                printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tSale: %d\n", arguments->boat->id);
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                sendMessage(construct_message(arguments->boat, 1));
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                 sem_post(&((canal+i-1)->sem));///Libera el espacio anterior
             }
             else if(i==0)///Inicio
             {
-                //while(exec_order_left->first->data->id!=arguments->boat->id)///Busy waiting hasta que le toque su turno
-                //{/*Busy waiting equis de*/}
-                //printf("%d antes de sem: %d\n", arguments->boat->id, i);//todo/////////////////////////////////////////////////////////////////////////////
                 sem_wait(&((canal+i)->sem));///Reserva el espacio siguiente
-                //printf("%d despues de sem: %d\n", arguments->boat->id, i);//todo/////////////////////////////////////////////////////////////////////////////
 
                 printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tEntra: %d\n", arguments->boat->id);
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                sendMessage(construct_message(arguments->boat, 0));
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                sendMessage(construct_message(arguments->boat, 5));
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-                //printf("%d antes de sem_exec_order_left\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
                 sem_wait(&sem_list_exec_order_left);
                 delete_first(list_exec_order_left);
                 sem_post(&sem_list_exec_order_left);
-                //printf("%d despues de sem_exec_order_left\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
 
                 sem_wait(&sem_list_exec_order_general); append_boat(list_exec_order_general, arguments->boat); sem_post(&sem_list_exec_order_general);
                 sem_wait(&sem_boats_in_canal); boats_in_canal++; sem_post(&sem_boats_in_canal);
@@ -1403,24 +1733,28 @@ void* tico_thread_func(void* arguments_)
                 {
                     (canal+i_upside_down+1)->boat=NULL;///Se borra
                 }
-                printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tSale: %d\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
+                printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tSale: %d\n", arguments->boat->id);
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                sendMessage(construct_message(arguments->boat, 1));
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                 sem_post(&((canal+i_upside_down+1)->sem));///Libera el espacio anterior
             }
             else if(i==0)///Inicio
             {
-                //while(exec_order_right->first->data->id!=arguments->boat->id)///Busy waiting hasta que le toque su turno
-                //{/*Busy waiting equis de*/}
-                //printf("%d antes de sem: %d\n", arguments->boat->id, i_upside_down);//todo/////////////////////////////////////////////////////////////////////////////
                 sem_wait(&((canal+i_upside_down)->sem));///Reserva el espacio siguiente
-                //printf("%d despues de sem: %d\n", arguments->boat->id, i_upside_down);//todo/////////////////////////////////////////////////////////////////////////////
 
                 printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tEntra: %d\n", arguments->boat->id);
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                sendMessage(construct_message(arguments->boat, 0));
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                sendMessage(construct_message(arguments->boat, 7));
+                ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-                //printf("%d antes de sem_exec_order_right\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
                 sem_wait(&sem_list_exec_order_right);
                 delete_first(list_exec_order_right);
                 sem_post(&sem_list_exec_order_right);
-                //printf("%d despues de sem_exec_order_right\n", arguments->boat->id);//todo/////////////////////////////////////////////////////////////////////////////
 
                 sem_wait(&sem_list_exec_order_general); append_boat(list_exec_order_general, arguments->boat); sem_post(&sem_list_exec_order_general);
                 sem_wait(&sem_boats_in_canal); boats_in_canal++; sem_post(&sem_boats_in_canal);
@@ -1438,15 +1772,14 @@ void* tico_thread_func(void* arguments_)
                 sem_post(&((canal+i_upside_down+1)->sem));///Libera el espacio anterior
             }
         }
-        //printf("step\n");//todo/////////////////////////////////////////////////////////////////////////////
-        //printf("\t\t\t\t\t %d\n", (int)((1000000 / arguments->boat->speed) * TIME_FIX_FACTOR));
+        ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        sendMessage(construct_message(arguments->boat, 2));
+        printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t[%d] pos %d\n", arguments->boat->id, arguments->boat->position);
+        ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         usleep((int)((1000000 / arguments->boat->speed) * TIME_FIX_FACTOR));///Simula el tiempo que le toma moverse un espacio
     }
 
-
     sem_wait(&sem_boats_in_canal); boats_in_canal--; sem_post(&sem_boats_in_canal);
-    //printf("\n");//todo/////////////////////////////////////////////////////////////////////////////
-
 
     ///RR deletes
     if(calendarization_algorithm==0)
@@ -1487,6 +1820,11 @@ void* tico_thread_func(void* arguments_)
                 if(boats_remaining_right>0)///Hay barcos al otro lado
                 {
                     printf("D\n");
+                    ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    char* message = construct_message(arguments->boat, 3);
+                    sendMessage(message);
+                    ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                     ups(&sem_right, canal_length);///Da n permisos a la derecha
                     set_to_zero(&sem_left);
                 }
@@ -1523,6 +1861,11 @@ void* tico_thread_func(void* arguments_)
                 if(boats_remaining_left>0)///Hay barcos al otro lado
                 {
                     printf("K\n");
+                    ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    char* message = construct_message(arguments->boat, 3);
+                    sendMessage(message);
+                    ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                     ups(&sem_left, canal_length);///Da n permisos a la derecha
                     set_to_zero(&sem_right);
                 }
@@ -1706,10 +2049,24 @@ void tico()
     pthread_join(thread_launcher_left, NULL);
     pthread_join(thread_launcher_right, NULL);
 }
-
+int count_digits(int n)
+{
+    int count=0;
+    while(n>=0)
+    {
+        n=n%10;
+    }
+    return count;
+}
 
 int main()
 {
+    //printf("Count: %d\n", count_digits(1234));
+
+
+
+
+
     ///Leer valores del file
     int w;
     Load_t* load = malloc(sizeof(Load_t));
@@ -1773,6 +2130,37 @@ int main()
     edf_deadlines[0] = json_object_get_int(json_object_array_get_idx(EDF, 0));
     edf_deadlines[1] = json_object_get_int(json_object_array_get_idx(EDF, 1));
     edf_deadlines[2] = json_object_get_int(json_object_array_get_idx(EDF, 2));
+
+
+
+    ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    sem_init(&messageSemaphore, 0, 1);
+
+    pthread_t clientThread;
+    //pthread_t sendThread;
+
+    pthread_create(&clientThread, NULL, runClient, NULL);
+
+    //pthread_create(&sendThread8, NULL, sendMessage, (void*) message8);
+
+    //pthread_join(sendThread1, NULL);
+    //pthread_join(sendThread2, NULL);
+    //pthread_join(sendThread3, NULL);
+    //pthread_join(sendThread4, NULL);
+    //pthread_join(sendThread5, NULL);
+    //pthread_join(sendThread6, NULL);
+    //pthread_join(sendThread7, NULL);
+
+    ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+
+
+
+
 
     ///Prints generales
     printf("Scheduler algorithm: ");
@@ -1882,6 +2270,13 @@ int main()
 
     printf("Execution order left: "); print_list(list_exec_order_left);
     printf("Execution order right: "); print_list(list_exec_order_right);
+
+
+
+    ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //pthread_join(sendThread8, NULL);
+    pthread_join(clientThread, NULL);
+    ///todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
     return 0;
