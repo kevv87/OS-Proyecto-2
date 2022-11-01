@@ -1,0 +1,10 @@
+# ninja log v5
+0	87	1665806530918650667	common/CMakeFiles/Common.dir/tools.c.o	79595e6ec2f54a1e
+1	134	1666020406069507694	build.ninja	dbb0e6d95ded8d0b
+0	121	1665892851252224993	CMakeFiles/Hardware_Iface.dir/serial_example.c.o	9f38bd07f010a74d
+1	70	1665803338806193000	arduino-serial/libArduino-serial.a	3ba842815992564f
+0	113	1665631202149344943	common/CMakeFiles/Common.dir/helloWorld.c.o	e684c230323da313
+2	177	1665803256001020319	arduino-serial/CMakeFiles/Arduino-serial.dir/arduino-serial-lib.c.o	ef45a6da868a351c
+1	76	1665892851206020066	CMakeFiles/Hardware_Iface.dir/hw_iface.c.o	8ab3785e3b22696f
+87	128	1665806530964880000	common/libCommon.a	915bf9ac3331551c
+121	199	1665892851330202994	Hardware_Iface	d94f03e2d83f664e

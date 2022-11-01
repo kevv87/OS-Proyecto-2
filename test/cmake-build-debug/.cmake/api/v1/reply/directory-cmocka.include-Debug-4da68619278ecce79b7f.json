@@ -1,0 +1,45 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install"
+		],
+		"files" : 
+		[
+			"/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/include/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 7,
+				"parent" : 0
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "cmocka-header",
+			"destination" : "include",
+			"paths" : 
+			[
+				"/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/include/cmocka.h",
+				"/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/include/cmocka_pbc.h",
+				"cmake-build-debug/cmocka/include/cmocka_version.h"
+			],
+			"type" : "file"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "cmocka/include",
+		"source" : "/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/include"
+	}
+}

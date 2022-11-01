@@ -1,0 +1,5 @@
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Applications/CLion.app/Contents/bin/ninja/mac/ninja -G Ninja -S /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test -B /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug
+-- Could NOT find Doxygen (missing: DOXYGEN_EXECUTABLE) 
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug

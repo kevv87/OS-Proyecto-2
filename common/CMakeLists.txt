@@ -1,4 +1,4 @@
-set(SOURCES helloWorld.c tools.c include/tools.h)
+set(SOURCES tools.c include/tools.h)
 
 set(LIBRARY_NAME Common)
 

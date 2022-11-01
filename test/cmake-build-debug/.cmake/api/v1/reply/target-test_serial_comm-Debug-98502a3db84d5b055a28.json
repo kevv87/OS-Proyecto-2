@@ -1,0 +1,194 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "test_serial_comm"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_executable",
+			"target_link_libraries",
+			"target_include_directories"
+		],
+		"files" : 
+		[
+			"CMakeLists.txt",
+			"/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 15,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 18,
+				"parent" : 0
+			},
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 21,
+				"parent" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 21,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 5,
+					"path" : "/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/.."
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/common/."
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/.."
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/../common/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/arduino-serial/./mongoose"
+				}
+			],
+			"language" : "C",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 2,
+			"id" : "cmocka::@0810ba72744d3bfe4cc1"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "hardware_iface::@7f25034bf5fd2f42481f"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "Common::@51b9880bd02bf49cce6e"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "Arduino-serial::@733b9ed4b21a2366f0cb"
+		}
+	],
+	"id" : "test_serial_comm::@6890427a1f51a3e7e1df",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-g",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "-Wl,-rpath,/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/src -Wl,-rpath,/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface -Wl,-rpath,/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface/common -Wl,-rpath,/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface/arduino-serial",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "cmocka/src/libcmocka.0.7.0.dylib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "hw_iface/libhardware_iface.dylib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "hw_iface/common/libCommon.dylib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 4,
+				"fragment" : "-lm",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 4,
+				"fragment" : "hw_iface/arduino-serial/libArduino-serial.dylib",
+				"role" : "libraries"
+			}
+		],
+		"language" : "C"
+	},
+	"name" : "test_serial_comm",
+	"nameOnDisk" : "test_serial_comm",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "test_hw_iface/test_serial_comm.c",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "EXECUTABLE"
+}

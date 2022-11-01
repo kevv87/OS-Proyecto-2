@@ -1,0 +1,611 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						7
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.10"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						37,
+						38
+					]
+				},
+				{
+					"build" : "cmocka",
+					"childIndexes" : 
+					[
+						2,
+						3,
+						4,
+						5
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-cmocka-Debug-9ba9eaa889450db42272.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5.0"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka",
+					"targetIndexes" : 
+					[
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17,
+						18,
+						19,
+						20,
+						21,
+						22,
+						23,
+						24,
+						25,
+						26,
+						27,
+						28,
+						29,
+						34
+					]
+				},
+				{
+					"build" : "cmocka/include",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-cmocka.include-Debug-4da68619278ecce79b7f.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5.0"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 2,
+					"source" : "/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/include"
+				},
+				{
+					"build" : "cmocka/src",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-cmocka.src-Debug-800a93dbf81d5a5f8377.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5.0"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 3,
+					"source" : "/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/src",
+					"targetIndexes" : 
+					[
+						33
+					]
+				},
+				{
+					"build" : "cmocka/doc",
+					"jsonFile" : "directory-cmocka.doc-Debug-742a69578221c698c4f0.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5.0"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/doc"
+				},
+				{
+					"build" : "cmocka/example",
+					"childIndexes" : 
+					[
+						6
+					],
+					"jsonFile" : "directory-cmocka.example-Debug-f0646eb99116bb010ec2.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5.0"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 4,
+					"source" : "/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/example",
+					"targetIndexes" : 
+					[
+						30,
+						31,
+						32,
+						36
+					]
+				},
+				{
+					"build" : "cmocka/example/mock",
+					"jsonFile" : "directory-cmocka.example.mock-Debug-512ffa93e4f6f7e48b8e.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5.0"
+					},
+					"parentIndex" : 5,
+					"projectIndex" : 4,
+					"source" : "/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/example/mock"
+				},
+				{
+					"build" : "hw_iface",
+					"childIndexes" : 
+					[
+						8,
+						9
+					],
+					"jsonFile" : "directory-hw_iface-Debug-ec17f405530d99fdaaba.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.10"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 5,
+					"source" : "/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface",
+					"targetIndexes" : 
+					[
+						35
+					]
+				},
+				{
+					"build" : "hw_iface/common",
+					"jsonFile" : "directory-hw_iface.common-Debug-bd71f2b1b5dc92fb0296.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.10"
+					},
+					"parentIndex" : 7,
+					"projectIndex" : 5,
+					"source" : "/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/common",
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"build" : "hw_iface/arduino-serial",
+					"jsonFile" : "directory-hw_iface.arduino-serial-Debug-af70c0d14cda1a5d6585.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.10"
+					},
+					"parentIndex" : 7,
+					"projectIndex" : 5,
+					"source" : "/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/arduino-serial",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						5
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "Test",
+					"targetIndexes" : 
+					[
+						37,
+						38
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						2,
+						3,
+						4
+					],
+					"directoryIndexes" : 
+					[
+						1,
+						4
+					],
+					"name" : "cmocka",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17,
+						18,
+						19,
+						20,
+						21,
+						22,
+						23,
+						24,
+						25,
+						26,
+						27,
+						28,
+						29,
+						34
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						2
+					],
+					"name" : "cmocka-header",
+					"parentIndex" : 1
+				},
+				{
+					"directoryIndexes" : 
+					[
+						3
+					],
+					"name" : "cmocka-library",
+					"parentIndex" : 1,
+					"targetIndexes" : 
+					[
+						33
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						5,
+						6
+					],
+					"name" : "cmocka-examples",
+					"parentIndex" : 1,
+					"targetIndexes" : 
+					[
+						30,
+						31,
+						32,
+						36
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						7,
+						8,
+						9
+					],
+					"name" : "hardware_iface",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						35
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 9,
+					"id" : "Arduino-serial::@733b9ed4b21a2366f0cb",
+					"jsonFile" : "target-Arduino-serial-Debug-b34a55853b1cd7de7c40.json",
+					"name" : "Arduino-serial",
+					"projectIndex" : 5
+				},
+				{
+					"directoryIndex" : 8,
+					"id" : "Common::@51b9880bd02bf49cce6e",
+					"jsonFile" : "target-Common-Debug-c13b41047567176e964c.json",
+					"name" : "Common",
+					"projectIndex" : 5
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "Continuous::@0718ac7d523535e54da4",
+					"jsonFile" : "target-Continuous-Debug-e8aac6abf427ec48792d.json",
+					"name" : "Continuous",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "ContinuousBuild::@0718ac7d523535e54da4",
+					"jsonFile" : "target-ContinuousBuild-Debug-f5e6375501a25cf2fa65.json",
+					"name" : "ContinuousBuild",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "ContinuousConfigure::@0718ac7d523535e54da4",
+					"jsonFile" : "target-ContinuousConfigure-Debug-d5aff71cda387355baba.json",
+					"name" : "ContinuousConfigure",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "ContinuousCoverage::@0718ac7d523535e54da4",
+					"jsonFile" : "target-ContinuousCoverage-Debug-dafba1bb7da0fe1ab160.json",
+					"name" : "ContinuousCoverage",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "ContinuousMemCheck::@0718ac7d523535e54da4",
+					"jsonFile" : "target-ContinuousMemCheck-Debug-08b12ee5569423252035.json",
+					"name" : "ContinuousMemCheck",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "ContinuousStart::@0718ac7d523535e54da4",
+					"jsonFile" : "target-ContinuousStart-Debug-56b9e0976cd93ca77a2e.json",
+					"name" : "ContinuousStart",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "ContinuousSubmit::@0718ac7d523535e54da4",
+					"jsonFile" : "target-ContinuousSubmit-Debug-f06ceb9e83b2b7605f80.json",
+					"name" : "ContinuousSubmit",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "ContinuousTest::@0718ac7d523535e54da4",
+					"jsonFile" : "target-ContinuousTest-Debug-d63e26f798ddbf032da9.json",
+					"name" : "ContinuousTest",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "ContinuousUpdate::@0718ac7d523535e54da4",
+					"jsonFile" : "target-ContinuousUpdate-Debug-f78d140df74f8a09122a.json",
+					"name" : "ContinuousUpdate",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "Experimental::@0718ac7d523535e54da4",
+					"jsonFile" : "target-Experimental-Debug-50e54ad1f45ba69fb18e.json",
+					"name" : "Experimental",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "ExperimentalBuild::@0718ac7d523535e54da4",
+					"jsonFile" : "target-ExperimentalBuild-Debug-71dcf0810fc739cfe839.json",
+					"name" : "ExperimentalBuild",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "ExperimentalConfigure::@0718ac7d523535e54da4",
+					"jsonFile" : "target-ExperimentalConfigure-Debug-bb4f597d5ae33cda66d0.json",
+					"name" : "ExperimentalConfigure",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "ExperimentalCoverage::@0718ac7d523535e54da4",
+					"jsonFile" : "target-ExperimentalCoverage-Debug-9872dbe4a7dc39f86da8.json",
+					"name" : "ExperimentalCoverage",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "ExperimentalMemCheck::@0718ac7d523535e54da4",
+					"jsonFile" : "target-ExperimentalMemCheck-Debug-e2e600c2ef51337df7f2.json",
+					"name" : "ExperimentalMemCheck",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "ExperimentalStart::@0718ac7d523535e54da4",
+					"jsonFile" : "target-ExperimentalStart-Debug-2972bbf4a0028ee731fe.json",
+					"name" : "ExperimentalStart",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "ExperimentalSubmit::@0718ac7d523535e54da4",
+					"jsonFile" : "target-ExperimentalSubmit-Debug-1fc85639bc079b66f8e1.json",
+					"name" : "ExperimentalSubmit",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "ExperimentalTest::@0718ac7d523535e54da4",
+					"jsonFile" : "target-ExperimentalTest-Debug-692283dc1390e08434af.json",
+					"name" : "ExperimentalTest",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "ExperimentalUpdate::@0718ac7d523535e54da4",
+					"jsonFile" : "target-ExperimentalUpdate-Debug-f33222ed5fa137f60151.json",
+					"name" : "ExperimentalUpdate",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "Nightly::@0718ac7d523535e54da4",
+					"jsonFile" : "target-Nightly-Debug-df547180041baf84b728.json",
+					"name" : "Nightly",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "NightlyBuild::@0718ac7d523535e54da4",
+					"jsonFile" : "target-NightlyBuild-Debug-8ccc21e3c5bda308460b.json",
+					"name" : "NightlyBuild",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "NightlyConfigure::@0718ac7d523535e54da4",
+					"jsonFile" : "target-NightlyConfigure-Debug-0c43f5f7b4c4f5f54be0.json",
+					"name" : "NightlyConfigure",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "NightlyCoverage::@0718ac7d523535e54da4",
+					"jsonFile" : "target-NightlyCoverage-Debug-a9ab39a9b4f02a26250d.json",
+					"name" : "NightlyCoverage",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "NightlyMemCheck::@0718ac7d523535e54da4",
+					"jsonFile" : "target-NightlyMemCheck-Debug-69b711bcd5a02bf1e513.json",
+					"name" : "NightlyMemCheck",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "NightlyMemoryCheck::@0718ac7d523535e54da4",
+					"jsonFile" : "target-NightlyMemoryCheck-Debug-ba16ea5bf62fffae31fd.json",
+					"name" : "NightlyMemoryCheck",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "NightlyStart::@0718ac7d523535e54da4",
+					"jsonFile" : "target-NightlyStart-Debug-53617c56d96289ff46ee.json",
+					"name" : "NightlyStart",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "NightlySubmit::@0718ac7d523535e54da4",
+					"jsonFile" : "target-NightlySubmit-Debug-54d774db13ca26ba6e07.json",
+					"name" : "NightlySubmit",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "NightlyTest::@0718ac7d523535e54da4",
+					"jsonFile" : "target-NightlyTest-Debug-ed03eced3321d818d693.json",
+					"name" : "NightlyTest",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "NightlyUpdate::@0718ac7d523535e54da4",
+					"jsonFile" : "target-NightlyUpdate-Debug-c3cb7f2d223b8be59c63.json",
+					"name" : "NightlyUpdate",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "allocate_module_test::@338e118eea7d3cbc50be",
+					"jsonFile" : "target-allocate_module_test-Debug-def0d33a3e34363c71c2.json",
+					"name" : "allocate_module_test",
+					"projectIndex" : 4
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "assert_macro_test::@338e118eea7d3cbc50be",
+					"jsonFile" : "target-assert_macro_test-Debug-fff2389c14980b4d760d.json",
+					"name" : "assert_macro_test",
+					"projectIndex" : 4
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "assert_module_test::@338e118eea7d3cbc50be",
+					"jsonFile" : "target-assert_module_test-Debug-0044ca0ad7daf9b25a4e.json",
+					"name" : "assert_module_test",
+					"projectIndex" : 4
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "cmocka::@0810ba72744d3bfe4cc1",
+					"jsonFile" : "target-cmocka-Debug-ff6da2bd2caab2a0ebc5.json",
+					"name" : "cmocka",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "dist::@0718ac7d523535e54da4",
+					"jsonFile" : "target-dist-Debug-7bf40873383c70858e61.json",
+					"name" : "dist",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 7,
+					"id" : "hardware_iface::@7f25034bf5fd2f42481f",
+					"jsonFile" : "target-hardware_iface-Debug-6c4e4d704b755d39050f.json",
+					"name" : "hardware_iface",
+					"projectIndex" : 5
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "simple_test::@338e118eea7d3cbc50be",
+					"jsonFile" : "target-simple_test-Debug-f4d8cc6e23e0cf6d7543.json",
+					"name" : "simple_test",
+					"projectIndex" : 4
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "test_channel_arduino::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-test_channel_arduino-Debug-51edca0ef0d708f5c7e1.json",
+					"name" : "test_channel_arduino",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "test_serial_comm::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-test_serial_comm-Debug-98502a3db84d5b055a28.json",
+					"name" : "test_serial_comm",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug",
+		"source" : "/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}

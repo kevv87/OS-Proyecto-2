@@ -1,0 +1,6 @@
+/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/build/CMakeFiles/rebuild_cache.dir
+/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/build/CMakeFiles/edit_cache.dir
+/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/build/CMakeFiles/CEThreads.dir
+/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/build/common/CMakeFiles/rebuild_cache.dir
+/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/build/common/CMakeFiles/edit_cache.dir
+/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/build/common/CMakeFiles/Common.dir

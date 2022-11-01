@@ -1,0 +1,84 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install"
+		],
+		"files" : 
+		[
+			"/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/src/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 54,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 61,
+				"parent" : 0
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"cmocka/src/libcmocka.0.7.0.dylib",
+				"cmocka/src/libcmocka.0.dylib"
+			],
+			"targetId" : "cmocka::@0810ba72744d3bfe4cc1",
+			"targetIndex" : 33,
+			"targetInstallNamelink" : "skip",
+			"type" : "target"
+		},
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"cmocka/src/libcmocka.dylib"
+			],
+			"targetId" : "cmocka::@0810ba72744d3bfe4cc1",
+			"targetIndex" : 33,
+			"targetInstallNamelink" : "only",
+			"type" : "target"
+		},
+		{
+			"backtrace" : 2,
+			"component" : "Unspecified",
+			"destination" : "lib/cmake/cmocka",
+			"exportName" : "cmocka-config",
+			"exportTargets" : 
+			[
+				{
+					"id" : "cmocka::@0810ba72744d3bfe4cc1",
+					"index" : 33
+				}
+			],
+			"paths" : 
+			[
+				"cmocka/src/CMakeFiles/Export/lib/cmake/cmocka/cmocka-config.cmake"
+			],
+			"type" : "export"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "cmocka/src",
+		"source" : "/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/src"
+	}
+}

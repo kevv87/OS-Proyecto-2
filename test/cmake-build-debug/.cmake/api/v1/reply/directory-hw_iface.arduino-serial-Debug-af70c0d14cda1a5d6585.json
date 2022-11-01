@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "hw_iface/arduino-serial",
+		"source" : "/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/arduino-serial"
+	}
+}

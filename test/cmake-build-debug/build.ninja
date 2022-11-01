@@ -1,0 +1,1968 @@
+## This file contains all the build statements describing the
+# compilation DAG.
+
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
+# 
+# Which is the root file.
+# =============================================================================
+
+# =============================================================================
+# Project: Test
+# Configurations: Debug
+# =============================================================================
+
+#############################################
+# Minimal version of Ninja required by this file
+
+ninja_required_version = 1.5
+
+
+#############################################
+# Set configuration variable for custom commands.
+
+CONFIGURATION = Debug
+# =============================================================================
+# Include auxiliary files.
+
+
+#############################################
+# Include rules file.
+
+include CMakeFiles/rules.ninja
+
+# =============================================================================
+
+#############################################
+# Logical path to working directory; prefix for absolute paths.
+
+cmake_ninja_workdir = /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/
+# =============================================================================
+# Object build statements for EXECUTABLE target test_serial_comm
+
+
+#############################################
+# Order-only phony target for test_serial_comm
+
+build cmake_object_order_depends_target_test_serial_comm: phony || cmake_object_order_depends_target_Arduino-serial cmake_object_order_depends_target_Common cmake_object_order_depends_target_cmocka cmake_object_order_depends_target_hardware_iface
+
+build CMakeFiles/test_serial_comm.dir/test_hw_iface/test_serial_comm.c.o: C_COMPILER__test_serial_comm_Debug /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/test_hw_iface/test_serial_comm.c || cmake_object_order_depends_target_test_serial_comm
+  DEP_FILE = CMakeFiles/test_serial_comm.dir/test_hw_iface/test_serial_comm.c.o.d
+  FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk
+  INCLUDES = -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/.. -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/common/. -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/include -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/.. -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/../common/include -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/arduino-serial/./mongoose
+  OBJECT_DIR = CMakeFiles/test_serial_comm.dir
+  OBJECT_FILE_DIR = CMakeFiles/test_serial_comm.dir/test_hw_iface
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target test_serial_comm
+
+
+#############################################
+# Link the executable test_serial_comm
+
+build test_serial_comm: C_EXECUTABLE_LINKER__test_serial_comm_Debug CMakeFiles/test_serial_comm.dir/test_hw_iface/test_serial_comm.c.o | cmocka/src/libcmocka.0.7.0.dylib hw_iface/libhardware_iface.dylib hw_iface/common/libCommon.dylib hw_iface/arduino-serial/libArduino-serial.dylib || cmocka/src/libcmocka.dylib hw_iface/arduino-serial/libArduino-serial.dylib hw_iface/common/libCommon.dylib hw_iface/libhardware_iface.dylib cmocka/src/libcmocka.dylib
+  FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk
+  LINK_LIBRARIES = -Wl,-rpath,/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/src -Wl,-rpath,/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface -Wl,-rpath,/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface/common -Wl,-rpath,/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface/arduino-serial  cmocka/src/libcmocka.0.7.0.dylib  hw_iface/libhardware_iface.dylib  hw_iface/common/libCommon.dylib  -lm  hw_iface/arduino-serial/libArduino-serial.dylib
+  OBJECT_DIR = CMakeFiles/test_serial_comm.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = test_serial_comm
+  TARGET_PDB = test_serial_comm.dbg
+
+# =============================================================================
+# Object build statements for EXECUTABLE target test_channel_arduino
+
+
+#############################################
+# Order-only phony target for test_channel_arduino
+
+build cmake_object_order_depends_target_test_channel_arduino: phony || cmake_object_order_depends_target_Arduino-serial cmake_object_order_depends_target_Common cmake_object_order_depends_target_cmocka cmake_object_order_depends_target_hardware_iface
+
+build CMakeFiles/test_channel_arduino.dir/test_hw_iface/test_channel_arduino.c.o: C_COMPILER__test_channel_arduino_Debug /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/test_hw_iface/test_channel_arduino.c || cmake_object_order_depends_target_test_channel_arduino
+  DEP_FILE = CMakeFiles/test_channel_arduino.dir/test_hw_iface/test_channel_arduino.c.o.d
+  FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk
+  INCLUDES = -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/.. -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/common/. -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/include -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/.. -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/../common/include -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/arduino-serial/./mongoose
+  OBJECT_DIR = CMakeFiles/test_channel_arduino.dir
+  OBJECT_FILE_DIR = CMakeFiles/test_channel_arduino.dir/test_hw_iface
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target test_channel_arduino
+
+
+#############################################
+# Link the executable test_channel_arduino
+
+build test_channel_arduino: C_EXECUTABLE_LINKER__test_channel_arduino_Debug CMakeFiles/test_channel_arduino.dir/test_hw_iface/test_channel_arduino.c.o | cmocka/src/libcmocka.0.7.0.dylib hw_iface/libhardware_iface.dylib hw_iface/common/libCommon.dylib hw_iface/arduino-serial/libArduino-serial.dylib || cmocka/src/libcmocka.dylib hw_iface/arduino-serial/libArduino-serial.dylib hw_iface/common/libCommon.dylib hw_iface/libhardware_iface.dylib cmocka/src/libcmocka.dylib
+  FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk
+  LINK_LIBRARIES = -Wl,-rpath,/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/src -Wl,-rpath,/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface -Wl,-rpath,/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface/common -Wl,-rpath,/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface/arduino-serial  cmocka/src/libcmocka.0.7.0.dylib  hw_iface/libhardware_iface.dylib  hw_iface/common/libCommon.dylib  -lm  hw_iface/arduino-serial/libArduino-serial.dylib
+  OBJECT_DIR = CMakeFiles/test_channel_arduino.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = test_channel_arduino
+  TARGET_PDB = test_channel_arduino.dbg
+
+
+#############################################
+# Utility command for package
+
+build CMakeFiles/package.util: CUSTOM_COMMAND all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cpack --config ./CPackConfig.cmake
+  DESC = Run CPack packaging tool...
+  pool = console
+  restat = 1
+
+build package: phony CMakeFiles/package.util
+
+
+#############################################
+# Utility command for package_source
+
+build CMakeFiles/package_source.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cpack --config ./CPackSourceConfig.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/CPackSourceConfig.cmake
+  DESC = Run CPack packaging tool for source...
+  pool = console
+  restat = 1
+
+build package_source: phony CMakeFiles/package_source.util
+
+
+#############################################
+# Utility command for edit_cache
+
+build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build edit_cache: phony CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake --regenerate-during-build -S/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test -B/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build rebuild_cache: phony CMakeFiles/rebuild_cache.util
+
+
+#############################################
+# Utility command for list_install_components
+
+build list_install_components: phony
+
+
+#############################################
+# Utility command for install
+
+build CMakeFiles/install.util: CUSTOM_COMMAND all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -P cmake_install.cmake
+  DESC = Install the project...
+  pool = console
+  restat = 1
+
+build install: phony CMakeFiles/install.util
+
+
+#############################################
+# Utility command for install/local
+
+build CMakeFiles/install/local.util: CUSTOM_COMMAND all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+  DESC = Installing only the local directory...
+  pool = console
+  restat = 1
+
+build install/local: phony CMakeFiles/install/local.util
+
+
+#############################################
+# Utility command for install/strip
+
+build CMakeFiles/install/strip.util: CUSTOM_COMMAND all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+  DESC = Installing the project stripped...
+  pool = console
+  restat = 1
+
+build install/strip: phony CMakeFiles/install/strip.util
+
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
+# /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/CMakeLists.txt
+# =============================================================================
+
+
+#############################################
+# Utility command for Experimental
+
+build cmocka/Experimental: phony cmocka/CMakeFiles/Experimental
+
+
+#############################################
+# Utility command for Nightly
+
+build cmocka/Nightly: phony cmocka/CMakeFiles/Nightly
+
+
+#############################################
+# Utility command for Continuous
+
+build cmocka/Continuous: phony cmocka/CMakeFiles/Continuous
+
+
+#############################################
+# Utility command for NightlyMemoryCheck
+
+build cmocka/NightlyMemoryCheck: phony cmocka/CMakeFiles/NightlyMemoryCheck
+
+
+#############################################
+# Utility command for NightlyStart
+
+build cmocka/NightlyStart: phony cmocka/CMakeFiles/NightlyStart
+
+
+#############################################
+# Utility command for NightlyUpdate
+
+build cmocka/NightlyUpdate: phony cmocka/CMakeFiles/NightlyUpdate
+
+
+#############################################
+# Utility command for NightlyConfigure
+
+build cmocka/NightlyConfigure: phony cmocka/CMakeFiles/NightlyConfigure
+
+
+#############################################
+# Utility command for NightlyBuild
+
+build cmocka/NightlyBuild: phony cmocka/CMakeFiles/NightlyBuild
+
+
+#############################################
+# Utility command for NightlyTest
+
+build cmocka/NightlyTest: phony cmocka/CMakeFiles/NightlyTest
+
+
+#############################################
+# Utility command for NightlyCoverage
+
+build cmocka/NightlyCoverage: phony cmocka/CMakeFiles/NightlyCoverage
+
+
+#############################################
+# Utility command for NightlyMemCheck
+
+build cmocka/NightlyMemCheck: phony cmocka/CMakeFiles/NightlyMemCheck
+
+
+#############################################
+# Utility command for NightlySubmit
+
+build cmocka/NightlySubmit: phony cmocka/CMakeFiles/NightlySubmit
+
+
+#############################################
+# Utility command for ExperimentalStart
+
+build cmocka/ExperimentalStart: phony cmocka/CMakeFiles/ExperimentalStart
+
+
+#############################################
+# Utility command for ExperimentalUpdate
+
+build cmocka/ExperimentalUpdate: phony cmocka/CMakeFiles/ExperimentalUpdate
+
+
+#############################################
+# Utility command for ExperimentalConfigure
+
+build cmocka/ExperimentalConfigure: phony cmocka/CMakeFiles/ExperimentalConfigure
+
+
+#############################################
+# Utility command for ExperimentalBuild
+
+build cmocka/ExperimentalBuild: phony cmocka/CMakeFiles/ExperimentalBuild
+
+
+#############################################
+# Utility command for ExperimentalTest
+
+build cmocka/ExperimentalTest: phony cmocka/CMakeFiles/ExperimentalTest
+
+
+#############################################
+# Utility command for ExperimentalCoverage
+
+build cmocka/ExperimentalCoverage: phony cmocka/CMakeFiles/ExperimentalCoverage
+
+
+#############################################
+# Utility command for ExperimentalMemCheck
+
+build cmocka/ExperimentalMemCheck: phony cmocka/CMakeFiles/ExperimentalMemCheck
+
+
+#############################################
+# Utility command for ExperimentalSubmit
+
+build cmocka/ExperimentalSubmit: phony cmocka/CMakeFiles/ExperimentalSubmit
+
+
+#############################################
+# Utility command for ContinuousStart
+
+build cmocka/ContinuousStart: phony cmocka/CMakeFiles/ContinuousStart
+
+
+#############################################
+# Utility command for ContinuousUpdate
+
+build cmocka/ContinuousUpdate: phony cmocka/CMakeFiles/ContinuousUpdate
+
+
+#############################################
+# Utility command for ContinuousConfigure
+
+build cmocka/ContinuousConfigure: phony cmocka/CMakeFiles/ContinuousConfigure
+
+
+#############################################
+# Utility command for ContinuousBuild
+
+build cmocka/ContinuousBuild: phony cmocka/CMakeFiles/ContinuousBuild
+
+
+#############################################
+# Utility command for ContinuousTest
+
+build cmocka/ContinuousTest: phony cmocka/CMakeFiles/ContinuousTest
+
+
+#############################################
+# Utility command for ContinuousCoverage
+
+build cmocka/ContinuousCoverage: phony cmocka/CMakeFiles/ContinuousCoverage
+
+
+#############################################
+# Utility command for ContinuousMemCheck
+
+build cmocka/ContinuousMemCheck: phony cmocka/CMakeFiles/ContinuousMemCheck
+
+
+#############################################
+# Utility command for ContinuousSubmit
+
+build cmocka/ContinuousSubmit: phony cmocka/CMakeFiles/ContinuousSubmit
+
+
+#############################################
+# Utility command for dist
+
+build cmocka/dist: phony cmocka/CMakeFiles/dist
+
+
+#############################################
+# Utility command for package
+
+build cmocka/CMakeFiles/package.util: CUSTOM_COMMAND cmocka/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cpack --config ./CPackConfig.cmake
+  DESC = Run CPack packaging tool...
+  pool = console
+  restat = 1
+
+build cmocka/package: phony cmocka/CMakeFiles/package.util
+
+
+#############################################
+# Utility command for package_source
+
+build cmocka/CMakeFiles/package_source.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cpack --config ./CPackSourceConfig.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/CPackSourceConfig.cmake
+  DESC = Run CPack packaging tool for source...
+  pool = console
+  restat = 1
+
+build cmocka/package_source: phony cmocka/CMakeFiles/package_source.util
+
+
+#############################################
+# Utility command for edit_cache
+
+build cmocka/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build cmocka/edit_cache: phony cmocka/CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build cmocka/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake --regenerate-during-build -S/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test -B/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build cmocka/rebuild_cache: phony cmocka/CMakeFiles/rebuild_cache.util
+
+
+#############################################
+# Utility command for list_install_components
+
+build cmocka/list_install_components: phony
+
+
+#############################################
+# Utility command for install
+
+build cmocka/CMakeFiles/install.util: CUSTOM_COMMAND cmocka/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -P cmake_install.cmake
+  DESC = Install the project...
+  pool = console
+  restat = 1
+
+build cmocka/install: phony cmocka/CMakeFiles/install.util
+
+
+#############################################
+# Utility command for install/local
+
+build cmocka/CMakeFiles/install/local.util: CUSTOM_COMMAND cmocka/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+  DESC = Installing only the local directory...
+  pool = console
+  restat = 1
+
+build cmocka/install/local: phony cmocka/CMakeFiles/install/local.util
+
+
+#############################################
+# Utility command for install/strip
+
+build cmocka/CMakeFiles/install/strip.util: CUSTOM_COMMAND cmocka/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+  DESC = Installing the project stripped...
+  pool = console
+  restat = 1
+
+build cmocka/install/strip: phony cmocka/CMakeFiles/install/strip.util
+
+
+#############################################
+# Custom command for cmocka/CMakeFiles/Experimental
+
+build cmocka/CMakeFiles/Experimental | ${cmake_ninja_workdir}cmocka/CMakeFiles/Experimental: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/ctest -D Experimental
+  pool = console
+
+
+#############################################
+# Custom command for cmocka/CMakeFiles/Nightly
+
+build cmocka/CMakeFiles/Nightly | ${cmake_ninja_workdir}cmocka/CMakeFiles/Nightly: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/ctest -D Nightly
+  pool = console
+
+
+#############################################
+# Custom command for cmocka/CMakeFiles/Continuous
+
+build cmocka/CMakeFiles/Continuous | ${cmake_ninja_workdir}cmocka/CMakeFiles/Continuous: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/ctest -D Continuous
+  pool = console
+
+
+#############################################
+# Custom command for cmocka/CMakeFiles/NightlyMemoryCheck
+
+build cmocka/CMakeFiles/NightlyMemoryCheck | ${cmake_ninja_workdir}cmocka/CMakeFiles/NightlyMemoryCheck: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/ctest -D NightlyMemoryCheck
+  pool = console
+
+
+#############################################
+# Custom command for cmocka/CMakeFiles/NightlyStart
+
+build cmocka/CMakeFiles/NightlyStart | ${cmake_ninja_workdir}cmocka/CMakeFiles/NightlyStart: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/ctest -D NightlyStart
+  pool = console
+
+
+#############################################
+# Custom command for cmocka/CMakeFiles/NightlyUpdate
+
+build cmocka/CMakeFiles/NightlyUpdate | ${cmake_ninja_workdir}cmocka/CMakeFiles/NightlyUpdate: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/ctest -D NightlyUpdate
+  pool = console
+
+
+#############################################
+# Custom command for cmocka/CMakeFiles/NightlyConfigure
+
+build cmocka/CMakeFiles/NightlyConfigure | ${cmake_ninja_workdir}cmocka/CMakeFiles/NightlyConfigure: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/ctest -D NightlyConfigure
+  pool = console
+
+
+#############################################
+# Custom command for cmocka/CMakeFiles/NightlyBuild
+
+build cmocka/CMakeFiles/NightlyBuild | ${cmake_ninja_workdir}cmocka/CMakeFiles/NightlyBuild: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/ctest -D NightlyBuild
+  pool = console
+
+
+#############################################
+# Custom command for cmocka/CMakeFiles/NightlyTest
+
+build cmocka/CMakeFiles/NightlyTest | ${cmake_ninja_workdir}cmocka/CMakeFiles/NightlyTest: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/ctest -D NightlyTest
+  pool = console
+
+
+#############################################
+# Custom command for cmocka/CMakeFiles/NightlyCoverage
+
+build cmocka/CMakeFiles/NightlyCoverage | ${cmake_ninja_workdir}cmocka/CMakeFiles/NightlyCoverage: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/ctest -D NightlyCoverage
+  pool = console
+
+
+#############################################
+# Custom command for cmocka/CMakeFiles/NightlyMemCheck
+
+build cmocka/CMakeFiles/NightlyMemCheck | ${cmake_ninja_workdir}cmocka/CMakeFiles/NightlyMemCheck: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/ctest -D NightlyMemCheck
+  pool = console
+
+
+#############################################
+# Custom command for cmocka/CMakeFiles/NightlySubmit
+
+build cmocka/CMakeFiles/NightlySubmit | ${cmake_ninja_workdir}cmocka/CMakeFiles/NightlySubmit: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/ctest -D NightlySubmit
+  pool = console
+
+
+#############################################
+# Custom command for cmocka/CMakeFiles/ExperimentalStart
+
+build cmocka/CMakeFiles/ExperimentalStart | ${cmake_ninja_workdir}cmocka/CMakeFiles/ExperimentalStart: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/ctest -D ExperimentalStart
+  pool = console
+
+
+#############################################
+# Custom command for cmocka/CMakeFiles/ExperimentalUpdate
+
+build cmocka/CMakeFiles/ExperimentalUpdate | ${cmake_ninja_workdir}cmocka/CMakeFiles/ExperimentalUpdate: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/ctest -D ExperimentalUpdate
+  pool = console
+
+
+#############################################
+# Custom command for cmocka/CMakeFiles/ExperimentalConfigure
+
+build cmocka/CMakeFiles/ExperimentalConfigure | ${cmake_ninja_workdir}cmocka/CMakeFiles/ExperimentalConfigure: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/ctest -D ExperimentalConfigure
+  pool = console
+
+
+#############################################
+# Custom command for cmocka/CMakeFiles/ExperimentalBuild
+
+build cmocka/CMakeFiles/ExperimentalBuild | ${cmake_ninja_workdir}cmocka/CMakeFiles/ExperimentalBuild: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/ctest -D ExperimentalBuild
+  pool = console
+
+
+#############################################
+# Custom command for cmocka/CMakeFiles/ExperimentalTest
+
+build cmocka/CMakeFiles/ExperimentalTest | ${cmake_ninja_workdir}cmocka/CMakeFiles/ExperimentalTest: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/ctest -D ExperimentalTest
+  pool = console
+
+
+#############################################
+# Custom command for cmocka/CMakeFiles/ExperimentalCoverage
+
+build cmocka/CMakeFiles/ExperimentalCoverage | ${cmake_ninja_workdir}cmocka/CMakeFiles/ExperimentalCoverage: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/ctest -D ExperimentalCoverage
+  pool = console
+
+
+#############################################
+# Custom command for cmocka/CMakeFiles/ExperimentalMemCheck
+
+build cmocka/CMakeFiles/ExperimentalMemCheck | ${cmake_ninja_workdir}cmocka/CMakeFiles/ExperimentalMemCheck: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/ctest -D ExperimentalMemCheck
+  pool = console
+
+
+#############################################
+# Custom command for cmocka/CMakeFiles/ExperimentalSubmit
+
+build cmocka/CMakeFiles/ExperimentalSubmit | ${cmake_ninja_workdir}cmocka/CMakeFiles/ExperimentalSubmit: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/ctest -D ExperimentalSubmit
+  pool = console
+
+
+#############################################
+# Custom command for cmocka/CMakeFiles/ContinuousStart
+
+build cmocka/CMakeFiles/ContinuousStart | ${cmake_ninja_workdir}cmocka/CMakeFiles/ContinuousStart: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/ctest -D ContinuousStart
+  pool = console
+
+
+#############################################
+# Custom command for cmocka/CMakeFiles/ContinuousUpdate
+
+build cmocka/CMakeFiles/ContinuousUpdate | ${cmake_ninja_workdir}cmocka/CMakeFiles/ContinuousUpdate: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/ctest -D ContinuousUpdate
+  pool = console
+
+
+#############################################
+# Custom command for cmocka/CMakeFiles/ContinuousConfigure
+
+build cmocka/CMakeFiles/ContinuousConfigure | ${cmake_ninja_workdir}cmocka/CMakeFiles/ContinuousConfigure: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/ctest -D ContinuousConfigure
+  pool = console
+
+
+#############################################
+# Custom command for cmocka/CMakeFiles/ContinuousBuild
+
+build cmocka/CMakeFiles/ContinuousBuild | ${cmake_ninja_workdir}cmocka/CMakeFiles/ContinuousBuild: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/ctest -D ContinuousBuild
+  pool = console
+
+
+#############################################
+# Custom command for cmocka/CMakeFiles/ContinuousTest
+
+build cmocka/CMakeFiles/ContinuousTest | ${cmake_ninja_workdir}cmocka/CMakeFiles/ContinuousTest: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/ctest -D ContinuousTest
+  pool = console
+
+
+#############################################
+# Custom command for cmocka/CMakeFiles/ContinuousCoverage
+
+build cmocka/CMakeFiles/ContinuousCoverage | ${cmake_ninja_workdir}cmocka/CMakeFiles/ContinuousCoverage: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/ctest -D ContinuousCoverage
+  pool = console
+
+
+#############################################
+# Custom command for cmocka/CMakeFiles/ContinuousMemCheck
+
+build cmocka/CMakeFiles/ContinuousMemCheck | ${cmake_ninja_workdir}cmocka/CMakeFiles/ContinuousMemCheck: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/ctest -D ContinuousMemCheck
+  pool = console
+
+
+#############################################
+# Custom command for cmocka/CMakeFiles/ContinuousSubmit
+
+build cmocka/CMakeFiles/ContinuousSubmit | ${cmake_ninja_workdir}cmocka/CMakeFiles/ContinuousSubmit: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/cmake/mac/bin/ctest -D ContinuousSubmit
+  pool = console
+
+
+#############################################
+# Custom command for cmocka/CMakeFiles/dist
+
+build cmocka/CMakeFiles/dist | ${cmake_ninja_workdir}cmocka/CMakeFiles/dist: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka && /Applications/CLion.app/Contents/bin/ninja/mac/ninja package_source
+
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
+# /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/CMakeLists.txt
+# =============================================================================
+
+
+#############################################
+# Utility command for package
+
+build cmocka/include/CMakeFiles/package.util: CUSTOM_COMMAND cmocka/include/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cpack --config ./CPackConfig.cmake
+  DESC = Run CPack packaging tool...
+  pool = console
+  restat = 1
+
+build cmocka/include/package: phony cmocka/include/CMakeFiles/package.util
+
+
+#############################################
+# Utility command for package_source
+
+build cmocka/include/CMakeFiles/package_source.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cpack --config ./CPackSourceConfig.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/CPackSourceConfig.cmake
+  DESC = Run CPack packaging tool for source...
+  pool = console
+  restat = 1
+
+build cmocka/include/package_source: phony cmocka/include/CMakeFiles/package_source.util
+
+
+#############################################
+# Utility command for edit_cache
+
+build cmocka/include/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/include && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build cmocka/include/edit_cache: phony cmocka/include/CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build cmocka/include/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/include && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake --regenerate-during-build -S/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test -B/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build cmocka/include/rebuild_cache: phony cmocka/include/CMakeFiles/rebuild_cache.util
+
+
+#############################################
+# Utility command for list_install_components
+
+build cmocka/include/list_install_components: phony
+
+
+#############################################
+# Utility command for install
+
+build cmocka/include/CMakeFiles/install.util: CUSTOM_COMMAND cmocka/include/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/include && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -P cmake_install.cmake
+  DESC = Install the project...
+  pool = console
+  restat = 1
+
+build cmocka/include/install: phony cmocka/include/CMakeFiles/install.util
+
+
+#############################################
+# Utility command for install/local
+
+build cmocka/include/CMakeFiles/install/local.util: CUSTOM_COMMAND cmocka/include/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/include && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+  DESC = Installing only the local directory...
+  pool = console
+  restat = 1
+
+build cmocka/include/install/local: phony cmocka/include/CMakeFiles/install/local.util
+
+
+#############################################
+# Utility command for install/strip
+
+build cmocka/include/CMakeFiles/install/strip.util: CUSTOM_COMMAND cmocka/include/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/include && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+  DESC = Installing the project stripped...
+  pool = console
+  restat = 1
+
+build cmocka/include/install/strip: phony cmocka/include/CMakeFiles/install/strip.util
+
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
+# /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/CMakeLists.txt
+# =============================================================================
+
+# =============================================================================
+# Object build statements for SHARED_LIBRARY target cmocka
+
+
+#############################################
+# Order-only phony target for cmocka
+
+build cmake_object_order_depends_target_cmocka: phony || cmocka/src/CMakeFiles/cmocka.dir
+
+build cmocka/src/CMakeFiles/cmocka.dir/cmocka.c.o: C_COMPILER__cmocka_Debug /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/src/cmocka.c || cmake_object_order_depends_target_cmocka
+  DEFINES = -DCMOCKA_EXPORTS
+  DEP_FILE = cmocka/src/CMakeFiles/cmocka.dir/cmocka.c.o.d
+  FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -fPIC -std=gnu99 -Wpedantic -Wall -Wshadow -Wmissing-prototypes -Wcast-align -Werror=address -Wstrict-prototypes -Werror=strict-prototypes -Wwrite-strings -Werror=write-strings -Werror-implicit-function-declaration -Wpointer-arith -Werror=pointer-arith -Wdeclaration-after-statement -Werror=declaration-after-statement -Wreturn-type -Werror=return-type -Wuninitialized -Werror=uninitialized -Wimplicit-fallthrough -Werror=strict-overflow -Wstrict-overflow=2 -Wno-format-zero-length -Wmissing-field-initializers -Wformat -Wformat-security -Werror=format-security -fno-common -fstack-protector-strong -fstack-clash-protection -DHAVE_CONFIG_H -std=gnu99
+  INCLUDES = -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/src -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/src -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/include
+  OBJECT_DIR = cmocka/src/CMakeFiles/cmocka.dir
+  OBJECT_FILE_DIR = cmocka/src/CMakeFiles/cmocka.dir
+
+
+# =============================================================================
+# Link build statements for SHARED_LIBRARY target cmocka
+
+
+#############################################
+# Link the shared library cmocka/src/libcmocka.0.7.0.dylib
+
+build cmocka/src/libcmocka.0.7.0.dylib: C_SHARED_LIBRARY_LINKER__cmocka_Debug cmocka/src/CMakeFiles/cmocka.dir/cmocka.c.o
+  ARCH_FLAGS = -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk
+  INSTALLNAME_DIR = @rpath/
+  LANGUAGE_COMPILE_FLAGS = -g
+  LINK_FLAGS = -fstack-protector-strong  -current_version 0.7.0
+  OBJECT_DIR = cmocka/src/CMakeFiles/cmocka.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  SONAME = libcmocka.0.dylib
+  SONAME_FLAG = -install_name
+  TARGET_FILE = cmocka/src/libcmocka.0.7.0.dylib
+  TARGET_PDB = cmocka.dylib.dbg
+
+
+#############################################
+# Create library symlink cmocka/src/libcmocka.dylib
+
+build cmocka/src/libcmocka.0.dylib cmocka/src/libcmocka.dylib: CMAKE_SYMLINK_LIBRARY cmocka/src/libcmocka.0.7.0.dylib
+  POST_BUILD = :
+
+
+#############################################
+# Utility command for package
+
+build cmocka/src/CMakeFiles/package.util: CUSTOM_COMMAND cmocka/src/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cpack --config ./CPackConfig.cmake
+  DESC = Run CPack packaging tool...
+  pool = console
+  restat = 1
+
+build cmocka/src/package: phony cmocka/src/CMakeFiles/package.util
+
+
+#############################################
+# Utility command for package_source
+
+build cmocka/src/CMakeFiles/package_source.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cpack --config ./CPackSourceConfig.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/CPackSourceConfig.cmake
+  DESC = Run CPack packaging tool for source...
+  pool = console
+  restat = 1
+
+build cmocka/src/package_source: phony cmocka/src/CMakeFiles/package_source.util
+
+
+#############################################
+# Utility command for edit_cache
+
+build cmocka/src/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/src && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build cmocka/src/edit_cache: phony cmocka/src/CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build cmocka/src/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/src && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake --regenerate-during-build -S/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test -B/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build cmocka/src/rebuild_cache: phony cmocka/src/CMakeFiles/rebuild_cache.util
+
+
+#############################################
+# Utility command for list_install_components
+
+build cmocka/src/list_install_components: phony
+
+
+#############################################
+# Utility command for install
+
+build cmocka/src/CMakeFiles/install.util: CUSTOM_COMMAND cmocka/src/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/src && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -P cmake_install.cmake
+  DESC = Install the project...
+  pool = console
+  restat = 1
+
+build cmocka/src/install: phony cmocka/src/CMakeFiles/install.util
+
+
+#############################################
+# Utility command for install/local
+
+build cmocka/src/CMakeFiles/install/local.util: CUSTOM_COMMAND cmocka/src/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/src && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+  DESC = Installing only the local directory...
+  pool = console
+  restat = 1
+
+build cmocka/src/install/local: phony cmocka/src/CMakeFiles/install/local.util
+
+
+#############################################
+# Utility command for install/strip
+
+build cmocka/src/CMakeFiles/install/strip.util: CUSTOM_COMMAND cmocka/src/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/src && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+  DESC = Installing the project stripped...
+  pool = console
+  restat = 1
+
+build cmocka/src/install/strip: phony cmocka/src/CMakeFiles/install/strip.util
+
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
+# /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/CMakeLists.txt
+# =============================================================================
+
+
+#############################################
+# Utility command for package
+
+build cmocka/doc/CMakeFiles/package.util: CUSTOM_COMMAND cmocka/doc/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cpack --config ./CPackConfig.cmake
+  DESC = Run CPack packaging tool...
+  pool = console
+  restat = 1
+
+build cmocka/doc/package: phony cmocka/doc/CMakeFiles/package.util
+
+
+#############################################
+# Utility command for package_source
+
+build cmocka/doc/CMakeFiles/package_source.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cpack --config ./CPackSourceConfig.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/CPackSourceConfig.cmake
+  DESC = Run CPack packaging tool for source...
+  pool = console
+  restat = 1
+
+build cmocka/doc/package_source: phony cmocka/doc/CMakeFiles/package_source.util
+
+
+#############################################
+# Utility command for edit_cache
+
+build cmocka/doc/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/doc && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build cmocka/doc/edit_cache: phony cmocka/doc/CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build cmocka/doc/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/doc && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake --regenerate-during-build -S/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test -B/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build cmocka/doc/rebuild_cache: phony cmocka/doc/CMakeFiles/rebuild_cache.util
+
+
+#############################################
+# Utility command for list_install_components
+
+build cmocka/doc/list_install_components: phony
+
+
+#############################################
+# Utility command for install
+
+build cmocka/doc/CMakeFiles/install.util: CUSTOM_COMMAND cmocka/doc/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/doc && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -P cmake_install.cmake
+  DESC = Install the project...
+  pool = console
+  restat = 1
+
+build cmocka/doc/install: phony cmocka/doc/CMakeFiles/install.util
+
+
+#############################################
+# Utility command for install/local
+
+build cmocka/doc/CMakeFiles/install/local.util: CUSTOM_COMMAND cmocka/doc/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/doc && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+  DESC = Installing only the local directory...
+  pool = console
+  restat = 1
+
+build cmocka/doc/install/local: phony cmocka/doc/CMakeFiles/install/local.util
+
+
+#############################################
+# Utility command for install/strip
+
+build cmocka/doc/CMakeFiles/install/strip.util: CUSTOM_COMMAND cmocka/doc/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/doc && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+  DESC = Installing the project stripped...
+  pool = console
+  restat = 1
+
+build cmocka/doc/install/strip: phony cmocka/doc/CMakeFiles/install/strip.util
+
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
+# /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/CMakeLists.txt
+# =============================================================================
+
+# =============================================================================
+# Object build statements for EXECUTABLE target simple_test
+
+
+#############################################
+# Order-only phony target for simple_test
+
+build cmake_object_order_depends_target_simple_test: phony || cmake_object_order_depends_target_cmocka
+
+build cmocka/example/CMakeFiles/simple_test.dir/simple_test.c.o: C_COMPILER__simple_test_Debug /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/example/simple_test.c || cmake_object_order_depends_target_simple_test
+  DEP_FILE = cmocka/example/CMakeFiles/simple_test.dir/simple_test.c.o.d
+  FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -fPIE -std=gnu99 -Wpedantic -Wall -Wshadow -Wmissing-prototypes -Wcast-align -Werror=address -Wstrict-prototypes -Werror=strict-prototypes -Wwrite-strings -Werror=write-strings -Werror-implicit-function-declaration -Wpointer-arith -Werror=pointer-arith -Wdeclaration-after-statement -Werror=declaration-after-statement -Wreturn-type -Werror=return-type -Wuninitialized -Werror=uninitialized -Wimplicit-fallthrough -Werror=strict-overflow -Wstrict-overflow=2 -Wno-format-zero-length -Wmissing-field-initializers -Wformat -Wformat-security -Werror=format-security -fno-common -fstack-protector-strong -fstack-clash-protection
+  INCLUDES = -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/example -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/example -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/include
+  OBJECT_DIR = cmocka/example/CMakeFiles/simple_test.dir
+  OBJECT_FILE_DIR = cmocka/example/CMakeFiles/simple_test.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target simple_test
+
+
+#############################################
+# Link the executable cmocka/example/simple_test
+
+build cmocka/example/simple_test: C_EXECUTABLE_LINKER__simple_test_Debug cmocka/example/CMakeFiles/simple_test.dir/simple_test.c.o | cmocka/src/libcmocka.0.7.0.dylib || cmocka/src/libcmocka.dylib cmocka/src/libcmocka.dylib
+  FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk
+  LINK_FLAGS = -fstack-protector-strong
+  LINK_LIBRARIES = -Wl,-rpath,/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/src  cmocka/src/libcmocka.0.7.0.dylib
+  OBJECT_DIR = cmocka/example/CMakeFiles/simple_test.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = cmocka/example/simple_test
+  TARGET_PDB = simple_test.dbg
+
+# =============================================================================
+# Object build statements for EXECUTABLE target allocate_module_test
+
+
+#############################################
+# Order-only phony target for allocate_module_test
+
+build cmake_object_order_depends_target_allocate_module_test: phony || cmake_object_order_depends_target_cmocka
+
+build cmocka/example/CMakeFiles/allocate_module_test.dir/allocate_module.c.o: C_COMPILER__allocate_module_test_Debug /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/example/allocate_module.c || cmake_object_order_depends_target_allocate_module_test
+  DEFINES = -DUNIT_TESTING=1
+  DEP_FILE = cmocka/example/CMakeFiles/allocate_module_test.dir/allocate_module.c.o.d
+  FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -fPIE -std=gnu99 -Wpedantic -Wall -Wshadow -Wmissing-prototypes -Wcast-align -Werror=address -Wstrict-prototypes -Werror=strict-prototypes -Wwrite-strings -Werror=write-strings -Werror-implicit-function-declaration -Wpointer-arith -Werror=pointer-arith -Wdeclaration-after-statement -Werror=declaration-after-statement -Wreturn-type -Werror=return-type -Wuninitialized -Werror=uninitialized -Wimplicit-fallthrough -Werror=strict-overflow -Wstrict-overflow=2 -Wno-format-zero-length -Wmissing-field-initializers -Wformat -Wformat-security -Werror=format-security -fno-common -fstack-protector-strong -fstack-clash-protection
+  INCLUDES = -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/example -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/example -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/include
+  OBJECT_DIR = cmocka/example/CMakeFiles/allocate_module_test.dir
+  OBJECT_FILE_DIR = cmocka/example/CMakeFiles/allocate_module_test.dir
+
+build cmocka/example/CMakeFiles/allocate_module_test.dir/allocate_module_test.c.o: C_COMPILER__allocate_module_test_Debug /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/example/allocate_module_test.c || cmake_object_order_depends_target_allocate_module_test
+  DEP_FILE = cmocka/example/CMakeFiles/allocate_module_test.dir/allocate_module_test.c.o.d
+  FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -fPIE -std=gnu99 -Wpedantic -Wall -Wshadow -Wmissing-prototypes -Wcast-align -Werror=address -Wstrict-prototypes -Werror=strict-prototypes -Wwrite-strings -Werror=write-strings -Werror-implicit-function-declaration -Wpointer-arith -Werror=pointer-arith -Wdeclaration-after-statement -Werror=declaration-after-statement -Wreturn-type -Werror=return-type -Wuninitialized -Werror=uninitialized -Wimplicit-fallthrough -Werror=strict-overflow -Wstrict-overflow=2 -Wno-format-zero-length -Wmissing-field-initializers -Wformat -Wformat-security -Werror=format-security -fno-common -fstack-protector-strong -fstack-clash-protection
+  INCLUDES = -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/example -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/example -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/include
+  OBJECT_DIR = cmocka/example/CMakeFiles/allocate_module_test.dir
+  OBJECT_FILE_DIR = cmocka/example/CMakeFiles/allocate_module_test.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target allocate_module_test
+
+
+#############################################
+# Link the executable cmocka/example/allocate_module_test
+
+build cmocka/example/allocate_module_test: C_EXECUTABLE_LINKER__allocate_module_test_Debug cmocka/example/CMakeFiles/allocate_module_test.dir/allocate_module.c.o cmocka/example/CMakeFiles/allocate_module_test.dir/allocate_module_test.c.o | cmocka/src/libcmocka.0.7.0.dylib || cmocka/src/libcmocka.dylib cmocka/src/libcmocka.dylib
+  FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk
+  LINK_FLAGS = -fstack-protector-strong
+  LINK_LIBRARIES = -Wl,-rpath,/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/src  cmocka/src/libcmocka.0.7.0.dylib
+  OBJECT_DIR = cmocka/example/CMakeFiles/allocate_module_test.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = cmocka/example/allocate_module_test
+  TARGET_PDB = allocate_module_test.dbg
+
+# =============================================================================
+# Object build statements for EXECUTABLE target assert_macro_test
+
+
+#############################################
+# Order-only phony target for assert_macro_test
+
+build cmake_object_order_depends_target_assert_macro_test: phony || cmake_object_order_depends_target_cmocka
+
+build cmocka/example/CMakeFiles/assert_macro_test.dir/assert_macro.c.o: C_COMPILER__assert_macro_test_Debug /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/example/assert_macro.c || cmake_object_order_depends_target_assert_macro_test
+  DEP_FILE = cmocka/example/CMakeFiles/assert_macro_test.dir/assert_macro.c.o.d
+  FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -fPIE -std=gnu99 -Wpedantic -Wall -Wshadow -Wmissing-prototypes -Wcast-align -Werror=address -Wstrict-prototypes -Werror=strict-prototypes -Wwrite-strings -Werror=write-strings -Werror-implicit-function-declaration -Wpointer-arith -Werror=pointer-arith -Wdeclaration-after-statement -Werror=declaration-after-statement -Wreturn-type -Werror=return-type -Wuninitialized -Werror=uninitialized -Wimplicit-fallthrough -Werror=strict-overflow -Wstrict-overflow=2 -Wno-format-zero-length -Wmissing-field-initializers -Wformat -Wformat-security -Werror=format-security -fno-common -fstack-protector-strong -fstack-clash-protection
+  INCLUDES = -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/example -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/example -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/include
+  OBJECT_DIR = cmocka/example/CMakeFiles/assert_macro_test.dir
+  OBJECT_FILE_DIR = cmocka/example/CMakeFiles/assert_macro_test.dir
+
+build cmocka/example/CMakeFiles/assert_macro_test.dir/assert_macro_test.c.o: C_COMPILER__assert_macro_test_Debug /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/example/assert_macro_test.c || cmake_object_order_depends_target_assert_macro_test
+  DEP_FILE = cmocka/example/CMakeFiles/assert_macro_test.dir/assert_macro_test.c.o.d
+  FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -fPIE -std=gnu99 -Wpedantic -Wall -Wshadow -Wmissing-prototypes -Wcast-align -Werror=address -Wstrict-prototypes -Werror=strict-prototypes -Wwrite-strings -Werror=write-strings -Werror-implicit-function-declaration -Wpointer-arith -Werror=pointer-arith -Wdeclaration-after-statement -Werror=declaration-after-statement -Wreturn-type -Werror=return-type -Wuninitialized -Werror=uninitialized -Wimplicit-fallthrough -Werror=strict-overflow -Wstrict-overflow=2 -Wno-format-zero-length -Wmissing-field-initializers -Wformat -Wformat-security -Werror=format-security -fno-common -fstack-protector-strong -fstack-clash-protection
+  INCLUDES = -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/example -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/example -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/include
+  OBJECT_DIR = cmocka/example/CMakeFiles/assert_macro_test.dir
+  OBJECT_FILE_DIR = cmocka/example/CMakeFiles/assert_macro_test.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target assert_macro_test
+
+
+#############################################
+# Link the executable cmocka/example/assert_macro_test
+
+build cmocka/example/assert_macro_test: C_EXECUTABLE_LINKER__assert_macro_test_Debug cmocka/example/CMakeFiles/assert_macro_test.dir/assert_macro.c.o cmocka/example/CMakeFiles/assert_macro_test.dir/assert_macro_test.c.o | cmocka/src/libcmocka.0.7.0.dylib || cmocka/src/libcmocka.dylib cmocka/src/libcmocka.dylib
+  FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk
+  LINK_FLAGS = -fstack-protector-strong
+  LINK_LIBRARIES = -Wl,-rpath,/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/src  cmocka/src/libcmocka.0.7.0.dylib
+  OBJECT_DIR = cmocka/example/CMakeFiles/assert_macro_test.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = cmocka/example/assert_macro_test
+  TARGET_PDB = assert_macro_test.dbg
+
+# =============================================================================
+# Object build statements for EXECUTABLE target assert_module_test
+
+
+#############################################
+# Order-only phony target for assert_module_test
+
+build cmake_object_order_depends_target_assert_module_test: phony || cmake_object_order_depends_target_cmocka
+
+build cmocka/example/CMakeFiles/assert_module_test.dir/assert_module.c.o: C_COMPILER__assert_module_test_Debug /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/example/assert_module.c || cmake_object_order_depends_target_assert_module_test
+  DEFINES = -DUNIT_TESTING=1
+  DEP_FILE = cmocka/example/CMakeFiles/assert_module_test.dir/assert_module.c.o.d
+  FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -fPIE -std=gnu99 -Wpedantic -Wall -Wshadow -Wmissing-prototypes -Wcast-align -Werror=address -Wstrict-prototypes -Werror=strict-prototypes -Wwrite-strings -Werror=write-strings -Werror-implicit-function-declaration -Wpointer-arith -Werror=pointer-arith -Wdeclaration-after-statement -Werror=declaration-after-statement -Wreturn-type -Werror=return-type -Wuninitialized -Werror=uninitialized -Wimplicit-fallthrough -Werror=strict-overflow -Wstrict-overflow=2 -Wno-format-zero-length -Wmissing-field-initializers -Wformat -Wformat-security -Werror=format-security -fno-common -fstack-protector-strong -fstack-clash-protection
+  INCLUDES = -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/example -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/example -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/include
+  OBJECT_DIR = cmocka/example/CMakeFiles/assert_module_test.dir
+  OBJECT_FILE_DIR = cmocka/example/CMakeFiles/assert_module_test.dir
+
+build cmocka/example/CMakeFiles/assert_module_test.dir/assert_module_test.c.o: C_COMPILER__assert_module_test_Debug /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/example/assert_module_test.c || cmake_object_order_depends_target_assert_module_test
+  DEP_FILE = cmocka/example/CMakeFiles/assert_module_test.dir/assert_module_test.c.o.d
+  FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -fPIE -std=gnu99 -Wpedantic -Wall -Wshadow -Wmissing-prototypes -Wcast-align -Werror=address -Wstrict-prototypes -Werror=strict-prototypes -Wwrite-strings -Werror=write-strings -Werror-implicit-function-declaration -Wpointer-arith -Werror=pointer-arith -Wdeclaration-after-statement -Werror=declaration-after-statement -Wreturn-type -Werror=return-type -Wuninitialized -Werror=uninitialized -Wimplicit-fallthrough -Werror=strict-overflow -Wstrict-overflow=2 -Wno-format-zero-length -Wmissing-field-initializers -Wformat -Wformat-security -Werror=format-security -fno-common -fstack-protector-strong -fstack-clash-protection
+  INCLUDES = -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/example -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/example -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/include
+  OBJECT_DIR = cmocka/example/CMakeFiles/assert_module_test.dir
+  OBJECT_FILE_DIR = cmocka/example/CMakeFiles/assert_module_test.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target assert_module_test
+
+
+#############################################
+# Link the executable cmocka/example/assert_module_test
+
+build cmocka/example/assert_module_test: C_EXECUTABLE_LINKER__assert_module_test_Debug cmocka/example/CMakeFiles/assert_module_test.dir/assert_module.c.o cmocka/example/CMakeFiles/assert_module_test.dir/assert_module_test.c.o | cmocka/src/libcmocka.0.7.0.dylib || cmocka/src/libcmocka.dylib cmocka/src/libcmocka.dylib
+  FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk
+  LINK_FLAGS = -fstack-protector-strong
+  LINK_LIBRARIES = -Wl,-rpath,/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/src  cmocka/src/libcmocka.0.7.0.dylib
+  OBJECT_DIR = cmocka/example/CMakeFiles/assert_module_test.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = cmocka/example/assert_module_test
+  TARGET_PDB = assert_module_test.dbg
+
+
+#############################################
+# Utility command for package
+
+build cmocka/example/CMakeFiles/package.util: CUSTOM_COMMAND cmocka/example/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cpack --config ./CPackConfig.cmake
+  DESC = Run CPack packaging tool...
+  pool = console
+  restat = 1
+
+build cmocka/example/package: phony cmocka/example/CMakeFiles/package.util
+
+
+#############################################
+# Utility command for package_source
+
+build cmocka/example/CMakeFiles/package_source.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cpack --config ./CPackSourceConfig.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/CPackSourceConfig.cmake
+  DESC = Run CPack packaging tool for source...
+  pool = console
+  restat = 1
+
+build cmocka/example/package_source: phony cmocka/example/CMakeFiles/package_source.util
+
+
+#############################################
+# Utility command for edit_cache
+
+build cmocka/example/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/example && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build cmocka/example/edit_cache: phony cmocka/example/CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build cmocka/example/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/example && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake --regenerate-during-build -S/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test -B/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build cmocka/example/rebuild_cache: phony cmocka/example/CMakeFiles/rebuild_cache.util
+
+
+#############################################
+# Utility command for list_install_components
+
+build cmocka/example/list_install_components: phony
+
+
+#############################################
+# Utility command for install
+
+build cmocka/example/CMakeFiles/install.util: CUSTOM_COMMAND cmocka/example/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/example && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -P cmake_install.cmake
+  DESC = Install the project...
+  pool = console
+  restat = 1
+
+build cmocka/example/install: phony cmocka/example/CMakeFiles/install.util
+
+
+#############################################
+# Utility command for install/local
+
+build cmocka/example/CMakeFiles/install/local.util: CUSTOM_COMMAND cmocka/example/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/example && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+  DESC = Installing only the local directory...
+  pool = console
+  restat = 1
+
+build cmocka/example/install/local: phony cmocka/example/CMakeFiles/install/local.util
+
+
+#############################################
+# Utility command for install/strip
+
+build cmocka/example/CMakeFiles/install/strip.util: CUSTOM_COMMAND cmocka/example/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/example && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+  DESC = Installing the project stripped...
+  pool = console
+  restat = 1
+
+build cmocka/example/install/strip: phony cmocka/example/CMakeFiles/install/strip.util
+
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
+# /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/example/CMakeLists.txt
+# =============================================================================
+
+
+#############################################
+# Utility command for package
+
+build cmocka/example/mock/CMakeFiles/package.util: CUSTOM_COMMAND cmocka/example/mock/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cpack --config ./CPackConfig.cmake
+  DESC = Run CPack packaging tool...
+  pool = console
+  restat = 1
+
+build cmocka/example/mock/package: phony cmocka/example/mock/CMakeFiles/package.util
+
+
+#############################################
+# Utility command for package_source
+
+build cmocka/example/mock/CMakeFiles/package_source.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cpack --config ./CPackSourceConfig.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/CPackSourceConfig.cmake
+  DESC = Run CPack packaging tool for source...
+  pool = console
+  restat = 1
+
+build cmocka/example/mock/package_source: phony cmocka/example/mock/CMakeFiles/package_source.util
+
+
+#############################################
+# Utility command for edit_cache
+
+build cmocka/example/mock/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/example/mock && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build cmocka/example/mock/edit_cache: phony cmocka/example/mock/CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build cmocka/example/mock/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/example/mock && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake --regenerate-during-build -S/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test -B/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build cmocka/example/mock/rebuild_cache: phony cmocka/example/mock/CMakeFiles/rebuild_cache.util
+
+
+#############################################
+# Utility command for list_install_components
+
+build cmocka/example/mock/list_install_components: phony
+
+
+#############################################
+# Utility command for install
+
+build cmocka/example/mock/CMakeFiles/install.util: CUSTOM_COMMAND cmocka/example/mock/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/example/mock && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -P cmake_install.cmake
+  DESC = Install the project...
+  pool = console
+  restat = 1
+
+build cmocka/example/mock/install: phony cmocka/example/mock/CMakeFiles/install.util
+
+
+#############################################
+# Utility command for install/local
+
+build cmocka/example/mock/CMakeFiles/install/local.util: CUSTOM_COMMAND cmocka/example/mock/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/example/mock && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+  DESC = Installing only the local directory...
+  pool = console
+  restat = 1
+
+build cmocka/example/mock/install/local: phony cmocka/example/mock/CMakeFiles/install/local.util
+
+
+#############################################
+# Utility command for install/strip
+
+build cmocka/example/mock/CMakeFiles/install/strip.util: CUSTOM_COMMAND cmocka/example/mock/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/example/mock && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+  DESC = Installing the project stripped...
+  pool = console
+  restat = 1
+
+build cmocka/example/mock/install/strip: phony cmocka/example/mock/CMakeFiles/install/strip.util
+
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
+# /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/CMakeLists.txt
+# =============================================================================
+
+# =============================================================================
+# Object build statements for SHARED_LIBRARY target hardware_iface
+
+
+#############################################
+# Order-only phony target for hardware_iface
+
+build cmake_object_order_depends_target_hardware_iface: phony || cmake_object_order_depends_target_Arduino-serial cmake_object_order_depends_target_Common
+
+build hw_iface/CMakeFiles/hardware_iface.dir/serial_example.c.o: C_COMPILER__hardware_iface_Debug /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/serial_example.c || cmake_object_order_depends_target_hardware_iface
+  DEFINES = -Dhardware_iface_EXPORTS
+  DEP_FILE = hw_iface/CMakeFiles/hardware_iface.dir/serial_example.c.o.d
+  FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -fPIC
+  INCLUDES = -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/.. -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/../common/include -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/common/. -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/arduino-serial/./mongoose
+  OBJECT_DIR = hw_iface/CMakeFiles/hardware_iface.dir
+  OBJECT_FILE_DIR = hw_iface/CMakeFiles/hardware_iface.dir
+
+build hw_iface/CMakeFiles/hardware_iface.dir/serial_comm.c.o: C_COMPILER__hardware_iface_Debug /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/serial_comm.c || cmake_object_order_depends_target_hardware_iface
+  DEFINES = -Dhardware_iface_EXPORTS
+  DEP_FILE = hw_iface/CMakeFiles/hardware_iface.dir/serial_comm.c.o.d
+  FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -fPIC
+  INCLUDES = -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/.. -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/../common/include -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/common/. -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/arduino-serial/./mongoose
+  OBJECT_DIR = hw_iface/CMakeFiles/hardware_iface.dir
+  OBJECT_FILE_DIR = hw_iface/CMakeFiles/hardware_iface.dir
+
+build hw_iface/CMakeFiles/hardware_iface.dir/hw_iface.c.o: C_COMPILER__hardware_iface_Debug /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/hw_iface.c || cmake_object_order_depends_target_hardware_iface
+  DEFINES = -Dhardware_iface_EXPORTS
+  DEP_FILE = hw_iface/CMakeFiles/hardware_iface.dir/hw_iface.c.o.d
+  FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -fPIC
+  INCLUDES = -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/.. -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/../common/include -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/common/. -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/arduino-serial/./mongoose
+  OBJECT_DIR = hw_iface/CMakeFiles/hardware_iface.dir
+  OBJECT_FILE_DIR = hw_iface/CMakeFiles/hardware_iface.dir
+
+
+# =============================================================================
+# Link build statements for SHARED_LIBRARY target hardware_iface
+
+
+#############################################
+# Link the shared library hw_iface/libhardware_iface.dylib
+
+build hw_iface/libhardware_iface.dylib: C_SHARED_LIBRARY_LINKER__hardware_iface_Debug hw_iface/CMakeFiles/hardware_iface.dir/serial_example.c.o hw_iface/CMakeFiles/hardware_iface.dir/serial_comm.c.o hw_iface/CMakeFiles/hardware_iface.dir/hw_iface.c.o | hw_iface/common/libCommon.dylib hw_iface/arduino-serial/libArduino-serial.dylib || hw_iface/arduino-serial/libArduino-serial.dylib hw_iface/common/libCommon.dylib
+  ARCH_FLAGS = -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk
+  INSTALLNAME_DIR = @rpath/
+  LANGUAGE_COMPILE_FLAGS = -g
+  LINK_LIBRARIES = -Wl,-rpath,/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface/common -Wl,-rpath,/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface/arduino-serial  hw_iface/common/libCommon.dylib  -lm  hw_iface/arduino-serial/libArduino-serial.dylib
+  OBJECT_DIR = hw_iface/CMakeFiles/hardware_iface.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  SONAME = libhardware_iface.dylib
+  SONAME_FLAG = -install_name
+  TARGET_FILE = hw_iface/libhardware_iface.dylib
+  TARGET_PDB = hardware_iface.dylib.dbg
+
+
+#############################################
+# Utility command for package
+
+build hw_iface/CMakeFiles/package.util: CUSTOM_COMMAND hw_iface/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cpack --config ./CPackConfig.cmake
+  DESC = Run CPack packaging tool...
+  pool = console
+  restat = 1
+
+build hw_iface/package: phony hw_iface/CMakeFiles/package.util
+
+
+#############################################
+# Utility command for package_source
+
+build hw_iface/CMakeFiles/package_source.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cpack --config ./CPackSourceConfig.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/CPackSourceConfig.cmake
+  DESC = Run CPack packaging tool for source...
+  pool = console
+  restat = 1
+
+build hw_iface/package_source: phony hw_iface/CMakeFiles/package_source.util
+
+
+#############################################
+# Utility command for edit_cache
+
+build hw_iface/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build hw_iface/edit_cache: phony hw_iface/CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build hw_iface/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake --regenerate-during-build -S/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test -B/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build hw_iface/rebuild_cache: phony hw_iface/CMakeFiles/rebuild_cache.util
+
+
+#############################################
+# Utility command for list_install_components
+
+build hw_iface/list_install_components: phony
+
+
+#############################################
+# Utility command for install
+
+build hw_iface/CMakeFiles/install.util: CUSTOM_COMMAND hw_iface/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -P cmake_install.cmake
+  DESC = Install the project...
+  pool = console
+  restat = 1
+
+build hw_iface/install: phony hw_iface/CMakeFiles/install.util
+
+
+#############################################
+# Utility command for install/local
+
+build hw_iface/CMakeFiles/install/local.util: CUSTOM_COMMAND hw_iface/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+  DESC = Installing only the local directory...
+  pool = console
+  restat = 1
+
+build hw_iface/install/local: phony hw_iface/CMakeFiles/install/local.util
+
+
+#############################################
+# Utility command for install/strip
+
+build hw_iface/CMakeFiles/install/strip.util: CUSTOM_COMMAND hw_iface/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+  DESC = Installing the project stripped...
+  pool = console
+  restat = 1
+
+build hw_iface/install/strip: phony hw_iface/CMakeFiles/install/strip.util
+
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
+# /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/CMakeLists.txt
+# =============================================================================
+
+# =============================================================================
+# Object build statements for SHARED_LIBRARY target Common
+
+
+#############################################
+# Order-only phony target for Common
+
+build cmake_object_order_depends_target_Common: phony || hw_iface/common/CMakeFiles/Common.dir
+
+build hw_iface/common/CMakeFiles/Common.dir/tools.c.o: C_COMPILER__Common_Debug /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/common/tools.c || cmake_object_order_depends_target_Common
+  DEFINES = -DCommon_EXPORTS
+  DEP_FILE = hw_iface/common/CMakeFiles/Common.dir/tools.c.o.d
+  FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -fPIC
+  INCLUDES = -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/common/.
+  OBJECT_DIR = hw_iface/common/CMakeFiles/Common.dir
+  OBJECT_FILE_DIR = hw_iface/common/CMakeFiles/Common.dir
+
+
+# =============================================================================
+# Link build statements for SHARED_LIBRARY target Common
+
+
+#############################################
+# Link the shared library hw_iface/common/libCommon.dylib
+
+build hw_iface/common/libCommon.dylib: C_SHARED_LIBRARY_LINKER__Common_Debug hw_iface/common/CMakeFiles/Common.dir/tools.c.o
+  ARCH_FLAGS = -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk
+  INSTALLNAME_DIR = @rpath/
+  LANGUAGE_COMPILE_FLAGS = -g
+  OBJECT_DIR = hw_iface/common/CMakeFiles/Common.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  SONAME = libCommon.dylib
+  SONAME_FLAG = -install_name
+  TARGET_FILE = hw_iface/common/libCommon.dylib
+  TARGET_PDB = Common.dylib.dbg
+
+
+#############################################
+# Utility command for package
+
+build hw_iface/common/CMakeFiles/package.util: CUSTOM_COMMAND hw_iface/common/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cpack --config ./CPackConfig.cmake
+  DESC = Run CPack packaging tool...
+  pool = console
+  restat = 1
+
+build hw_iface/common/package: phony hw_iface/common/CMakeFiles/package.util
+
+
+#############################################
+# Utility command for package_source
+
+build hw_iface/common/CMakeFiles/package_source.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cpack --config ./CPackSourceConfig.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/CPackSourceConfig.cmake
+  DESC = Run CPack packaging tool for source...
+  pool = console
+  restat = 1
+
+build hw_iface/common/package_source: phony hw_iface/common/CMakeFiles/package_source.util
+
+
+#############################################
+# Utility command for edit_cache
+
+build hw_iface/common/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface/common && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build hw_iface/common/edit_cache: phony hw_iface/common/CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build hw_iface/common/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface/common && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake --regenerate-during-build -S/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test -B/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build hw_iface/common/rebuild_cache: phony hw_iface/common/CMakeFiles/rebuild_cache.util
+
+
+#############################################
+# Utility command for list_install_components
+
+build hw_iface/common/list_install_components: phony
+
+
+#############################################
+# Utility command for install
+
+build hw_iface/common/CMakeFiles/install.util: CUSTOM_COMMAND hw_iface/common/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface/common && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -P cmake_install.cmake
+  DESC = Install the project...
+  pool = console
+  restat = 1
+
+build hw_iface/common/install: phony hw_iface/common/CMakeFiles/install.util
+
+
+#############################################
+# Utility command for install/local
+
+build hw_iface/common/CMakeFiles/install/local.util: CUSTOM_COMMAND hw_iface/common/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface/common && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+  DESC = Installing only the local directory...
+  pool = console
+  restat = 1
+
+build hw_iface/common/install/local: phony hw_iface/common/CMakeFiles/install/local.util
+
+
+#############################################
+# Utility command for install/strip
+
+build hw_iface/common/CMakeFiles/install/strip.util: CUSTOM_COMMAND hw_iface/common/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface/common && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+  DESC = Installing the project stripped...
+  pool = console
+  restat = 1
+
+build hw_iface/common/install/strip: phony hw_iface/common/CMakeFiles/install/strip.util
+
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
+# /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/CMakeLists.txt
+# =============================================================================
+
+# =============================================================================
+# Object build statements for SHARED_LIBRARY target Arduino-serial
+
+
+#############################################
+# Order-only phony target for Arduino-serial
+
+build cmake_object_order_depends_target_Arduino-serial: phony || hw_iface/arduino-serial/CMakeFiles/Arduino-serial.dir
+
+build hw_iface/arduino-serial/CMakeFiles/Arduino-serial.dir/arduino-serial-lib.c.o: C_COMPILER__Arduino-serial_Debug /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/arduino-serial/arduino-serial-lib.c || cmake_object_order_depends_target_Arduino-serial
+  DEFINES = -DArduino_serial_EXPORTS
+  DEP_FILE = hw_iface/arduino-serial/CMakeFiles/Arduino-serial.dir/arduino-serial-lib.c.o.d
+  FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -fPIC
+  INCLUDES = -I/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/arduino-serial/./mongoose
+  OBJECT_DIR = hw_iface/arduino-serial/CMakeFiles/Arduino-serial.dir
+  OBJECT_FILE_DIR = hw_iface/arduino-serial/CMakeFiles/Arduino-serial.dir
+
+
+# =============================================================================
+# Link build statements for SHARED_LIBRARY target Arduino-serial
+
+
+#############################################
+# Link the shared library hw_iface/arduino-serial/libArduino-serial.dylib
+
+build hw_iface/arduino-serial/libArduino-serial.dylib: C_SHARED_LIBRARY_LINKER__Arduino-serial_Debug hw_iface/arduino-serial/CMakeFiles/Arduino-serial.dir/arduino-serial-lib.c.o
+  ARCH_FLAGS = -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk
+  INSTALLNAME_DIR = @rpath/
+  LANGUAGE_COMPILE_FLAGS = -g
+  OBJECT_DIR = hw_iface/arduino-serial/CMakeFiles/Arduino-serial.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  SONAME = libArduino-serial.dylib
+  SONAME_FLAG = -install_name
+  TARGET_FILE = hw_iface/arduino-serial/libArduino-serial.dylib
+  TARGET_PDB = Arduino-serial.dylib.dbg
+
+
+#############################################
+# Utility command for package
+
+build hw_iface/arduino-serial/CMakeFiles/package.util: CUSTOM_COMMAND hw_iface/arduino-serial/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cpack --config ./CPackConfig.cmake
+  DESC = Run CPack packaging tool...
+  pool = console
+  restat = 1
+
+build hw_iface/arduino-serial/package: phony hw_iface/arduino-serial/CMakeFiles/package.util
+
+
+#############################################
+# Utility command for package_source
+
+build hw_iface/arduino-serial/CMakeFiles/package_source.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cpack --config ./CPackSourceConfig.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/CPackSourceConfig.cmake
+  DESC = Run CPack packaging tool for source...
+  pool = console
+  restat = 1
+
+build hw_iface/arduino-serial/package_source: phony hw_iface/arduino-serial/CMakeFiles/package_source.util
+
+
+#############################################
+# Utility command for edit_cache
+
+build hw_iface/arduino-serial/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface/arduino-serial && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build hw_iface/arduino-serial/edit_cache: phony hw_iface/arduino-serial/CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build hw_iface/arduino-serial/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface/arduino-serial && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake --regenerate-during-build -S/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test -B/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build hw_iface/arduino-serial/rebuild_cache: phony hw_iface/arduino-serial/CMakeFiles/rebuild_cache.util
+
+
+#############################################
+# Utility command for list_install_components
+
+build hw_iface/arduino-serial/list_install_components: phony
+
+
+#############################################
+# Utility command for install
+
+build hw_iface/arduino-serial/CMakeFiles/install.util: CUSTOM_COMMAND hw_iface/arduino-serial/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface/arduino-serial && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -P cmake_install.cmake
+  DESC = Install the project...
+  pool = console
+  restat = 1
+
+build hw_iface/arduino-serial/install: phony hw_iface/arduino-serial/CMakeFiles/install.util
+
+
+#############################################
+# Utility command for install/local
+
+build hw_iface/arduino-serial/CMakeFiles/install/local.util: CUSTOM_COMMAND hw_iface/arduino-serial/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface/arduino-serial && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+  DESC = Installing only the local directory...
+  pool = console
+  restat = 1
+
+build hw_iface/arduino-serial/install/local: phony hw_iface/arduino-serial/CMakeFiles/install/local.util
+
+
+#############################################
+# Utility command for install/strip
+
+build hw_iface/arduino-serial/CMakeFiles/install/strip.util: CUSTOM_COMMAND hw_iface/arduino-serial/all
+  COMMAND = cd /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface/arduino-serial && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+  DESC = Installing the project stripped...
+  pool = console
+  restat = 1
+
+build hw_iface/arduino-serial/install/strip: phony hw_iface/arduino-serial/CMakeFiles/install/strip.util
+
+# =============================================================================
+# Target aliases.
+
+build Arduino-serial: phony hw_iface/arduino-serial/libArduino-serial.dylib
+
+build Common: phony hw_iface/common/libCommon.dylib
+
+build Continuous: phony cmocka/Continuous
+
+build ContinuousBuild: phony cmocka/ContinuousBuild
+
+build ContinuousConfigure: phony cmocka/ContinuousConfigure
+
+build ContinuousCoverage: phony cmocka/ContinuousCoverage
+
+build ContinuousMemCheck: phony cmocka/ContinuousMemCheck
+
+build ContinuousStart: phony cmocka/ContinuousStart
+
+build ContinuousSubmit: phony cmocka/ContinuousSubmit
+
+build ContinuousTest: phony cmocka/ContinuousTest
+
+build ContinuousUpdate: phony cmocka/ContinuousUpdate
+
+build Experimental: phony cmocka/Experimental
+
+build ExperimentalBuild: phony cmocka/ExperimentalBuild
+
+build ExperimentalConfigure: phony cmocka/ExperimentalConfigure
+
+build ExperimentalCoverage: phony cmocka/ExperimentalCoverage
+
+build ExperimentalMemCheck: phony cmocka/ExperimentalMemCheck
+
+build ExperimentalStart: phony cmocka/ExperimentalStart
+
+build ExperimentalSubmit: phony cmocka/ExperimentalSubmit
+
+build ExperimentalTest: phony cmocka/ExperimentalTest
+
+build ExperimentalUpdate: phony cmocka/ExperimentalUpdate
+
+build Nightly: phony cmocka/Nightly
+
+build NightlyBuild: phony cmocka/NightlyBuild
+
+build NightlyConfigure: phony cmocka/NightlyConfigure
+
+build NightlyCoverage: phony cmocka/NightlyCoverage
+
+build NightlyMemCheck: phony cmocka/NightlyMemCheck
+
+build NightlyMemoryCheck: phony cmocka/NightlyMemoryCheck
+
+build NightlyStart: phony cmocka/NightlyStart
+
+build NightlySubmit: phony cmocka/NightlySubmit
+
+build NightlyTest: phony cmocka/NightlyTest
+
+build NightlyUpdate: phony cmocka/NightlyUpdate
+
+build allocate_module_test: phony cmocka/example/allocate_module_test
+
+build assert_macro_test: phony cmocka/example/assert_macro_test
+
+build assert_module_test: phony cmocka/example/assert_module_test
+
+build cmocka: phony cmocka/src/libcmocka.dylib
+
+build dist: phony cmocka/dist
+
+build hardware_iface: phony hw_iface/libhardware_iface.dylib
+
+build libArduino-serial.dylib: phony hw_iface/arduino-serial/libArduino-serial.dylib
+
+build libCommon.dylib: phony hw_iface/common/libCommon.dylib
+
+build libcmocka.dylib: phony cmocka/src/libcmocka.dylib
+
+build libhardware_iface.dylib: phony hw_iface/libhardware_iface.dylib
+
+build simple_test: phony cmocka/example/simple_test
+
+# =============================================================================
+# Folder targets.
+
+# =============================================================================
+
+#############################################
+# Folder: /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug
+
+build all: phony test_serial_comm test_channel_arduino cmocka/all hw_iface/all
+
+# =============================================================================
+
+#############################################
+# Folder: /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka
+
+build cmocka/all: phony cmocka/include/all cmocka/src/all cmocka/doc/all cmocka/example/all
+
+# =============================================================================
+
+#############################################
+# Folder: /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/doc
+
+build cmocka/doc/all: phony
+
+# =============================================================================
+
+#############################################
+# Folder: /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/example
+
+build cmocka/example/all: phony cmocka/example/simple_test cmocka/example/allocate_module_test cmocka/example/assert_macro_test cmocka/example/assert_module_test cmocka/example/mock/all
+
+# =============================================================================
+
+#############################################
+# Folder: /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/example/mock
+
+build cmocka/example/mock/all: phony
+
+# =============================================================================
+
+#############################################
+# Folder: /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/include
+
+build cmocka/include/all: phony
+
+# =============================================================================
+
+#############################################
+# Folder: /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/cmocka/src
+
+build cmocka/src/all: phony cmocka/src/libcmocka.dylib
+
+# =============================================================================
+
+#############################################
+# Folder: /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface
+
+build hw_iface/all: phony hw_iface/libhardware_iface.dylib hw_iface/common/all hw_iface/arduino-serial/all
+
+# =============================================================================
+
+#############################################
+# Folder: /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface/arduino-serial
+
+build hw_iface/arduino-serial/all: phony hw_iface/arduino-serial/libArduino-serial.dylib
+
+# =============================================================================
+
+#############################################
+# Folder: /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/hw_iface/common
+
+build hw_iface/common/all: phony hw_iface/common/libCommon.dylib
+
+# =============================================================================
+# Built-in targets
+
+
+#############################################
+# Re-run CMake if any of its inputs changed.
+
+build build.ninja: RERUN_CMAKE | ../CMakeLists.txt /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/BasicConfigVersion-AnyNewerVersion.cmake.in /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCXXInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCommonLanguageInclude.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeGenericSystem.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeInitializeConfigs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeLanguageInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakePackageConfigHelpers.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeSystemSpecificInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeSystemSpecificInitialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CPack.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CPackComponent.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CTest.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CTestTargets.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CTestUseLaunchers.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CheckCCompilerFlag.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CheckCSourceCompiles.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CheckCXXSourceCompiles.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CheckFunctionExists.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CheckIncludeFile.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CheckIncludeFileCXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CheckLibraryExists.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CheckStructHasMember.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CheckSymbolExists.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CheckTypeSize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/AppleClang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/GNU.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/DartConfiguration.tcl.in /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/FindDoxygen.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/FindPackageHandleStandardArgs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/FindPackageMessage.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/GNUInstallDirs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Internal/CheckCompilerFlag.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Internal/CheckFlagCommonConfig.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Internal/CheckSourceCompiles.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Apple-AppleClang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Apple-AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Apple-Clang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Apple-Clang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Apple-Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Darwin-Initialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Darwin.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/UnixPaths.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/TestBigEndian.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/WriteBasicConfigVersionFile.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Templates/CPackConfig.cmake.in /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/arduino-serial/CMakeLists.txt /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/CMakeLists.txt /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/CPackConfig.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/CTestConfig.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/CompilerChecks.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/ConfigureChecks.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/DefineOptions.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/cmake/Modules/AddCCompilerFlag.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/cmake/Modules/AddCMockaTest.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/cmake/Modules/CheckCCompilerFlagSSP.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/cmake/Modules/DefineCMakeDefaults.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/cmake/Modules/DefineCompilerFlags.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/cmake/Modules/DefinePlatformDefaults.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/cmake/Modules/MacroEnsureOutOfSourceBuild.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/cmocka.pc.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/config.h.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/doc/CMakeLists.txt /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/example/CMakeLists.txt /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/example/mock/CMakeLists.txt /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/include/CMakeLists.txt /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/include/cmocka_version.h.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/src/CMakeLists.txt /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/common/CMakeLists.txt /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/CMakeLists.txt CMakeCache.txt CMakeFiles/3.23.2/CMakeCCompiler.cmake CMakeFiles/3.23.2/CMakeCXXCompiler.cmake CMakeFiles/3.23.2/CMakeSystem.cmake
+  pool = console
+
+
+#############################################
+# A missing CMake input file is not an error.
+
+build ../CMakeLists.txt /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/BasicConfigVersion-AnyNewerVersion.cmake.in /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCXXInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCommonLanguageInclude.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeGenericSystem.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeInitializeConfigs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeLanguageInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakePackageConfigHelpers.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeSystemSpecificInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeSystemSpecificInitialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CPack.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CPackComponent.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CTest.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CTestTargets.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CTestUseLaunchers.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CheckCCompilerFlag.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CheckCSourceCompiles.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CheckCXXSourceCompiles.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CheckFunctionExists.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CheckIncludeFile.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CheckIncludeFileCXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CheckLibraryExists.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CheckStructHasMember.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CheckSymbolExists.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CheckTypeSize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/AppleClang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/GNU.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/DartConfiguration.tcl.in /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/FindDoxygen.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/FindPackageHandleStandardArgs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/FindPackageMessage.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/GNUInstallDirs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Internal/CheckCompilerFlag.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Internal/CheckFlagCommonConfig.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Internal/CheckSourceCompiles.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Apple-AppleClang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Apple-AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Apple-Clang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Apple-Clang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Apple-Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Darwin-Initialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Darwin.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/UnixPaths.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/TestBigEndian.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/WriteBasicConfigVersionFile.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Templates/CPackConfig.cmake.in /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/arduino-serial/CMakeLists.txt /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/CMakeLists.txt /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/CPackConfig.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/CTestConfig.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/CompilerChecks.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/ConfigureChecks.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/DefineOptions.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/cmake/Modules/AddCCompilerFlag.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/cmake/Modules/AddCMockaTest.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/cmake/Modules/CheckCCompilerFlagSSP.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/cmake/Modules/DefineCMakeDefaults.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/cmake/Modules/DefineCompilerFlags.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/cmake/Modules/DefinePlatformDefaults.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/cmake/Modules/MacroEnsureOutOfSourceBuild.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/cmocka.pc.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/config.h.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/doc/CMakeLists.txt /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/example/CMakeLists.txt /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/example/mock/CMakeLists.txt /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/include/CMakeLists.txt /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/include/cmocka_version.h.cmake /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/src/CMakeLists.txt /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/common/CMakeLists.txt /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/CMakeLists.txt CMakeCache.txt CMakeFiles/3.23.2/CMakeCCompiler.cmake CMakeFiles/3.23.2/CMakeCXXCompiler.cmake CMakeFiles/3.23.2/CMakeSystem.cmake: phony
+
+
+#############################################
+# Clean all the built files.
+
+build clean: CLEAN
+
+
+#############################################
+# Print all primary targets available.
+
+build help: HELP
+
+
+#############################################
+# Make the all target the default.
+
+default all

@@ -1,0 +1,113 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2
+					],
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.10"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						2
+					]
+				},
+				{
+					"build" : "common",
+					"jsonFile" : "directory-common-Debug-0eb90554894baaab6ff3.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.10"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/common",
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"build" : "arduino-serial",
+					"jsonFile" : "directory-arduino-serial-Debug-9963e619ed0aeceabf82.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.10"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/arduino-serial",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						2
+					],
+					"name" : "Hardware_Iface",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 2,
+					"id" : "Arduino-serial::@457ab4233e42bb4e34e7",
+					"jsonFile" : "target-Arduino-serial-Debug-4fec6ce67a53196a2753.json",
+					"name" : "Arduino-serial",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "Common::@bfc844598bd03e848b3c",
+					"jsonFile" : "target-Common-Debug-792861103b27f60b1e58.json",
+					"name" : "Common",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Hardware_Iface::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Hardware_Iface-Debug-732c32d52be4fea1f6a4.json",
+					"name" : "Hardware_Iface",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/cmake-build-debug",
+		"source" : "/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}

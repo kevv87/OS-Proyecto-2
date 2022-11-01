@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "cmocka/example/mock",
+		"source" : "/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/cmocka/example/mock"
+	}
+}

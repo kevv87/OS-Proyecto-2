@@ -1,0 +1,72 @@
+Compiling the C compiler identification source file "CMakeCCompilerId.c" failed.
+Compiler: /Library/Developer/CommandLineTools/usr/bin/cc 
+Build flags: 
+Id flags:  
+
+The output was:
+1
+ld: library not found for -lSystem
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" failed.
+Compiler: /Library/Developer/CommandLineTools/usr/bin/c++ 
+Build flags: 
+Id flags:  
+
+The output was:
+1
+ld: library not found for -lc++
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+
+
+Determining if the include file io.h exists failed with the following output:
+Change Dir: /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Applications/CLion.app/Contents/bin/ninja/mac/ninja cmTC_e309e && [1/2] Building C object CMakeFiles/cmTC_e309e.dir/CheckIncludeFile.c.o
+FAILED: CMakeFiles/cmTC_e309e.dir/CheckIncludeFile.c.o 
+/Library/Developer/CommandLineTools/usr/bin/cc   -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -fPIE -MD -MT CMakeFiles/cmTC_e309e.dir/CheckIncludeFile.c.o -MF CMakeFiles/cmTC_e309e.dir/CheckIncludeFile.c.o.d -o CMakeFiles/cmTC_e309e.dir/CheckIncludeFile.c.o -c /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:10: fatal error: 'io.h' file not found
+#include <io.h>
+         ^~~~~~
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+
+Determining if the include file malloc.h exists failed with the following output:
+Change Dir: /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Applications/CLion.app/Contents/bin/ninja/mac/ninja cmTC_406f9 && [1/2] Building C object CMakeFiles/cmTC_406f9.dir/CheckIncludeFile.c.o
+FAILED: CMakeFiles/cmTC_406f9.dir/CheckIncludeFile.c.o 
+/Library/Developer/CommandLineTools/usr/bin/cc   -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -fPIE -MD -MT CMakeFiles/cmTC_406f9.dir/CheckIncludeFile.c.o -MF CMakeFiles/cmTC_406f9.dir/CheckIncludeFile.c.o.d -o CMakeFiles/cmTC_406f9.dir/CheckIncludeFile.c.o -c /Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/test/cmake-build-debug/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:10: fatal error: 'malloc.h' file not found
+#include <malloc.h>
+         ^~~~~~~~~~
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+
+Compiling the C compiler identification source file "CMakeCCompilerId.c" failed.
+Compiler: /Library/Developer/CommandLineTools/usr/bin/cc 
+Build flags: 
+Id flags:  
+
+The output was:
+1
+ld: library not found for -lSystem
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" failed.
+Compiler: /Library/Developer/CommandLineTools/usr/bin/c++ 
+Build flags: 
+Id flags:  
+
+The output was:
+1
+ld: library not found for -lc++
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+
+

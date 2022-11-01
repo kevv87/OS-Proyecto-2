@@ -1,0 +1,9 @@
+/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/cmake-build-debug/CMakeFiles/Hardware_Iface.dir
+/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/cmake-build-debug/common/CMakeFiles/Common.dir
+/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/cmake-build-debug/common/CMakeFiles/edit_cache.dir
+/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/cmake-build-debug/common/CMakeFiles/rebuild_cache.dir
+/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/cmake-build-debug/arduino-serial/CMakeFiles/Arduino-serial.dir
+/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/cmake-build-debug/arduino-serial/CMakeFiles/edit_cache.dir
+/Users/kevv87/ghq/github.com/kevv87/OS-Proyecto-2/hw_iface/cmake-build-debug/arduino-serial/CMakeFiles/rebuild_cache.dir
