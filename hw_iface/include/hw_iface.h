@@ -10,7 +10,7 @@
 
 int add_ship(iface_context_t *context, direction_t direction);
 int change_channel_direction(iface_context_t *context, direction_t direction);
-int interchange_ships_position(iface_context_t *context, int from_pos, int to_pos);
+int move_ships_position(iface_context_t *context, int from_pos, int to_pos);
 int place_ship_in_position(iface_context_t *context, int position, ship_type_t shipType);
 int remove_ship_from_position(iface_context_t *context, int position);
 

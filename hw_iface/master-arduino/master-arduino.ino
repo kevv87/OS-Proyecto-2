@@ -1,49 +1,13 @@
 #include <Wire.h>
 
-const int CHANNEL_LEN = 10;
 const int debugLedPin = 9;
-
-typedef enum direction_t {
-    RIGHT,
-    LEFT
-} direction_t;
-
-typedef enum ship_type_t {
-    NO_SHIP,
-    NORMAL,
-    PESQUERO,
-    PATRULLA
-} ship_type_t;
-
-typedef struct iface_state_t{
-    ship_type_t channel_representation[CHANNEL_LEN];
-    uint8_t ships_at_left;
-    uint8_t ships_at_right;
-    direction_t channel_direction;
-} iface_state_t;
-
-const int I2C_canal_1 = 0x1;
-const int I2C_canal_2 = 0x2;
-const int I2C_contadores = 0x3;
-
-iface_state_t *state;
-String state_message;
-
+const int I2C_CANAL = 0x1;
 
 void setup() {
-    // Initializing essential variables
-    state = malloc(sizeof(iface_state_t));
-
     // Serial comm with PC
     Serial.begin(9600);
-    pinMode(debugLedPin, OUTPUT);
 
     Wire.begin();
-}
-
-void send_confirmation() {
-    char* confirm_message = "ok";
-    Serial.write(confirm_message);
 }
 
 void flash_debug_led(int times){
@@ -59,74 +23,52 @@ void flash_debug_led(int times){
     }
 }
 
-void read_serial_struct() {
-    int len = sizeof(iface_state_t);
-    char *struct_buffer = malloc(len);
-
-    // Vamos a leer un string de la forma
-    // 1 2 3 0 0 0 0 0 0 0\n
-    // 00 99\n
-    // 0\0
-
-    state_message = Serial.readString();
-    flash_debug_led(1);
-
-    //memcpy(state, struct_buffer, len);
-//    size_t len = 72;//sizeof(iface_state_t);
-//    char *struct_buffer = malloc(len);
-//    int i = 0;
-//    delay(100);
-//
-//    while(Serial.available() != len){
-//        delay(10);
-//    }
-//
-//    flash_debug_led(1);
-//
-//    while(Serial.available()){
-//        struct_buffer[i] = Serial.read();
-//        i++;
-//    }
-//
-//
-//    memcpy(state, struct_buffer, len);
-//
-//
-//    free(struct_buffer);
-}
-
-void sendI2CMessage(int target_device, void* message, int length){
-    flash_debug_led(3);
-    char msg_buffer[516];
-
-    state_message.toCharArray(msg_buffer, state_message.length());
-
-    Wire.beginTransmission(target_device);
-    Wire.write(msg_buffer);
-//    for(int i = 0; i < length; i++) {
-//        Wire.write(msg_buffer[i]);
-//    }
+void sendI2CMessage(int message){
+    Wire.beginTransmission(I2C_CANAL);
+    Wire.write(message);
     Wire.endTransmission();
-    flash_debug_led(3);
 }
 
-void send_control_messages_to_slaves() {
-    sendI2CMessage(
-            I2C_canal_1,
-            state->channel_representation,
-            sizeof(ship_type_t) * CHANNEL_LEN);
+void add_boat_to_pos(int boat_type, int pos){
+    Wire.beginTransmission(I2C_CANAL);
+    Wire.write(1);
+    Wire.write(boat_type);
+    Wire.write(pos);
+    Wire.endTransmission();
+}
+
+void move_ship(int from_pos, int to_pos) {
+    Wire.beginTransmission(I2C_CANAL);
+    Wire.write(2);
+    Wire.write(from_pos);
+    Wire.write(to_pos);
+    Wire.endTransmission();
 }
 
 void loop() {
-    byte brightness;
+    byte code;
 
     if(Serial.available()){
-        brightness = Serial.read();
-        if(brightness == 170) {
-            send_confirmation();
-            read_serial_struct();
-            send_control_messages_to_slaves();
-            //analogWrite(ledPin, state->ledState);
+        code = Serial.read();
+        int boat_type, pos, from_pos, to_pos;
+
+        switch (code) {
+            case 1:
+                delay(10);
+                //flash_debug_led(1);
+                boat_type = Serial.read();
+                pos = Serial.read();
+                add_boat_to_pos(boat_type, pos);
+                break;
+            case 2:
+                delay(10);
+                from_pos = Serial.read();
+                to_pos = Serial.read();
+                move_ship(from_pos, to_pos);
+                break;
+            default:
+                break;
         }
+
     }
 }
